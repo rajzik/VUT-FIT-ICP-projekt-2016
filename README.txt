@@ -1,8 +1,8 @@
-HRA2016
+ï»¿HRA2016
 
 Projekt do ICP
 
-Authoøi:
-Pavel Pospíšil
-Jan Šilhan
+AuthoÅ™i:
+Pavel PospÃ­Å¡il
+Jan Å ilhan
 
