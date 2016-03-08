@@ -1,48 +1,43 @@
-
 #pragma once
 
-#include "player.h"
-#include <stdlib.h>
-#include <stdio.h>
+//#include <stdlib.h>
+//#include <stdio.h>
+//#include <new>
+#include <iostream>
+#include <cstdlib>
 #include <string>
 #include <stack>
-#include <new>
-
+#include "player.h"
 
 enum color
 {
     EMPTY,
-    BLACK, 
+    BLACK,
     WHITE
 };
 
-
 class game{
     protected:
-    std::stack<std::string> * history, * future;
-    player * player1, * player2;
-    int size;
-    int **gameField;
+        int size;
+        int **gameField;
+        player * player1, * player2;
+        std::stack<std::string> * history, * future;
 
-
-    void initGameField();
-    void changeFiled(bool black, int x, int y);
+        void initGameField();
+        void changeFiled(bool black, int x, int y);
     public:
-    game(bool computer, int size);
-    
-    
-    bool saveGame();
-    bool loadGame();
-    
-    void nextStep();
-    void prevStep();
-    
-    bool makeMove(bool black, int x, int y);
-    void changeField(bool black, int x, int y);
-    
+        game(bool computer, int size);
+        ~game();
 
-    virtual void draw();
-    
+        bool saveGame();
+        bool loadGame();
+
+        void nextStep();
+        void prevStep();
+
+        bool makeMove(bool black, int x, int y);
+        void changeField(bool black, int x, int y);
+        /*virtual*/ void draw();
 };
 
 

@@ -1,6 +1,5 @@
 #include "player.h"
 
-
 player::player(std::string name, bool black, bool computer)
 {
     player::name = name;
@@ -8,23 +7,18 @@ player::player(std::string name, bool black, bool computer)
     player::computer = computer;
 }
 
-int player::getScore(){
+int player::getScore() {
     return score;
 }
 
-void player::setScore(int score){
+void player::setScore(int score) {
     player::score = score;
 }
 
-std::string player::getName(){
+std::string player::getName() {
     return name;
 }
 
-bool player::isBlack(){
+bool player::isBlack() {
     return black;
 }
-
-
-
-
-

@@ -1,0 +1,4 @@
+*.o
+src/bin/Debug/src.exe
+*.depend
+src/src.layout
