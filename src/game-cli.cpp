@@ -14,7 +14,8 @@ void gameCli::draw(){
     
     gameField[2][2] = WHITE;
     gameField[3][3] = BLACK;
-     
+    std::string dummyPlayer = "Silhan";
+
     
     
     
@@ -39,7 +40,7 @@ void gameCli::draw(){
     }
     
     
-    
+    std::cout<< dummyPlayer << std::endl;
     
     
 }
