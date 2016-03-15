@@ -1,8 +1,5 @@
 #pragma once
 
-//#include <stdlib.h>
-//#include <stdio.h>
-//#include <new>
 #include <iostream>
 #include <cstdlib>
 #include <string>
@@ -37,7 +34,7 @@ class game{
 
         bool makeMove(bool black, int x, int y);
         void changeField(bool black, int x, int y);
-        /*virtual*/ void draw();
+        virtual void draw();
 };
 
 
