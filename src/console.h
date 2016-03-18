@@ -6,6 +6,7 @@
 
 #define ISWINDOWS false
 #ifdef WINDOWS
+    #include <windows.h>
     #define ISWINDOWS true
 #endif
 
@@ -31,10 +32,10 @@ public:
     void setConsoleColor();
     void setCursor(int x, int y);
     void clear();
-    
-    char *colors;
-private: 
+    void resetToDefault();
 
+private: 
+    int colorsNumber[5];
     int fgColor;
     int bgColor;
     

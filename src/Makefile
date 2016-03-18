@@ -1,5 +1,5 @@
 
-NAME=HRA2016
+NAME=HRA2016-cli
  
 CC=g++
 CFLAGS=-Wall -Wextra --std=c++11 -pedantic

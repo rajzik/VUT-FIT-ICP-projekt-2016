@@ -34,6 +34,8 @@ class game{
 
         bool makeMove(bool black, int x, int y);
         void changeField(bool black, int x, int y);
+
+        virtual void run();
         virtual void draw();
 };
 

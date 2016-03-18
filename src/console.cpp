@@ -5,42 +5,63 @@
 console::console(){
     fgColor = CSWHITE;
     bgColor = CSDEFAULT;
-    console::colors = new char[5];
+
     
-    // if(ISWINDOWS)
-    //    console::colors[] = {'0','0','7','4','6'};
-    // else
-    //     console::colors[] = {'0','0','7','1','3'};
+    if(ISWINDOWS){
+       colorsNumber[0] = 0;
+       colorsNumber[1] = 0;
+       colorsNumber[2] = 7;
+       colorsNumber[3] = 4;
+       colorsNumber[4] = 6;
+    }
+    else{
+       colorsNumber[0] = 0;
+       colorsNumber[1] = 0;
+       colorsNumber[2] = 7;
+       colorsNumber[3] = 1;
+       colorsNumber[4] = 3;
+    }
 }
 
-console::~console(){}
+console::~console(){
+    if (ISWINDOWS)
+    {
+        
+    }
+    else
+    {
+        std::cout<< "\033c";
+    }
+}
 
 void console::setBgColor(int color){
     bgColor = color;
+    setConsoleColor();
 }
 
 void console::setFgColor(int color){
     fgColor = color;
+    setConsoleColor();
 }
 void console::setConsoleColor(){
     if (ISWINDOWS)
     {
-        // std::string toCharArr = "color "+ std::to_string(colors[bgColor]) + std::to_string(colors[fgColor]);
-        std::string toCharArr = "color "+ std::to_string(0) + std::to_string(0);
+        std::string toCharArr = "color "+ std::to_string(colorsNumber[bgColor]) + std::to_string(colorsNumber[fgColor]);
+        // std::string toCharArr = "color "+ std::to_string(0) + std::to_string(0);
         
         system(toCharArr.c_str());
     }
     else
     {
-        // std::cout << "\e[3"+std::to_string(colors[fgColor])+";4"+std::to_string(colors[bgColor]);
-        std::cout << "\e[3"+std::to_string(0)+";4"+std::to_string(0);
-        
+        std::cout << "\033[3"+std::to_string(colorsNumber[fgColor])+";4"+std::to_string(colorsNumber[bgColor]) + "m";
+        // std::cout << "\e[3"+std::to_string(0)+";4"+std::to_string(0);   
     }
     
     
 }
 
 void console::setCursor(int x, int y){
+    y = y/2;
     std::string a;
     if (ISWINDOWS)
     {
@@ -48,19 +69,29 @@ void console::setCursor(int x, int y){
     }
     else
     {
-        a = "\e["+std::to_string(y)+";"+std::to_string(x)+"H";
+        a = "\033["+std::to_string(y)+";"+std::to_string(x)+"H";
         std::cout << a;
     }
 }
 void console::clear(){
     if (ISWINDOWS)
     {
-           
+        
     }
     else
     {
-        std::cout << "\e[2J\ec";
+        std::cout << "\033[2J\033c";
     }
-    setConsoleColor();
-    
+}
+
+
+void console::resetToDefault(){
+    if (ISWINDOWS)
+    {
+        
+    }
+    else
+    {
+        std::cout << "\033[0m ";
+    }
 }

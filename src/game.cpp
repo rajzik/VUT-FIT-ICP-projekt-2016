@@ -14,6 +14,14 @@ game::game(bool computer, int size)
     } else {
         exit(1);
     }
+    
+    int firstX = size/2;
+    int firstY = size/2;
+    
+    gameField[firstX-1][firstY-1] = BLACK;
+    gameField[firstX-1][firstY] = WHITE;
+    gameField[firstX][firstY-1] = WHITE;
+    gameField[firstX][firstY] = BLACK;
 }
 
 game::~game()
@@ -70,3 +78,4 @@ void game::prevStep() {
 
 
 void game::draw(){}
+void game::run(){}
