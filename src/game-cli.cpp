@@ -71,7 +71,8 @@ void gameCli::run(){
         std::string command;
         draw();
          
-     
+        checkRules();
+        
         std::cin >> command;
         if(command.compare("quit") >= 0 || command.compare("q") >= 0)
             return;

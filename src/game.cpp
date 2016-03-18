@@ -77,5 +77,44 @@ void game::prevStep() {
 }
 
 
+
+std::vector<std::pair<int, int>> game::checkRules(bool black){    
+    p1Moves.clear();
+    p2Moves.clear();
+
+    int playa = black?BLACK:WHITE;
+    for(int x = 0; x < size; x++){
+        for(int y = 0; y < size; y++){
+            if(gameField[x][y] == playa && checkMove(black, x, y))
+                if(black)
+                    p1Moves.push_back(make_pair(x, y));
+                else
+                    p2Moves.push_back(make_pair(x,y));
+        }
+    }
+    
+}
+
+bool game::checkMove(bool black, int x, int y){
+    bool horizontal = false, vertical = false, diagonalPlus = false, diagonalMinus = false;
+    int enemy = !black?BLACK:WHITE; 
+    if(x > 0)
+        if(gameField[x-1][y] == enemy)
+            horizontal = true;
+    if(x < size)
+        if(gameField[x+1][y] == enemy)       
+            horizontal = true;
+    if(y > 0)
+        if(gameField[x][y-1] == enemy)
+            vertical true;
+    if(y < size)
+        if(gameField[x][y+1] == enemy)
+            vertical true;
+    
+    
+    
+    return true;
+}
+
 void game::draw(){}
 void game::run(){}
