@@ -6,6 +6,8 @@
 #include <stack>
 #include <utility>
 #include <vector>
+#include <algorithm>
+#include <math.h>
 #include "player.h"
 
 enum color
@@ -15,15 +17,18 @@ enum color
     WHITE
 };
 
+
+
 class game{
     protected:
         int size;
         int **gameField;
         player * player1, * player2;
         std::stack<std::string> * history, * future;
-        std::vector<std::pair<int, int>> p1Moves;
-        std::vector<std::pair<int, int>> p2Moves;
 
+        
+        int checkDirection(bool black, int x, int y, int xDirection, int yDirection);
+        void colorPath(bool color, int x, int y, int endX, int endY);
         void initGameField();
         void changeFiled(bool black, int x, int y);
     public:
@@ -40,7 +45,6 @@ class game{
         bool makeMove(bool black, int x, int y);
         bool checkMove(bool black, int x, int y);
         void changeField(bool black, int x, int y);
-        std::vector<std::pair<int, int>> * checkRules(bool black);
         virtual void run();
         virtual void draw();
 };

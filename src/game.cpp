@@ -1,6 +1,7 @@
 
 #include "game.h"
 #include "player.h"
+
 game::game(bool computer, int size)
 {
     history = new std::stack<std::string>();
@@ -16,17 +17,22 @@ game::game(bool computer, int size)
     }
     
     int firstX = size/2;
-    int firstY = size/2;
     
-    gameField[firstX-1][firstY-1] = BLACK;
-    gameField[firstX-1][firstY] = WHITE;
-    gameField[firstX][firstY-1] = WHITE;
-    gameField[firstX][firstY] = BLACK;
+    gameField[firstX-1][firstX-1] = BLACK;
+    gameField[firstX-1][firstX] = WHITE;
+    gameField[firstX][firstX-1] = WHITE;
+    gameField[firstX][firstX] = BLACK;
+    
+    
+    checkMove(true, 5, 3);
+    std::cout<<std::endl;
+    
+    
 }
 
 game::~game()
 {
-
+    
 }
 
 void game::initGameField() {
@@ -43,10 +49,99 @@ bool game::makeMove(bool black, int x, int y) {
     if(gameField[x][y] != EMPTY)
         return false;
 
-    game::changeField(black, x, y);
+    checkMove(black, x, y);
+    return true;
+}
+bool game::checkMove(bool black, int x, int y){
+
+    std::cout<<"leva"<<std::endl;    
+    if(x > 0)
+        checkDirection(black, x,y, 0,y);
+    
+    std::cout<<"prava"<<std::endl;
+    if(x < size-1)
+        checkDirection(black, x,y, size-1,y);
+        
+    std::cout<<"nahoru"<<std::endl;
+    if(y > 0)
+        checkDirection(black, x,y, x,0);
+        
+    std::cout<<"dolu"<<std::endl;
+    if(y < size-1)
+        checkDirection(black, x,y, x,size-1);
+        
+    std::cout<<"leva nahoru"<<std::endl;
+    if(x > 0 && y > 0){
+        int minimum = std::min(x,y);
+        checkDirection(black, x, y, x-minimum, y-minimum);
+    }
+    
+    std::cout<<"leva dolu"<<std::endl;
+    if(x > 0 && y < size-1){
+        int minimum = std::min(x,size-1-y);
+        checkDirection(black, x, y, x-minimum, y+minimum);
+    }
+    
+    std::cout<<"prava dolu"<<std::endl;
+    if(x<size-1 && y < size-1){
+        int minimum = std::min(size-1-x, size-1-y);
+        checkDirection(black, x, y, x + minimum, y+minimum);
+    }
+    
+    std::cout<<"prava nahoru"<<std::endl;
+    if(x<size-1 && y > 0){
+        int minimum = std::min(size-1-x, y);
+        checkDirection(black,x,y,x+minimum, y-minimum);
+    }
+    
     return true;
 }
 
+int game::checkDirection(bool black, int x, int y, int endX, int endY){
+    std::cout<<"x:"<<x<<" y: "<<y<<" endX: "<<endX<< " endY: "<<endY<<std::endl;
+    
+    int color = black?BLACK:WHITE;
+    int revColor = black?WHITE:BLACK;
+    bool oposite = false, bro = false;
+    
+    
+    int stepCount = std::max(abs(x-endX),abs(y-endY));
+    int xStep = (endX-x)/stepCount;
+    int yStep = (endY-x)/stepCount;
+    
+    
+    for(int i = 0; i <= stepCount; i++){
+        int dataField = gameField[x+i*xStep][y+i*yStep];
+        if( dataField == revColor)
+        { 
+            oposite =true;
+            continue;
+        }
+        if(oposite && dataField == color){
+            colorPath(black, x,y, x+i*xStep, y+i*yStep);
+            break;
+        }
+        if(dataField == EMPTY)
+            break;
+    }
+    
+    
+ 
+     
+}
+
+void game::colorPath(bool color, int x, int y, int endX, int endY){  
+    
+    int stepCount = std::max(abs(x-endX),abs(y-endY));
+    int xStep = (endX-x)/stepCount;
+    int yStep = (endY-x)/stepCount;
+    
+    
+    for(int i = 0; i <= stepCount; i++){
+        changeField(color, x+i*xStep, y+i*yStep);
+        //gameField[][] = color;
+    }
+}
 
 bool game::saveGame() {
     return true;
@@ -57,6 +152,7 @@ bool game::loadGame() {
 }
 
 void game::changeField(bool black, int x, int y) {
+    std::cout<<"obarvuji: "<< x << y<<std::endl;
     gameField[x][y] = black? BLACK : WHITE;
 }
 
@@ -78,43 +174,6 @@ void game::prevStep() {
 
 
 
-std::vector<std::pair<int, int>> game::checkRules(bool black){    
-    p1Moves.clear();
-    p2Moves.clear();
-
-    int playa = black?BLACK:WHITE;
-    for(int x = 0; x < size; x++){
-        for(int y = 0; y < size; y++){
-            if(gameField[x][y] == playa && checkMove(black, x, y))
-                if(black)
-                    p1Moves.push_back(make_pair(x, y));
-                else
-                    p2Moves.push_back(make_pair(x,y));
-        }
-    }
-    
-}
-
-bool game::checkMove(bool black, int x, int y){
-    bool horizontal = false, vertical = false, diagonalPlus = false, diagonalMinus = false;
-    int enemy = !black?BLACK:WHITE; 
-    if(x > 0)
-        if(gameField[x-1][y] == enemy)
-            horizontal = true;
-    if(x < size)
-        if(gameField[x+1][y] == enemy)       
-            horizontal = true;
-    if(y > 0)
-        if(gameField[x][y-1] == enemy)
-            vertical true;
-    if(y < size)
-        if(gameField[x][y+1] == enemy)
-            vertical true;
-    
-    
-    
-    return true;
-}
 
 void game::draw(){}
 void game::run(){}
