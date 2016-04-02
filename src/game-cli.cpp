@@ -32,10 +32,10 @@ void gameCli::draw(){
     std::cout << std::endl;
     
     
-    for (int x = 0; x < size; x++)
+    for (int y = 0; y < size; y++)
     {
-        std::cout << (x+1) << " ";
-        for (int y = 0; y < size; y++)
+        std::cout << (y+1) << " ";
+        for (int x = 0; x < size; x++)
         {
             if(gameField[x][y] == EMPTY)
                 std::cout << "_";

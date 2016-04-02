@@ -1,4 +1,3 @@
-//#include <stdlib>
 #include <iostream>
 #include <cstdlib>
 #include "game.h"
@@ -8,19 +7,8 @@
 
 int main(){
 
-   
-
-    // player * p;
-
-    // p = new player("Petr", true, false);
-    // std::cout << p->getName() << std::endl;
-    
-    
     gameCli * game = new gameCli(false, 8);
    
-
-    // game->draw();
-    
     game->run();
     return 0;
 }

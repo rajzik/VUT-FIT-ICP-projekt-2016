@@ -25,6 +25,10 @@ game::game(bool computer, int size)
     
     
     checkMove(true, 5, 3);
+    checkMove(false,5, 2);
+    checkMove(false,5, 4);
+    // gameField[5][3] = BLACK;
+    // changeField(true, 5, 3);
     std::cout<<std::endl;
     
     
@@ -107,12 +111,12 @@ int game::checkDirection(bool black, int x, int y, int endX, int endY){
     
     int stepCount = std::max(abs(x-endX),abs(y-endY));
     int xStep = (endX-x)/stepCount;
-    int yStep = (endY-x)/stepCount;
+    int yStep = (endY-y)/stepCount;
     
     
-    for(int i = 0; i <= stepCount; i++){
+    for(int i = 1; i <= stepCount; i++){
         int dataField = gameField[x+i*xStep][y+i*yStep];
-        if( dataField == revColor)
+        if(dataField == revColor)
         { 
             oposite =true;
             continue;
@@ -134,7 +138,7 @@ void game::colorPath(bool color, int x, int y, int endX, int endY){
     
     int stepCount = std::max(abs(x-endX),abs(y-endY));
     int xStep = (endX-x)/stepCount;
-    int yStep = (endY-x)/stepCount;
+    int yStep = (endY-y)/stepCount;
     
     
     for(int i = 0; i <= stepCount; i++){
