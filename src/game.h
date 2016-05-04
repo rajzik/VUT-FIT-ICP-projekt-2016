@@ -18,13 +18,19 @@ enum color
 };
 
 
+typedef struct move{
+    bool player;
+    int x;
+    int y;
+} move;
+
 
 class game{
     protected:
         int size;
         int **gameField;
         player * player1, * player2;
-        std::stack<std::string> * history, * future;
+        std::stack<move> * history, * future;
 
         
         int checkDirection(bool black, int x, int y, int xDirection, int yDirection);

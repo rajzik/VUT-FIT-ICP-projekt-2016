@@ -4,8 +4,8 @@
 
 game::game(bool computer, int size)
 {
-    history = new std::stack<std::string>();
-    future = new std::stack<std::string>();
+    history = new std::stack<move>();
+    future = new std::stack<move>();
     std::string name = "player";
     if(size == 6 || size == 8 || size == 10 || size == 12 ) {
         game::size = size;
@@ -40,7 +40,8 @@ void game::initPlayers(std::string nameOne, std::string nameTwo, bool computer){
 
 game::~game()
 {
-    
+    delete player1;
+    delete player2;
 }
 
 void game::initGameField() {
@@ -56,9 +57,12 @@ bool game::makeMove(bool black, int x, int y) {
         return false;
     if(gameField[x][y] != EMPTY)
         return false;
-
-    checkMove(black, x, y);
-    return true;
+    bool validMove = checkMove(black, x, y);
+    move mv = {black,x,y};
+    if(validMove)
+        history->push(mv);
+        
+    return validMove;
 }
 bool game::checkMove(bool black, int x, int y){
 
@@ -166,7 +170,7 @@ bool game::loadGame() {
 }
 
 void game::changeField(bool black, int x, int y) {
-    std::cout<<"obarvuji: "<< x << y<<std::endl;
+    // std::cout<<"obarvuji: "<< x << y<<std::endl;
     gameField[x][y] = black? BLACK : WHITE;
 }
 
