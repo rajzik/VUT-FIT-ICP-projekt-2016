@@ -1,14 +1,10 @@
 #include "game-cli.h"
 
 
-constexpr unsigned int str2int(const char* str, int h = 0)
-{
-    return !str[h] ? 5381 : (str2int(str, h+1) * 33) ^ str[h];
-}
 
 
-gameCli::gameCli(bool computer, int size)
-:game(computer, size){
+gameCli::gameCli()
+:game(){
     consol.clear();
     printHelp();
     getGameInfo();
@@ -42,10 +38,46 @@ void gameCli::getGameInfo(){
     }
     initPlayers("Player 1", "Player 2", single == 1);
     
+    
+    int tempSize = -1;
+    while(true){
+        consol.clear();   
+        std::cout<<tempSize<<std::endl;
+        std::cout<< "Please enter valid size 6, 8, 10, 12. Or press enter or type 0 to set default size"<<std::endl;
+        std::cout<<"Enter game field size: ";
+        std::getline(std::cin, a);
+        tempSize = std::stoi("0"+a);
+        
+        if((tempSize % 2) == 0 && tempSize > 5 && tempSize < 13 )
+            break;
+        if(tempSize == 0)
+        {
+            tempSize = 8;        
+            break;
+        }
+        
+    }
+    
+    size = tempSize;
+    initGameField();
+    
 }
 
 void gameCli::drawScore(){   
-    std::cout << player1->getName() << ": " << player1->getScore() << "\t" << player2->getName() << ": " << player1->getScore() << std::endl;
+    
+    std::cout << player1->getName() << ": " << player1->getScore() << " ";
+    consol.setFgColor(CSBLACK);
+    consol.setBgColor(CSWHITE);
+    std::cout<<"O";        
+    
+    consol.resetToDefault();
+    std::cout << "\t" << player2->getName() << ": " << player1->getScore() << " ";
+    consol.setFgColor(CSYELLOW);
+    consol.setBgColor(CSBLACK);
+    std::cout<<"X";
+    
+    consol.resetToDefault();
+    std::cout<<std::endl;
 }
 
 void gameCli::draw(){
@@ -54,16 +86,19 @@ void gameCli::draw(){
     consol.setFgColor(CSBLACK);
     consol.setBgColor(CSWHITE);
 
+    
     std::cout << "  ";
+    if(size>9)
+        std::cout<<" ";
     for(int firstLine = 0; firstLine < size; firstLine++)
         std::cout << (char)(97 + firstLine) << " ";
     std::cout << std::endl;
     
     
-    for (int y = 0; y < size; y++)
+    for (int x = 0; x < size; x++)
     {
-        std::cout << (y+1) << " ";
-        for (int x = 0; x < size; x++)
+        std::cout << (x+1) << " " << ((size>9 && x < 9)?" ":"");
+        for (int y = 0; y < size; y++)
         {
             if(gameField[x][y] == EMPTY)
                 std::cout << "_";

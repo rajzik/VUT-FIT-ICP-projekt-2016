@@ -1,13 +1,17 @@
 #pragma once
 
 #include <iostream>
+#include <fstream>
 #include <cstdlib>
 #include <string>
 #include <stack>
 #include <utility>
 #include <vector>
 #include <algorithm>
+#include <sstream>
 #include <math.h>
+#include <boost/filesystem.hpp>
+#include <boost/range/iterator_range.hpp>
 #include "player.h"
 
 enum color
@@ -39,12 +43,12 @@ class game{
         void initGameField();
         void changeFiled(bool black, int x, int y);
     public:
-        game(bool computer, int size);
+        game();
         ~game();
         
 
         bool saveGame();
-        bool loadGame();
+        bool loadGame(std::string filename);
 
         void nextStep();
         void prevStep();

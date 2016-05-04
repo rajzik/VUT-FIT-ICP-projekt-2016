@@ -3,4 +3,5 @@ src/bin/Debug/src.exe
 *.depend
 src/src.layout
 src/HRA2016
-src/HRA2016-cli
+HRA2016-cli
+saves/

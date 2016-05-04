@@ -7,7 +7,7 @@
 
 int main(){
 
-    gameCli * game = new gameCli(false, 8);
+    gameCli * game = new gameCli();
    
     game->run();
     return 0;

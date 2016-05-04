@@ -15,7 +15,7 @@ private:
     
 public:
 
-    gameCli(bool computer, int size);
+    gameCli();
     ~gameCli();
     void getGameInfo();
     void printHelp();

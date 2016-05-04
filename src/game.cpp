@@ -2,42 +2,15 @@
 #include "game.h"
 #include "player.h"
 
-game::game(bool computer, int size)
+game::game()
 {
     history = new std::stack<move>();
     future = new std::stack<move>();
-    std::string name = "player";
-    if(size == 6 || size == 8 || size == 10 || size == 12 ) {
-        game::size = size;
-        game::initGameField();
-    } else {
-        exit(1);
-    }
-    
-    int firstX = size/2;
-    
-    gameField[firstX-1][firstX-1] = BLACK;
-    gameField[firstX-1][firstX] = WHITE;
-    gameField[firstX][firstX-1] = WHITE;
-    gameField[firstX][firstX] = BLACK;
-    
-    
-    // checkMove(true, 5, 3);
-    // checkMove(false,5, 2);
-    // checkMove(false,5, 4);
-    // gameField[5][3] = BLACK;
-    // changeField(true, 5, 3);
-    std::cout<<std::endl;
-    
-    
 }
-
 void game::initPlayers(std::string nameOne, std::string nameTwo, bool computer){
     player1 = new player(nameOne, false, computer);
     player2 = new player(nameTwo, true, false); 
 }
-
-
 game::~game()
 {
     delete player1;
@@ -45,10 +18,24 @@ game::~game()
 }
 
 void game::initGameField() {
+    if(!(size == 6 || size == 8 || size == 10 || size == 12 ))
+        return;   
     gameField = new int*[size];
 
     for(int i = 0; i < size; i++)
         gameField[i] = new int[size];
+        
+    for(int x = 0; x < size; x++)
+        for(int y = 0; y < size; y++)
+            gameField[x][y] = 0;    
+        
+    int center = size/2;
+    
+    gameField[center-1][center-1] = WHITE;
+    gameField[center-1][center] = BLACK;
+    gameField[center][center-1] = BLACK;
+    gameField[center][center] = WHITE;    
+    
 }
 
 
@@ -59,9 +46,13 @@ bool game::makeMove(bool black, int x, int y) {
         return false;
     bool validMove = checkMove(black, x, y);
     move mv = {black,x,y};
-    if(validMove)
+    if(validMove){
         history->push(mv);
         
+        std::stack<move> * empty = new std::stack<move>();
+        swap(future, empty);
+    
+    }
     return validMove;
 }
 bool game::checkMove(bool black, int x, int y){
@@ -157,15 +148,147 @@ void game::colorPath(bool color, int x, int y, int endX, int endY){
     
     for(int i = 0; i <= stepCount; i++){
         changeField(color, x+i*xStep, y+i*yStep);
-        //gameField[][] = color;
     }
 }
 
 bool game::saveGame() {
+    
+    boost::filesystem::path dir("saves");
+    
+    boost::filesystem::create_directory(dir);
+    
+    std::stringstream filename; 
+    int biggest = -1;
+    for(auto& entry : boost::make_iterator_range(boost::filesystem::directory_iterator(dir), {}))
+    {
+        std::stringstream ss;
+        ss << boost::filesystem::basename(entry);
+        int actualNum = std::stoi("0" + ss.str());
+        if(actualNum > biggest)
+            biggest = actualNum;
+    }
+    filename << (++biggest) << "a.sav";
+    
+    std::ofstream savFile;
+    savFile.open(("saves/"+ filename.str()), std::ios::out | std::ios::binary);
+    if(!savFile.is_open())
+        return false;
+    savFile << "fs" << std::endl;
+    savFile << size << std::endl;
+    for(int x = 0; x < size; x++)
+    {
+        for(int y = 0; y < size; y++)
+            savFile << gameField[x][y];
+        savFile<<std::endl;
+    }
+    
+    savFile << "fse"<<std::endl;
+    move a = {true, 0,1};
+    history->push(a);
+    std::stack<move> * tempStack = new std::stack<move>(); 
+
+    if(!history->empty())
+    {
+        savFile << "hs"<<std::endl;
+        savFile << history->size()<<std::endl;
+        while(!history->empty()){
+            move m = history->top();
+            tempStack->push(m);
+            savFile << m.player <<";"<<m.x<<";"<<m.y<<";"<<std::endl;
+            history->pop(); 
+        }
+        savFile << "hse"<<std::endl;
+    }
+    while(!tempStack->empty()){
+        history->push(tempStack->top());
+        tempStack->pop();        
+    }
+    
+    future->push(a);
+    if(!future->empty())
+    {
+        savFile << "fs"<<std::endl;
+        savFile << future->size()<<std::endl;
+        while(!future->empty()){
+            move m = future->top();
+            tempStack->push(m);
+            savFile << m.player <<";"<<m.x<<";"<<m.y<<";"<<std::endl;
+            future->pop(); 
+        }
+        savFile << "fse"<<std::endl;
+    }
+    while(!tempStack->empty()){
+        future->push(tempStack->top());
+        tempStack->pop();        
+    }
+    
+    savFile.close();
     return true;
 }
 
-bool game::loadGame() {
+bool game::loadGame(std::string filename) {
+    boost::filesystem::path dir("saves");
+    boost::filesystem::create_directory(dir);
+    
+    if(!boost::filesystem::exists( "saves/"+filename ))
+        return false;
+    
+    
+    std::ifstream savFile;
+    savFile.open("saves/"+filename);
+    std::stringstream ss;
+    ss << savFile.rdbuf();
+    std::string content = ss.str();
+    std::size_t pos;
+    savFile.close();
+    
+    if((pos = content.find("fs")) == std::string::npos)
+        return false;
+    
+    content.erase(0, 3);
+    
+    if((pos = content.find("\n")) == std::string::npos)
+        return false;
+    
+    int tempSize = std::stoi("0" + content.substr(0, pos));
+    if(!((tempSize % 2) == 0 && tempSize < 6  && tempSize > 12) )
+        return false;
+    content.erase(0, pos+1);
+    
+    
+    size = tempSize;
+    initGameField();
+    
+    
+    
+    
+    for(int x = 0; x < size; x++){
+        for(int y = 0; y < size; y++){
+            int tempColor = std::stoi("0"+ content.substr(0,1));
+            if(tempColor > 2 || tempColor < 0)
+                return false;
+            gameField[x][y] = tempColor;
+            content.erase(0,1); 
+        }
+        content.erase(0,1);
+    }
+    
+    
+    if((pos = content.find("fse")) == std::string::npos)
+        return false;
+    
+    content.erase(0, pos+4);
+    
+    if((pos = content.find("hse")) != std::string::npos)
+    {
+        content.erase(0, pos + 4);
+        
+        
+        
+    }
+    
+    
+    
     return true;
 }
 
