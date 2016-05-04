@@ -7,8 +7,6 @@ game::game(bool computer, int size)
     history = new std::stack<std::string>();
     future = new std::stack<std::string>();
     std::string name = "player";
-    // player1 = new player(name+"1", false, computer);
-    // player2 = new player(name+"2", true, false);
     if(size == 6 || size == 8 || size == 10 || size == 12 ) {
         game::size = size;
         game::initGameField();
@@ -24,15 +22,21 @@ game::game(bool computer, int size)
     gameField[firstX][firstX] = BLACK;
     
     
-    checkMove(true, 5, 3);
-    checkMove(false,5, 2);
-    checkMove(false,5, 4);
+    // checkMove(true, 5, 3);
+    // checkMove(false,5, 2);
+    // checkMove(false,5, 4);
     // gameField[5][3] = BLACK;
     // changeField(true, 5, 3);
     std::cout<<std::endl;
     
     
 }
+
+void game::initPlayers(std::string nameOne, std::string nameTwo, bool computer){
+    player1 = new player(nameOne, false, computer);
+    player2 = new player(nameTwo, true, false); 
+}
+
 
 game::~game()
 {
@@ -58,53 +62,58 @@ bool game::makeMove(bool black, int x, int y) {
 }
 bool game::checkMove(bool black, int x, int y){
 
-    std::cout<<"leva"<<std::endl;    
+    int score = 0;
+    // std::cout<<"leva"<<std::endl;    
     if(x > 0)
-        checkDirection(black, x,y, 0,y);
+        score += checkDirection(black, x,y, 0,y);
     
-    std::cout<<"prava"<<std::endl;
+    // std::cout<<"prava"<<std::endl;
     if(x < size-1)
-        checkDirection(black, x,y, size-1,y);
+        score += checkDirection(black, x,y, size-1,y);
         
-    std::cout<<"nahoru"<<std::endl;
+    // std::cout<<"nahoru"<<std::endl;
     if(y > 0)
-        checkDirection(black, x,y, x,0);
+        score += checkDirection(black, x,y, x,0);
         
-    std::cout<<"dolu"<<std::endl;
+    // std::cout<<"dolu"<<std::endl;
     if(y < size-1)
-        checkDirection(black, x,y, x,size-1);
+        score += checkDirection(black, x,y, x,size-1);
         
-    std::cout<<"leva nahoru"<<std::endl;
+    // std::cout<<"leva nahoru"<<std::endl;
     if(x > 0 && y > 0){
         int minimum = std::min(x,y);
-        checkDirection(black, x, y, x-minimum, y-minimum);
+        score += checkDirection(black, x, y, x-minimum, y-minimum);
     }
     
-    std::cout<<"leva dolu"<<std::endl;
+    // std::cout<<"leva dolu"<<std::endl;
     if(x > 0 && y < size-1){
         int minimum = std::min(x,size-1-y);
-        checkDirection(black, x, y, x-minimum, y+minimum);
+        score += checkDirection(black, x, y, x-minimum, y+minimum);
     }
     
-    std::cout<<"prava dolu"<<std::endl;
+    // std::cout<<"prava dolu"<<std::endl;
     if(x<size-1 && y < size-1){
         int minimum = std::min(size-1-x, size-1-y);
-        checkDirection(black, x, y, x + minimum, y+minimum);
+        score += checkDirection(black, x, y, x + minimum, y+minimum);
     }
     
-    std::cout<<"prava nahoru"<<std::endl;
+    // std::cout<<"prava nahoru"<<std::endl;
     if(x<size-1 && y > 0){
         int minimum = std::min(size-1-x, y);
-        checkDirection(black,x,y,x+minimum, y-minimum);
+        score += checkDirection(black,x,y,x+minimum, y-minimum);
     }
     
-    return true;
+    changeScore(black, score);
+    if(score != 0)
+        changeScore(!black, - (score - 1));
+    
+    return score != 0;
 }
 
 int game::checkDirection(bool black, int x, int y, int endX, int endY){
-    std::cout<<"x:"<<x<<" y: "<<y<<" endX: "<<endX<< " endY: "<<endY<<std::endl;
+    // std::cout<<"x:"<<x<<" y: "<<y<<" endX: "<<endX<< " endY: "<<endY<<std::endl;
     
-    int color = black?BLACK:WHITE;
+    int color = black?BLACK:WHITE, score = 0;
     int revColor = black?WHITE:BLACK;
     bool oposite = false, bro = false;
     
@@ -122,6 +131,7 @@ int game::checkDirection(bool black, int x, int y, int endX, int endY){
             continue;
         }
         if(oposite && dataField == color){
+            score++;
             colorPath(black, x,y, x+i*xStep, y+i*yStep);
             break;
         }
@@ -130,7 +140,7 @@ int game::checkDirection(bool black, int x, int y, int endX, int endY){
     }
     
     
- 
+    return score;
      
 }
 
@@ -176,6 +186,13 @@ void game::prevStep() {
     history->pop();
 }
 
+
+void game::changeScore(bool black, int scoreDiff){
+    if(black)
+        player1->setScore(player1->getScore() + scoreDiff);
+    else
+        player2->setScore(player2->getScore() + scoreDiff);
+}
 
 
 

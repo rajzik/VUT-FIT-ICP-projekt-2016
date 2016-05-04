@@ -10,12 +10,14 @@ private:
         
     std::string dummyPlayer;
     int dummyScore;
+    bool actualPlayer;
+    
     
 public:
 
     gameCli(bool computer, int size);
     ~gameCli();
-
+    void getGameInfo();
     void printHelp();
     void draw();
     void drawScore();

@@ -28,6 +28,7 @@ class game{
 
         
         int checkDirection(bool black, int x, int y, int xDirection, int yDirection);
+        void changeScore(bool black, int newScore);
         void colorPath(bool color, int x, int y, int endX, int endY);
         void initGameField();
         void changeFiled(bool black, int x, int y);
@@ -45,6 +46,7 @@ class game{
         bool makeMove(bool black, int x, int y);
         bool checkMove(bool black, int x, int y);
         void changeField(bool black, int x, int y);
+        void initPlayers(std::string nameOne, std::string nameTwo, bool computer);
         virtual void run();
         virtual void draw();
 };

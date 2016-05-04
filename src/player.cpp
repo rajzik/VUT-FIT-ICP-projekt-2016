@@ -5,6 +5,7 @@ player::player(std::string name, bool black, bool computer)
     player::name = name;
     player::black = black;
     player::computer = computer;
+    player::score = 2;
 }
 
 int player::getScore() {

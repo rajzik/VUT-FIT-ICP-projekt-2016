@@ -1,23 +1,51 @@
 #include "game-cli.h"
 
 
+constexpr unsigned int str2int(const char* str, int h = 0)
+{
+    return !str[h] ? 5381 : (str2int(str, h+1) * 33) ^ str[h];
+}
+
 
 gameCli::gameCli(bool computer, int size)
 :game(computer, size){
-    dummyPlayer = "Silhan";
-    dummyScore = 0;
     consol.clear();
     printHelp();
+    getGameInfo();
+    actualPlayer = true;
 }
      
 gameCli::~gameCli(){
     
 }
 
-
-void gameCli::drawScore(){
+void gameCli::getGameInfo(){
     
-    std::cout << dummyPlayer << ": " << dummyScore << "\t" << dummyPlayer << ": " << dummyScore << std::endl;
+    int single = -1;
+    std::string a;
+    while(true){
+        consol.clear();        
+        if(single != -1)
+            std::cout<< "Please enter valid game type 1 or 2"<<std::endl;
+                
+        std::cout<<"1) Single Player"<<std::endl
+        <<"2) Multiplayer"<<std::endl
+        <<"Please enter game type: ";
+        
+
+        std::getline(std::cin, a);
+        single = std::stoi("0"+a);
+        
+        if(single == 1 || single == 2)
+            break;
+        
+    }
+    initPlayers("Player 1", "Player 2", single == 1);
+    
+}
+
+void gameCli::drawScore(){   
+    std::cout << player1->getName() << ": " << player1->getScore() << "\t" << player2->getName() << ": " << player1->getScore() << std::endl;
 }
 
 void gameCli::draw(){
@@ -56,7 +84,8 @@ void gameCli::draw(){
     
     std::cout << std::endl;
     consol.setCursor(size*2 + 5, 5);
-    std::cout << "Now Playing: "<< dummyPlayer << std::endl;
+    
+    std::cout << "Now Playing: "<< (actualPlayer? player1->getName():player2->getName()) << std::endl;
     consol.setCursor(0, size*2+4);
     
     drawScore();    
@@ -73,22 +102,36 @@ void gameCli::run(){
       
         
         std::cin >> command;
-        if(command.compare("quit") >= 0 || command.compare("q") >= 0)
+        
+        
+        std::size_t found;
+        
+        if((found = command.find("quit"))!= std::string::npos){
             return;
-            
-        if(command.compare("help") >= 0 || command.compare("h") >= 0)
-            printHelp();
+        }
+        else if((found = command.find("help"))!= std::string::npos){
+            consol.clear();
+            printHelp();    
+            std::cin.get();
+        }
+        else{
+            //make move to be filed later
+            actualPlayer = !actualPlayer;
+        }
+        
     }
 }
 
 void gameCli::printHelp(){
     std::cout << "HRA2016 Help" <<std::endl
-    
-    << "To help write help/h" << std::endl
-    << "to continue to game press any key" << std::endl;
+    << "To help write help" << std::endl
+    << "To quit write quit" << std::endl
+    << "to save game type save" << std::endl
+    << "to load game type load" << std::endl
+    << "To make move just write <column><row>" <<std::endl
+    << "to continue to game press enter..." << std::endl;
     
     std::cin.get();
-    
 }
 
 
