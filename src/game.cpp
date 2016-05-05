@@ -8,6 +8,7 @@ game::game()
     future = new std::stack<move>();
 }
 void game::initPlayers(std::string nameOne, std::string nameTwo, bool computer){
+    actualPlayer1 = true;
     player1 = new player(nameOne, false, computer);
     player2 = new player(nameTwo, true, false); 
 }

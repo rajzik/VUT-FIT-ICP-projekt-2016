@@ -3,22 +3,41 @@
 #include <QMessageBox>
 //#include "enums.h"
 
-/*
-#include "game.h"
-#include <QString>
-*/
-
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
     game()
 {
     ui->setupUi(this);
+    initPlayers("Player 1", "Player 2", 1);
+    game::size = DEFAULT_SIZE;
+    initGameField();
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::init()
+{
+    /* Tlacitka hraci plochy */
+    for (int i =0; i < game::size; i++) {
+        for (int j = 0; j < game::size; j++) {
+            maze_button[i][j] = new QPushButton(this);
+            maze_button[i][j]->setGeometry(QRect(QPoint(20+50*i, 100+50*j),
+            QSize(50, 50)));
+            connect(maze_button[i][j], SIGNAL (released()), this, SLOT (handleButton()));
+        }
+    }
+    /* Ovladaci tlacitka */
+    for (int i =0; i < 5; i++) {
+        ui_button[i] = new QPushButton(this);
+        ui_button[i]->setGeometry(QRect(QPoint(20 + 80*i, 20),
+        QSize(70, 30)));
+    }
+    connect(ui_button[0], SIGNAL (released()), this, SLOT (printHelp()));
+    ui_button[0]->setText("Nápověda");
 }
 
 /* Obnoveni barvy talcitek podle hraci plochy */
@@ -44,7 +63,7 @@ void MainWindow::draw()
     }
     ui->label_1->setText(QString::number(player1->getScore()));
     ui->label_2->setText(QString::number(player2->getScore()));
-    ui->label_3->setText(QString::fromStdString(players[actualPlayer]->getName()));
+    ui->label_3->setText(QString::fromStdString(actualPlayer1?player1->getName():player2->getName()));
 }
 
 void MainWindow::printHelp()
@@ -53,27 +72,6 @@ void MainWindow::printHelp()
 
     msgBox.setText("Toto okno obsahuje nápovědu.");
     msgBox.exec();
-}
-
-void MainWindow::init()
-{
-    /* Tlacitka hraci plochy */
-    for (int i =0; i < game::size; i++) {
-        for (int j = 0; j < game::size; j++) {
-            maze_button[i][j] = new QPushButton(this);
-            maze_button[i][j]->setGeometry(QRect(QPoint(20+50*i, 100+50*j),
-            QSize(50, 50)));
-            connect(maze_button[i][j], SIGNAL (released()), this, SLOT (handleButton()));
-        }
-    }
-    /* Ovladaci tlacitka */
-    for (int i =0; i < 5; i++) {
-        ui_button[i] = new QPushButton(this);
-        ui_button[i]->setGeometry(QRect(QPoint(20 + 80*i, 20),
-        QSize(70, 30)));
-    }
-    connect(ui_button[0], SIGNAL (released()), this, SLOT (printHelp()));
-    ui_button[0]->setText("Nápověda");
 }
 
 /* Provede akci podle stisknuteho tlacitka */
