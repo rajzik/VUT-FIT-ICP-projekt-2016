@@ -1,7 +1,4 @@
 #include "mainwindow.h"
-#include "ui_mainwindow.h"
-#include <QMessageBox>
-//#include "enums.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -143,3 +140,6 @@ void MainWindow::Popupdialog()
 
            //QString item = inputdialog.getItem(this,        tr("QInputDialog::getItem()"),tr("Season:"), items, 0, false, &ok);
 }
+
+void MainWindow::run()
+{}

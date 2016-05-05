@@ -15,17 +15,13 @@ LIBS += -lboost_system -lboost_filesystem
 
 SOURCES +=\
         mainwindow.cpp \
-    console.cpp \
     game.cpp \
-    game-cli.cpp \
     game-gui.cpp \
     main-gui.cpp \
     player.cpp
 
 HEADERS  += mainwindow.h \
-    console.h \
     game.h \
-    game-cli.h \
     game-gui.h \
     player.h
 
