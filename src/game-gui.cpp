@@ -2,7 +2,7 @@
 #include "mainwindow.h"
 #include <QApplication>
 
-gameGui::gameGui(bool computer, int size, int argc, char *argv[]) : game(computer, size)
+gameGui::gameGui(int argc, char *argv[]) : game()
 {
     a = new QApplication(argc, argv);
     window = new MainWindow();
