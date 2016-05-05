@@ -119,15 +119,19 @@ int game::checkDirection(bool black, int x, int y, int endX, int endY){
     int xStep = (endX-x)/stepCount;
     int yStep = (endY-y)/stepCount;
     
-    
+    int dataField = gameField[x+1*xStep][y+1*yStep];
+    if(dataField != revColor)
+    { 
+        return score;
+    }
     for(int i = 1; i <= stepCount; i++){
-        int dataField = gameField[x+i*xStep][y+i*yStep];
-        if(dataField == revColor)
-        { 
-            oposite =true;
-            continue;
-        }
-        if(oposite && dataField == color){
+        dataField = gameField[x+i*xStep][y+i*yStep];
+        // if(dataField == revColor)
+        // { 
+        //     oposite =true;
+        //     continue;
+        // }
+        if(dataField == color){
             score++;
             colorPath(black, x,y, x+i*xStep, y+i*yStep);
             break;
