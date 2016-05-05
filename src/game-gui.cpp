@@ -1,12 +1,10 @@
 #include "game-gui.h"
-#include "mainwindow.h"
-#include <QApplication>
 
 gameGui::gameGui(int argc, char *argv[])
 {
     a = new QApplication(argc, argv);
     window = new MainWindow();
-    window->setFixedSize(40 + DEFAULT_SIZE*50, 120 + DEFAULT_SIZE*50);
+    window->setFixedSize(40 + DEFAULT_SIZE*60, 120 + DEFAULT_SIZE*60);
     window->init();
     window->show();
     window->draw();

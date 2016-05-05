@@ -3,6 +3,9 @@
 
 #include <QMainWindow>
 #include <QPushButton>
+#include <QInputDialog>
+#include <ui_mainwindow.h>
+#include <QMessageBox>
 #include "game.h"
 
 namespace Ui {
@@ -16,8 +19,10 @@ class MainWindow : public QMainWindow, public game
 public:
     explicit MainWindow(QWidget *parent = 0);
     void draw();
+    void run();
     void init();
     ~MainWindow();
+    void Popupdialog();
 private slots:
     void openHelp();
     void saveGame();

@@ -1,7 +1,4 @@
 #include "mainwindow.h"
-#include "ui_mainwindow.h"
-#include <QMessageBox>
-//#include "enums.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -97,7 +94,9 @@ void MainWindow::saveGame()
 
 void MainWindow::loadGame()
 {
-    game::loadGame("save.file");
+    Popupdialog();
+
+    //game::loadGame("save.file");
 }
 
 void MainWindow::exitGame()
@@ -122,3 +121,25 @@ void MainWindow::handleButton()
         }
     }
 }
+
+void MainWindow::Popupdialog()
+{
+      QInputDialog inputdialog;
+      QStringList items;
+             items << tr("Spring") << tr("Summer");
+
+
+     // bool val = QObject::connect(inputdialog,SIGNAL(textValueChanged(const QString &text)),this,SLOT(selText( const QString & text )));
+           bool val =  QObject::connect(&inputdialog,SIGNAL(textValueChanged(const QString &)),this,SLOT(selText(const QString &)));
+
+           bool ok;
+
+           inputdialog.setOptions(QInputDialog::UseListViewForComboBoxItems);
+           inputdialog.setComboBoxItems(items);
+           inputdialog.exec();
+
+           //QString item = inputdialog.getItem(this,        tr("QInputDialog::getItem()"),tr("Season:"), items, 0, false, &ok);
+}
+
+void MainWindow::run()
+{}

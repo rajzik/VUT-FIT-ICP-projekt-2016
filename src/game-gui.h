@@ -3,6 +3,9 @@
 #include "mainwindow.h"
 #include <QApplication>
 #include <QMainWindow>
+#include <iostream>
+#include <cstdlib>
+#include <QApplication>
 //#include <QPushButton>
 
 class gameGui
