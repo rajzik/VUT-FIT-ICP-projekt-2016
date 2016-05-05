@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QPushButton>
+#include <QInputDialog>
 #include "game.h"
 
 namespace Ui {
@@ -18,6 +19,7 @@ public:
     void draw();
     void init();
     ~MainWindow();
+    void Popupdialog();
 private slots:
     void openHelp();
     void saveGame();
