@@ -110,9 +110,8 @@ bool game::checkMove(bool black, int x, int y){
 int game::checkDirection(bool black, int x, int y, int endX, int endY){
     // std::cout<<"x:"<<x<<" y: "<<y<<" endX: "<<endX<< " endY: "<<endY<<std::endl;
     
-    int color = black?BLACK:WHITE, score = 0;
+    int color = black?BLACK:WHITE;
     int revColor = black?WHITE:BLACK;
-    bool oposite = false;
     
     
     int stepCount = std::max(abs(x-endX),abs(y-endY));
@@ -122,39 +121,34 @@ int game::checkDirection(bool black, int x, int y, int endX, int endY){
     int dataField = gameField[x+1*xStep][y+1*yStep];
     if(dataField != revColor)
     { 
-        return score;
+        return 0;
     }
-    for(int i = 1; i <= stepCount; i++){
+    
+    
+    
+    for(int i = 2; i <= stepCount; i++){
         dataField = gameField[x+i*xStep][y+i*yStep];
-        // if(dataField == revColor)
-        // { 
-        //     oposite =true;
-        //     continue;
-        // }
         if(dataField == color){
-            score++;
-            colorPath(black, x,y, x+i*xStep, y+i*yStep);
-            break;
+            return colorPath(black, x,y, x+i*xStep, y+i*yStep);
         }
         if(dataField == EMPTY)
             break;
     }
     
-    
-    return score;
-     
+    return 0;
 }
 
-void game::colorPath(bool color, int x, int y, int endX, int endY){  
+int game::colorPath(bool color, int x, int y, int endX, int endY){  
     
     int stepCount = std::max(abs(x-endX),abs(y-endY));
     int xStep = (endX-x)/stepCount;
     int yStep = (endY-y)/stepCount;
     
-    
-    for(int i = 0; i <= stepCount; i++){
+    int i;
+    for(i = 0; i <= stepCount; i++){
         changeField(color, x+i*xStep, y+i*yStep);
     }
+    return i;
 }
 
 bool game::saveGame() {
