@@ -40,7 +40,7 @@ class game{
         bool actualPlayer1;
         
         int checkDirection(bool black, int x, int y, int xDirection, int yDirection);
-        void changeScore(bool black, int newScore);
+        void changeScore();
         int colorPath(bool color, int x, int y, int endX, int endY);
         void initGameField();
         void changeFiled(bool black, int x, int y);

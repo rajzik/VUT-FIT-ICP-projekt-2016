@@ -48,11 +48,11 @@ bool game::makeMove(bool black, int x, int y) {
     bool validMove = checkMove(black, x, y);
     move mv = {black,x,y};
     if(validMove){
-        history->push(mv);
+        changeScore();
         
+        history->push(mv);
         std::stack<move> * empty = new std::stack<move>();
         swap(future, empty);
-    
     }
     return validMove;
 }
@@ -99,11 +99,7 @@ bool game::checkMove(bool black, int x, int y){
         score += checkDirection(black,x,y,x+minimum, y-minimum);
     }
     
-    if(score != 0)
-    {
-        changeScore(black, score);
-        changeScore(!black, - (score-1));
-    }
+    
     return score != 0;
 }
 
@@ -312,11 +308,19 @@ void game::prevStep() {
 }
 
 
-void game::changeScore(bool black, int scoreDiff){
-    if(black)
-        player1->setScore(player1->getScore() + scoreDiff);
-    else
-        player2->setScore(player2->getScore() + scoreDiff);
+void game::changeScore(){
+    int black = 0, white = 0;
+    for(int x = 0; x < size;x ++)
+    {
+        for(int y = 0; y < size; y++)
+            if(gameField[x][y] == BLACK)
+                black++;
+            else if(gameField[x][y] == WHITE)
+                white++;
+    }
+    player1->setScore(black);
+    player2->setScore(white);
+    
 }
 
 
