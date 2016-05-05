@@ -201,7 +201,7 @@ bool game::saveGame() {
     
     if(!future->empty())
     {
-        savFile << "fs"<<std::endl;
+        savFile << "ft"<<std::endl;
         savFile << future->size()<<std::endl;
         while(!future->empty()){
             move m = future->top();
@@ -209,7 +209,7 @@ bool game::saveGame() {
             savFile << m.player <<";"<<m.x<<";"<<m.y<<";"<<std::endl;
             future->pop(); 
         }
-        savFile << "fse"<<std::endl;
+        savFile << "fte"<<std::endl;
     }
     while(!tempStack->empty()){
         future->push(tempStack->top());
@@ -249,12 +249,8 @@ bool game::loadGame(std::string filename) {
         return false;
     content.erase(0, pos+1);
     
-    
     size = tempSize;
     initGameField();
-    
-    
-    
     
     for(int x = 0; x < size; x++){
         for(int y = 0; y < size; y++){

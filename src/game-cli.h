@@ -7,7 +7,7 @@ class gameCli : public game
 {
 private: 
     console consol;    
-
+    std::string message;
     bool actualPlayer;
     void printSavedGame();
     
