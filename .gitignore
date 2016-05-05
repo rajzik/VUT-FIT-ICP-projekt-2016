@@ -7,4 +7,6 @@ HRA2016-cli
 saves/
 build-src-Desktop-Debug/
 src/src.pro.user
+gui-compiled/
+src/Makefile
 

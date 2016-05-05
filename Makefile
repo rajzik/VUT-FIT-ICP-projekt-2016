@@ -11,9 +11,17 @@ LFLAGS += $(shell command -v g++-4.8 >/dev/null 2>&1 && echo -n "-static-libstdc
 all: $(NAMECLI) $(NAME)
 
 
-$(NAME): src/main-gui.cpp
+#$(NAME): src/main-gui.cpp
+#	$(CC) $(CFLAGS) src/main-gui.cpp -o $(NAME) src/game.cpp src/player.cpp $(LFLAGS) 
+gui:
+	@cd src && qmake-qt5 src.pro -o ../gui-compiled/Makefile  
+	$(MAKE) CXX=$(CC) -C gui-compiled 
+
+
+$(NAME):src/main-gui.cpp gui
 	$(CC) $(CFLAGS) src/main-gui.cpp -o $(NAME) src/game.cpp src/player.cpp $(LFLAGS) 
-	
+
+
 $(NAMECLI): src/main-cli.cpp
 	$(CC) $(CFLAGS) src/main-cli.cpp -o $(NAMECLI) src/game.cpp src/game-cli.cpp src/player.cpp src/console.cpp $(LFLAGS)
 
