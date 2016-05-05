@@ -101,8 +101,8 @@ bool game::checkMove(bool black, int x, int y){
     
     if(score != 0)
     {
-        changeScore(black, score+1);
-        changeScore(!black, - (score));
+        changeScore(black, score);
+        changeScore(!black, - (score-1));
     }
     return score != 0;
 }
