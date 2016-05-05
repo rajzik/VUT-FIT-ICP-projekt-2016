@@ -8,17 +8,17 @@ CFLAGS=-Wall -Wextra --std=c++11 -pedantic
 LFLAGS=-lboost_system -lboost_filesystem
 LFLAGS += $(shell command -v g++-4.8 >/dev/null 2>&1 && echo -n "-static-libstdc++")
 
-all: $(NAMECLI) $(NAME)
+all: $(NAMECLI) gui
 
 
 #$(NAME): src/main-gui.cpp
 #	$(CC) $(CFLAGS) src/main-gui.cpp -o $(NAME) src/game.cpp src/player.cpp $(LFLAGS) 
 gui:
-	@cd src && qmake-qt5 src.pro -o ../gui-compiled/Makefile  
-	$(MAKE) CXX=$(CC) -C gui-compiled 
+	qmake-qt5 src/src.pro -o gui-compiled/Makefile  
+	$(MAKE) CXX=$(CC) -C gui-compiled -o ../$(NAME)
+	mv gui-compiled/src $(NAME)
 
-
-$(NAME):src/main-gui.cpp gui
+$(NAME):src/main-gui.cpp
 	$(CC) $(CFLAGS) src/main-gui.cpp -o $(NAME) src/game.cpp src/player.cpp $(LFLAGS) 
 
 
