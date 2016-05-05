@@ -14,6 +14,8 @@
 #include <boost/range/iterator_range.hpp>
 #include "player.h"
 
+#define DEFAULT_SIZE 8
+
 enum color
 {
     EMPTY,
