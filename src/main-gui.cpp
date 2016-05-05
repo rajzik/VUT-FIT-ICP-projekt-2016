@@ -4,11 +4,9 @@
 #include "game-gui.h"
 #include "player.h"
 
+int main(int argc, char * argv[])
+{
+    gameGui * game = new gameGui(argc, argv);
 
-int main(){
-
-    gameGui * game = new gameGui(false, 8);
-   
-    game->run();
-    return 0;
+    //game->run();
 }

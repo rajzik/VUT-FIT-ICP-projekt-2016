@@ -5,3 +5,7 @@ src/src.layout
 src/HRA2016
 HRA2016-cli
 saves/
+build-src-Desktop-Debug/
+src/src.pro
+src/src.pro.user
+

@@ -10,15 +10,15 @@
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui_set(new Ui::MainWindow),
+    ui(new Ui::MainWindow),
     game()
 {
-    ui_set->setupUi(this);
+    ui->setupUi(this);
 }
 
 MainWindow::~MainWindow()
 {
-    delete ui_set;
+    delete ui;
 }
 
 /* Obnoveni barvy talcitek podle hraci plochy */
@@ -42,9 +42,9 @@ void MainWindow::draw()
             }
         }
     }
-    /*ui_set->label_1->setText(QString::number(players[0]->getScore()));
-    ui_set->label_2->setText(QString::number(players[1]->getScore()));
-    ui_set->label_3->setText(QString::fromStdString(players[actualPlayer]->getName()));*/
+    ui->label_1->setText(QString::number(player1->getScore()));
+    ui->label_2->setText(QString::number(player2->getScore()));
+    ui->label_3->setText(QString::fromStdString(players[actualPlayer]->getName()));
 }
 
 void MainWindow::printHelp()

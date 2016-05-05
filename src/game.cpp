@@ -110,7 +110,7 @@ int game::checkDirection(bool black, int x, int y, int endX, int endY){
     
     int color = black?BLACK:WHITE, score = 0;
     int revColor = black?WHITE:BLACK;
-    bool oposite = false, bro = false;
+    bool oposite = false;
     
     
     int stepCount = std::max(abs(x-endX),abs(y-endY));

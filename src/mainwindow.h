@@ -24,7 +24,7 @@ private slots:
 private:
     QPushButton *maze_button[8][8];
     QPushButton *ui_button[5];
-    Ui::MainWindow *ui_set;
+    Ui::MainWindow *ui;
 };
 
 #endif // MAINWINDOW_H

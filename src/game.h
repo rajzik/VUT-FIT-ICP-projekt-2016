@@ -37,7 +37,7 @@ class game{
         int **gameField;
         player * player1, * player2;
         std::stack<move> * history, * future;
-
+        bool actualPlayer1;
         
         int checkDirection(bool black, int x, int y, int xDirection, int yDirection);
         void changeScore(bool black, int newScore);
