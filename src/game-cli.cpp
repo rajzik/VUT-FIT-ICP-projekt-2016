@@ -8,7 +8,6 @@ gameCli::gameCli()
     consol.clear();
     printHelp();
     getGameInfo();
-    actualPlayer = true;
 }
      
 gameCli::~gameCli(){
@@ -42,7 +41,6 @@ void gameCli::getGameInfo(){
     int tempSize = -1;
     while(true){
         consol.clear();   
-        std::cout<<tempSize<<std::endl;
         std::cout<< "Please enter valid size 6, 8, 10, 12. Or press enter or type 0 to set default size"<<std::endl;
         std::cout<<"Enter game field size: ";
         std::getline(std::cin, a);
@@ -120,7 +118,7 @@ void gameCli::draw(){
     std::cout << std::endl;
     consol.setCursor(size*2 + 5, 5);
     
-    std::cout << "Now Playing: "<< (actualPlayer? player1->getName():player2->getName()) << std::endl;
+    std::cout << "Now Playing: "<< (actualPlayer1? player1->getName():player2->getName()) << std::endl;
     consol.setCursor(0, size*2+4);
     
     drawScore();    
@@ -132,18 +130,22 @@ void gameCli::printSavedGame(){
     boost::filesystem::create_directory(dir);
     
     std::stringstream filename; 
+    int i = 0;
+    
     
     for(auto& entry : boost::make_iterator_range(boost::filesystem::directory_iterator(dir), {}))
     {
         std::time_t t = boost::filesystem::last_write_time(entry);
-        
+        char buff[20];
+        strftime(buff, 20, "%Y-%m-%d %H:%M", localtime(&t));
+        std::cout<< (++i) << ") " << buff << " " <<boost::filesystem::basename(entry) <<std::endl ;
         std::stringstream ss;
         ss << boost::filesystem::basename(entry);
         
     }
 
     
-    
+    std::cin.get();
     
 }
 
@@ -177,7 +179,7 @@ void gameCli::run(){
         }
         else{
             //make move to be filed later
-            actualPlayer = !actualPlayer;
+            actualPlayer1 = !actualPlayer1;
         }
         
     }

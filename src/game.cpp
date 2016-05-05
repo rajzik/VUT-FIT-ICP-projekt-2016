@@ -99,10 +99,11 @@ bool game::checkMove(bool black, int x, int y){
         score += checkDirection(black,x,y,x+minimum, y-minimum);
     }
     
-    changeScore(black, score);
     if(score != 0)
-        changeScore(!black, - (score - 1));
-    
+    {
+        changeScore(black, score+1);
+        changeScore(!black, - (score));
+    }
     return score != 0;
 }
 
