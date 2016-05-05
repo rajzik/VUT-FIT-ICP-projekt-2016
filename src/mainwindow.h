@@ -19,7 +19,12 @@ public:
     void init();
     ~MainWindow();
 private slots:
-    void printHelp();
+    void openHelp();
+    void saveGame();
+    void newGame();
+    void openSettings();
+    void loadGame();
+    void exitGame();
     void handleButton();
 private:
     QPushButton *maze_button[8][8];
