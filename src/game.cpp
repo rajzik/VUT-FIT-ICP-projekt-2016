@@ -183,8 +183,7 @@ bool game::saveGame() {
     }
     
     savFile << "fse"<<std::endl;
-    move a = {true, 0,1};
-    history->push(a);
+    
     std::stack<move> * tempStack = new std::stack<move>(); 
 
     if(!history->empty())
@@ -204,7 +203,6 @@ bool game::saveGame() {
         tempStack->pop();        
     }
     
-    future->push(a);
     if(!future->empty())
     {
         savFile << "fs"<<std::endl;

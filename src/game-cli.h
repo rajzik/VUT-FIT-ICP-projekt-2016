@@ -7,14 +7,11 @@ class gameCli : public game
 {
 private: 
     console consol;    
-        
-    std::string dummyPlayer;
-    int dummyScore;
+
     bool actualPlayer;
-    
+    void printSavedGame();
     
 public:
-
     gameCli();
     ~gameCli();
     void getGameInfo();

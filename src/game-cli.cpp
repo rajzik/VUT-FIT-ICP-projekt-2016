@@ -126,6 +126,27 @@ void gameCli::draw(){
     drawScore();    
 }
 
+void gameCli::printSavedGame(){
+    consol.clear();
+    boost::filesystem::path dir("saves");
+    boost::filesystem::create_directory(dir);
+    
+    std::stringstream filename; 
+    
+    for(auto& entry : boost::make_iterator_range(boost::filesystem::directory_iterator(dir), {}))
+    {
+        std::time_t t = boost::filesystem::last_write_time(entry);
+        
+        std::stringstream ss;
+        ss << boost::filesystem::basename(entry);
+        
+    }
+
+    
+    
+    
+}
+
 
 void gameCli::run(){
     
@@ -147,6 +168,11 @@ void gameCli::run(){
         else if((found = command.find("help"))!= std::string::npos){
             consol.clear();
             printHelp();    
+            std::cin.get();
+        }
+        else if((found = command.find("load")) != std::string::npos){
+            consol.clear();
+            printSavedGame();
             std::cin.get();
         }
         else{
