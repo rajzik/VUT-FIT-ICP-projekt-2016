@@ -23,6 +23,7 @@ SOURCES +=\
 HEADERS  += mainwindow.h \
     game.h \
     game-gui.h \
-    player.h
+    player.h \
+    enums.h
 
 FORMS    += mainwindow.ui

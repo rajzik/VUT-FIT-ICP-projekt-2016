@@ -7,6 +7,9 @@
 #include <ui_mainwindow.h>
 #include <QMessageBox>
 #include <QMovie>
+#include <QStringList>
+#include <QDir>
+#include <iostream>
 #include "game.h"
 
 namespace Ui {
@@ -16,28 +19,34 @@ namespace Ui {
 class MainWindow : public QMainWindow, public game
 {
     Q_OBJECT
-
-public:
-    explicit MainWindow(int width, int height, QWidget *parent = 0);
+private:
+    QPushButton *maze_buttons[8][8];
+    QMovie *blackAnimation;
+    QMovie *whiteAnimation;
+    Ui::MainWindow *ui;
+    int windowWidth;
+    int windowHeight;
     void draw();
     void run();
-    void init();
-    ~MainWindow();
+    void initButtons();
+    void initGraphics();
+    void connectSlots();
     void Popupdialog();
+    void clearButtons();
+    void disableButtons();
+public:
+    explicit MainWindow(QWidget *parent = 0);
+    void init(int size);
+    ~MainWindow();
 private slots:
     void openHelp();
     void saveGame();
-    void newGame();
-    void openSettings();
+    void newGame();    
     void loadGame();
     void exitGame();
     void handleButton();
-private:
-    QPushButton *maze_button[8][8];
-    QPushButton *ui_button[5];
-    QMovie *animations[2];
-    Ui::MainWindow *ui;
-    int windowSize[2];
+    void redoHistory();
+    void undoHistory();
 };
 
 #endif // MAINWINDOW_H

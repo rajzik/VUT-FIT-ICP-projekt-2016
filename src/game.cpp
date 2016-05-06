@@ -9,6 +9,7 @@ game::game()
 }
 void game::initPlayers(std::string nameOne, std::string nameTwo, bool computer){
     actualPlayer1 = true;
+    //actualPlayer1 = false;
     player1 = new player(nameOne, false, computer);
     player2 = new player(nameTwo, true, false); 
 }
@@ -25,10 +26,19 @@ void game::initGameField() {
 
     for(int i = 0; i < size; i++)
         gameField[i] = new int[size];
-        
+    /*int pole[6][6] = {
+        {WHITE,WHITE,WHITE,WHITE,BLACK,WHITE},
+        {WHITE,WHITE,WHITE,BLACK,BLACK,WHITE},
+        {WHITE,WHITE,WHITE,WHITE,BLACK,WHITE},
+        {WHITE,WHITE,WHITE,WHITE,BLACK,WHITE},
+        {WHITE,WHITE,WHITE,BLACK,WHITE,WHITE},
+        {WHITE,EMPTY,EMPTY,EMPTY,WHITE,WHITE}
+    };*/
     for(int x = 0; x < size; x++)
         for(int y = 0; y < size; y++)
-            gameField[x][y] = 0;    
+            gameField[x][y] = EMPTY;
+            //gameField[x][y] = pole[y][x];
+
         
     int center = size/2;
     
@@ -40,13 +50,13 @@ void game::initGameField() {
 }
 
 
-bool game::makeMove(bool black, int x, int y) {
+bool game::makeMove(bool write, int x, int y) {
     if(x < 0 || y < 0 || x >= size || y >= size)
         return false;
     if(gameField[x][y] != EMPTY)
         return false;
-    bool validMove = checkMove(black, x, y);
-    move mv = {black,x,y};
+    bool validMove = checkMove(write, x, y);
+    move mv = {actualPlayer1,x,y};
     if(validMove){
         changeScore();
         
@@ -56,58 +66,100 @@ bool game::makeMove(bool black, int x, int y) {
     }
     return validMove;
 }
-bool game::checkMove(bool black, int x, int y){
+
+int game::impossibleMove()
+{
+    bool blackCan = false;
+    bool whiteCan = false;
+    bool actualPlayerBackup;
+
+    actualPlayerBackup = actualPlayer1;
+    for (int i = 0; i < game::size; i++) {
+        for (int j =0; j < game::size; j++) {
+            /* Check black player */
+            actualPlayer1 = 1;
+            if (game::makeMove(READ, i, j))
+                blackCan = true;
+            /* Check white player */
+            actualPlayer1 = 0;
+            if (game::makeMove(READ, i, j))
+                whiteCan = true;
+        }
+    }
+    actualPlayer1 = actualPlayerBackup;
+
+    /* Nobody can move - return 2 */
+    if (!blackCan && !whiteCan) {
+        return 2;
+    }
+    /* Actual can move - return 0 || Skip actual player - return 1 */
+    if (actualPlayer1) {
+        if (blackCan) {
+            return 0;
+        } else {
+            return 1;
+        }
+    } else {
+        if (whiteCan) {
+            return 0;
+        } else {
+            return 1;
+        }
+    }
+}
+
+bool game::checkMove(bool write, int x, int y){
 
     int score = 0;
     // std::cout<<"leva"<<std::endl;    
     if(x > 0)
-        score += checkDirection(black, x,y, 0,y);
+        score += checkDirection(write, x,y, 0,y);
     
     // std::cout<<"prava"<<std::endl;
     if(x < size-1)
-        score += checkDirection(black, x,y, size-1,y);
+        score += checkDirection(write, x,y, size-1,y);
         
     // std::cout<<"nahoru"<<std::endl;
     if(y > 0)
-        score += checkDirection(black, x,y, x,0);
+        score += checkDirection(write, x,y, x,0);
         
     // std::cout<<"dolu"<<std::endl;
     if(y < size-1)
-        score += checkDirection(black, x,y, x,size-1);
+        score += checkDirection(write, x,y, x,size-1);
         
     // std::cout<<"leva nahoru"<<std::endl;
     if(x > 0 && y > 0){
         int minimum = std::min(x,y);
-        score += checkDirection(black, x, y, x-minimum, y-minimum);
+        score += checkDirection(write, x, y, x-minimum, y-minimum);
     }
     
     // std::cout<<"leva dolu"<<std::endl;
     if(x > 0 && y < size-1){
         int minimum = std::min(x,size-1-y);
-        score += checkDirection(black, x, y, x-minimum, y+minimum);
+        score += checkDirection(write, x, y, x-minimum, y+minimum);
     }
     
     // std::cout<<"prava dolu"<<std::endl;
     if(x<size-1 && y < size-1){
         int minimum = std::min(size-1-x, size-1-y);
-        score += checkDirection(black, x, y, x + minimum, y+minimum);
+        score += checkDirection(write, x, y, x + minimum, y+minimum);
     }
     
     // std::cout<<"prava nahoru"<<std::endl;
     if(x<size-1 && y > 0){
         int minimum = std::min(size-1-x, y);
-        score += checkDirection(black,x,y,x+minimum, y-minimum);
+        score += checkDirection(write,x,y,x+minimum, y-minimum);
     }
     
     
     return score != 0;
 }
 
-int game::checkDirection(bool black, int x, int y, int endX, int endY){
+int game::checkDirection(bool write, int x, int y, int endX, int endY){
     // std::cout<<"x:"<<x<<" y: "<<y<<" endX: "<<endX<< " endY: "<<endY<<std::endl;
     
-    int color = black?BLACK:WHITE;
-    int revColor = black?WHITE:BLACK;
+    int color = actualPlayer1?BLACK:WHITE;
+    int revColor = actualPlayer1?WHITE:BLACK;
     
     
     int stepCount = std::max(abs(x-endX),abs(y-endY));
@@ -125,7 +177,7 @@ int game::checkDirection(bool black, int x, int y, int endX, int endY){
     for(int i = 2; i <= stepCount; i++){
         dataField = gameField[x+i*xStep][y+i*yStep];
         if(dataField == color){
-            return colorPath(black, x,y, x+i*xStep, y+i*yStep);
+            return colorPath(write, x,y, x+i*xStep, y+i*yStep);
         }
         if(dataField == EMPTY)
             break;
@@ -134,7 +186,7 @@ int game::checkDirection(bool black, int x, int y, int endX, int endY){
     return 0;
 }
 
-int game::colorPath(bool color, int x, int y, int endX, int endY){  
+int game::colorPath(bool write, int x, int y, int endX, int endY){
     
     int stepCount = std::max(abs(x-endX),abs(y-endY));
     int xStep = (endX-x)/stepCount;
@@ -142,7 +194,7 @@ int game::colorPath(bool color, int x, int y, int endX, int endY){
     
     int i;
     for(i = 0; i <= stepCount; i++){
-        changeField(color, x+i*xStep, y+i*yStep);
+        changeField(write, x+i*xStep, y+i*yStep);
     }
     return i;
 }
@@ -363,9 +415,11 @@ bool game::loadGame(std::string filename) {
     return true;
 }
 
-void game::changeField(bool black, int x, int y) {
+void game::changeField(bool write, int x, int y) {
     // std::cout<<"obarvuji: "<< x << y<<std::endl;
-    gameField[x][y] = black? BLACK : WHITE;
+    if (write) {
+        gameField[x][y] = actualPlayer1? BLACK : WHITE;
+    }
 }
 
 void game::nextStep() {
@@ -396,8 +450,7 @@ void game::changeScore(){
                 white++;
     }
     player1->setScore(black);
-    player2->setScore(white);
-    
+    player2->setScore(white);    
 }
 
 

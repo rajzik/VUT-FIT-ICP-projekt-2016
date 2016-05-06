@@ -13,16 +13,9 @@
 #include <boost/filesystem.hpp>
 #include <boost/range/iterator_range.hpp>
 #include "player.h"
+#include "enums.h"
 
-#define DEFAULT_SIZE 8
-
-enum color
-{
-    EMPTY,
-    BLACK,
-    WHITE
-};
-
+#define DEFAULT_SIZE 6
 
 typedef struct move{
     bool player;
@@ -39,11 +32,12 @@ class game{
         std::stack<move> * history, * future;
         bool actualPlayer1;
         
-        int checkDirection(bool black, int x, int y, int xDirection, int yDirection);
+        int checkDirection(bool write, int x, int y, int xDirection, int yDirection);
         void changeScore();
-        int colorPath(bool color, int x, int y, int endX, int endY);
+        int colorPath(bool write, int x, int y, int endX, int endY);
         void initGameField();
         void changeFiled(bool black, int x, int y);
+        int impossibleMove();
     public:
         game();
         ~game();
@@ -55,8 +49,8 @@ class game{
         void nextStep();
         void prevStep();
         
-        bool makeMove(bool black, int x, int y);
-        bool checkMove(bool black, int x, int y);
+        bool makeMove(bool write, int x, int y);
+        bool checkMove(bool write, int x, int y);
         void changeField(bool black, int x, int y);
         void initPlayers(std::string nameOne, std::string nameTwo, bool computer);
         virtual void run();
