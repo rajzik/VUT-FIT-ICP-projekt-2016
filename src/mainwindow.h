@@ -6,6 +6,7 @@
 #include <QInputDialog>
 #include <ui_mainwindow.h>
 #include <QMessageBox>
+#include <QMovie>
 #include "game.h"
 
 namespace Ui {
@@ -17,7 +18,7 @@ class MainWindow : public QMainWindow, public game
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
+    explicit MainWindow(int width, int height, QWidget *parent = 0);
     void draw();
     void run();
     void init();
@@ -34,7 +35,9 @@ private slots:
 private:
     QPushButton *maze_button[8][8];
     QPushButton *ui_button[5];
+    QMovie *animations[2];
     Ui::MainWindow *ui;
+    int windowSize[2];
 };
 
 #endif // MAINWINDOW_H
