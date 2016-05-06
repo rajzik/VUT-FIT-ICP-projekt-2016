@@ -235,19 +235,31 @@ bool game::loadGame(std::string filename) {
     std::string content = ss.str();
     std::size_t pos;
     savFile.close();
+    std::string a;
+
     
-    if((pos = content.find("fs")) == std::string::npos)
+    if((pos = content.find("fs\n")) == std::string::npos)
         return false;
     
     content.erase(0, 3);
     
+        
     if((pos = content.find("\n")) == std::string::npos)
         return false;
     
+    
     int tempSize = std::stoi("0" + content.substr(0, pos));
-    if(!((tempSize % 2) == 0 && tempSize < 6  && tempSize > 12) )
+
+    if(!((tempSize % 2) == 0 && tempSize >= 6  && tempSize <= 12) )
         return false;
+        
     content.erase(0, pos+1);
+
+    
+    std::cout<<content<<std::endl;
+    std::getline(std::cin, a);
+    
+    
     
     size = tempSize;
     initGameField();
@@ -255,28 +267,97 @@ bool game::loadGame(std::string filename) {
     for(int x = 0; x < size; x++){
         for(int y = 0; y < size; y++){
             int tempColor = std::stoi("0"+ content.substr(0,1));
+    
             if(tempColor > 2 || tempColor < 0)
                 return false;
             gameField[x][y] = tempColor;
             content.erase(0,1); 
-        }
+        }        
         content.erase(0,1);
     }
-    
     
     if((pos = content.find("fse")) == std::string::npos)
         return false;
     
     content.erase(0, pos+4);
     
-    if((pos = content.find("hse")) != std::string::npos)
+    if((pos = content.find("hs")) != std::string::npos)
     {
-        content.erase(0, pos + 4);
+        content.erase(0, pos + 3);
+        if((pos = content.find("\n")) == std::string::npos)
+            return false;
+        tempSize = std::stoi("0" + content.substr(0, pos));
+        content.erase(0, pos+1);
+        if(tempSize <= 0)
+            return false;
         
+        std::stack<move> * temp = new std::stack<move>();
         
+        for(int i = 0; i < tempSize; i++){
+            move m;
+            if((pos = content.find(";")) == std::string::npos)
+                return false;
+            m.player = (bool)std::stoi("0" + content.substr(0, pos));
+            
+            content.erase(0, pos+1);
+            if((pos = content.find(";")) == std::string::npos)
+                return false;
+            m.x = std::stoi("0" + content.substr(0, pos));
+            content.erase(0, pos+1);
+            
+            if((pos = content.find(";")) == std::string::npos)
+                return false;
+            m.y = std::stoi("0" + content.substr(0, pos));
+            content.erase(0, pos+2);
+            
+            temp->push(m);
+        }
         
+    
+        if((pos = content.find("hse")) != std::string::npos)
+            return false;
+        content.erase(0, pos + 3);
+        
+        swap(temp, history);
     }
     
+    if((pos = content.find("ft")) != std::string::npos)
+    {
+        content.erase(0, pos + 3);
+        if((pos = content.find("\n")) == std::string::npos)
+            return false;
+        tempSize = std::stoi("0" + content.substr(0, pos));
+        content.erase(0, pos+1);
+        if(tempSize <= 0)
+            return false;
+        
+        std::stack<move> * temp = new std::stack<move>();
+        
+        for(int i = 0; i < tempSize; i++){
+            move m;
+            if((pos = content.find(";")) == std::string::npos)
+                return false;
+            m.player = (bool)std::stoi("0" + content.substr(0, pos));
+            
+            content.erase(0, pos+1);
+            if((pos = content.find(";")) == std::string::npos)
+                return false;
+            m.x = std::stoi("0" + content.substr(0, pos));
+            content.erase(0, pos+1);
+            
+            if((pos = content.find(";")) == std::string::npos)
+                return false;
+            m.y = std::stoi("0" + content.substr(0, pos));
+            content.erase(0, pos+2);
+            
+            temp->push(m);
+        }
+        
+        if((pos = content.find("fte")) != std::string::npos)
+            content.erase(0, pos + 3);
+        
+        swap(temp, future);
+    }
     
     
     return true;
