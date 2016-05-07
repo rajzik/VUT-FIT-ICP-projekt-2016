@@ -25,6 +25,7 @@ game::~game()
 void game::computerMove()
 {
     if (game::easyComputer) {
+        /* Random move */
         int randomX;
         int randomY;
         std::srand(std::time(0));
@@ -32,19 +33,31 @@ void game::computerMove()
             randomX = std::rand() % game::size;
             randomY = std::rand() % game::size;
         } while (!makeMove(WRITE, randomX, randomY));
-    } else {        
-        int maxX = 0, maxY = 0, maxScore = 0, actScore;
+    } else {
+        /* Find maximal moves + random select */
+        int maxScore = 0, actScore, randomPos;
+        std::vector<int> xVals, yVals;
+        /* Find maximal value */
         for (int i = 0; i < game::size; i++) {
             for (int j = 0; j < game::size; j++) {
                 actScore = makeMove(READ, i, j);
+                if (actScore == maxScore) {
+                    xVals.push_back(i);
+                    yVals.push_back(j);
+                }
                 if (actScore > maxScore) {
                     maxScore = actScore;
-                    maxX = i;
-                    maxY = j;
+                    xVals.clear();
+                    yVals.clear();
+                    xVals.push_back(i);
+                    yVals.push_back(j);
                 }
             }
         }
-        makeMove(WRITE, maxX, maxY);
+        /* Random select from max */
+        std::srand(std::time(0));
+        randomPos = std::rand() % xVals.size();
+        makeMove(WRITE, xVals.at(randomPos), yVals.at(randomPos));
     }
 }
 
