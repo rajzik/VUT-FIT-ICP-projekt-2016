@@ -1,0 +1,7 @@
+Doxygen
+Rozpor ve vykreslovani progrmau CLI vs. GUI
+Makefile
+	make run
+	make doxygen
+	make pack
+Jmena autoru do vsech modulu
