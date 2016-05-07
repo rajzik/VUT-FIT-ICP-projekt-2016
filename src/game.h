@@ -15,7 +15,7 @@
 #include "player.h"
 #include "enums.h"
 
-#define DEFAULT_SIZE 6
+#define DEFAULT_SIZE 8
 
 typedef struct move{
     bool player;

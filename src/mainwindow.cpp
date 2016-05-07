@@ -2,15 +2,7 @@
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), game(), ui(new Ui::MainWindow)
 {
-    /*
     ui->setupUi(this);
-    game::size = DEFAULT_SIZE;
-    windowWidth = 50 + size*60;
-    windowHeight = 225 + size*60;
-    this->setFixedSize(windowWidth, windowHeight);
-    initPlayers("Player 1", "Player 2", 1);
-    initGameField();
-*/
 }
 
 MainWindow::~MainWindow()
@@ -43,18 +35,26 @@ void MainWindow::connectSlots()
 
 void MainWindow::initGraphics()
 {
+    /* Window size */
+    windowWidth = 50 + game::size*60;
+    windowHeight = 225 + game::size*60;
+    this->setFixedSize(windowWidth, windowHeight);
     /* Positions */
     ui->lblP2Color->setGeometry(QRect(QPoint(windowWidth-50-120, 20), QSize(120, 120)));
     ui->lblP2Score->setGeometry(QRect(QPoint(windowWidth-50-120, 20), QSize(120, 120)));
+    ui->lblWrongMove->setGeometry(QRect(QPoint(windowWidth/2-25, 20+35), QSize(50, 50)));
     /* Black Animation */
-    blackAnimation = new QMovie("../graphics/black_120.gif");
+    blackAnimation = new QMovie("./graphics/blackPlayer.gif");
     ui->lblP1Color->setMovie(blackAnimation);
     blackAnimation->start();
     /* White animation */
-
-    whiteAnimation = new QMovie("../graphics/white_120.gif");
+    whiteAnimation = new QMovie("./graphics/whitePlayer.gif");
     ui->lblP2Color->setMovie(whiteAnimation);
     whiteAnimation->start();
+    /* Wrong animation */
+    wrongMoveAnimation = new QMovie("./graphics/wrongMove.gif");
+    ui->lblWrongMove->setMovie(wrongMoveAnimation);
+    wrongMoveAnimation->setSpeed(500);
     /* Backgrounds */
     ui->centralWidget->setStyleSheet("background-color: rgb(128, 128, 128);");
     ui->lblP1Score->setStyleSheet("background-color: rgba(0, 0, 0, 0%);");
@@ -64,17 +64,12 @@ void MainWindow::initGraphics()
 void MainWindow::init(int size)
 {
     game::size = size;
-    ui->setupUi(this);
-    windowWidth = 50 + game::size*60;
-    windowHeight = 225 + game::size*60;
-    this->setFixedSize(windowWidth, windowHeight);
+
     initPlayers("Player 1", "Player 2", 1);
-
     initGameField();
-
+    initGraphics();
     initButtons();
     connectSlots();
-    initGraphics();
     draw();
 }
 
@@ -85,26 +80,28 @@ void MainWindow::draw()
         for (int j =0; j < game::size; j++) {
             switch (gameField[i][j]) {
                 case EMPTY:
-                    maze_buttons[i][j]->setIcon(QIcon("../graphics/empty_50.bmp"));
+                    maze_buttons[i][j]->setIcon(QIcon("./graphics/emptyStone.png"));
                     break;
                 case BLACK:
-                    maze_buttons[i][j]->setIcon(QIcon("../graphics/black_50.png"));
+                    maze_buttons[i][j]->setIcon(QIcon("./graphics/blackStone.png"));
                     break;
                 case WHITE:
-                    maze_buttons[i][j]->setIcon(QIcon("../graphics/white_50.png"));
-                    break;
+                    maze_buttons[i][j]->setIcon(QIcon("./graphics/whiteStone.png"));
+                break;
             }
         }
     }    
     /* Score and animations */
     ui->lblP1Score->setText(QString::number(player1->getScore()));
     ui->lblP2Score->setText(QString::number(player2->getScore()));
-    if (actualPlayer1) {
+    if (actualPlayer1) {        
         blackAnimation->start();
         whiteAnimation->stop();
-    } else {
+        whiteAnimation->jumpToFrame(1);
+    } else {        
         blackAnimation->stop();
         whiteAnimation->start();
+        blackAnimation->jumpToFrame(1);
     }
 }
 
@@ -151,11 +148,11 @@ void MainWindow::newGame()
     selectedSize = QInputDialog::getItem(this, tr("Nová hra"), tr("Volba velikosti hrací plochy"), fileNames, 0, false, &sizeSelected);
     if (sizeSelected && !selectedSize.isEmpty()) {
         clearButtons();
-        game::size = selectedSize.toInt();
-        game::initPlayers("Player 1", "Player 2", 1);
-        game::initGameField();
-        init(game::size);
-        draw();
+        //game::size = selectedSize.toInt();
+        //game::initPlayers("Player 1", "Player 2", 1);
+        //game::initGameField();
+        init(selectedSize.toInt());
+        //draw();
     }
 }
 
@@ -180,7 +177,7 @@ void MainWindow::loadGame()
     savesDir.setFilter(QDir::Files | QDir::Hidden | QDir::NoSymLinks);
     list = savesDir.entryInfoList();
     for (int i = 0; i < list.size(); ++i) {
-        fileNames << list.at(i).fileName();
+        fileNames << list.at(i).created().toString("dd.MM.yyyy hh:mm:ss");
     }
     selectedFile = QInputDialog::getItem(this, tr("Nahrát hru"), tr("Volba uložené hry:"), fileNames, 0, false, &fileSelected);
     if (fileSelected && !selectedFile.isEmpty()) {
@@ -200,47 +197,34 @@ void MainWindow::exitGame()
     exit(0);
 }
 
-void MainWindow::disableButtons()
-{
-    for (int i =0; i < game::size; i++) {
-        for (int j =0; j < game::size; j++) {
-            maze_buttons[i][j]->setEnabled(false);
-        }
-    }
-}
-
 void MainWindow::handleButton()
 {    
     QMessageBox msgBox2;
-    QMessageBox msgBox;
-    QMessageBox msgBox3;
+    QMessageBox msgBox;    
 
     for(int i = 0; i < game::size; i++) {
         for (int j = 0; j < game::size; j++) {
             if (sender() == maze_buttons[i][j]) {
                 if (makeMove(WRITE, i, j)) {
+                    draw();
                     actualPlayer1 = !actualPlayer1;
                     /* Kontrola následujícího hráče */
                     switch (impossibleMove()) {
                         case 0:
                             break;
-                        case 1:
-                            draw();
+                        case 1:                            
                             actualPlayer1 = !actualPlayer1;
+                            draw();
                             msgBox.setText("Nelze provést další tah, hráč bude přeskočen.");
                             msgBox.exec();
                             break;
-                        case 2:
-                            draw();
+                        case 2:                            
                             msgBox2.setText("Hra u konce!!");
-                            msgBox2.exec();
-                            disableButtons();
+                            msgBox2.exec();                            
                         break;
                     }
                 } else {
-                    msgBox3.setText("Neplatný tah");
-                    msgBox3.exec();
-                    ui->label->setText("Neplatný tah!");
+                    wrongMoveAnimation->start();                    
                 }
                 draw();
             }

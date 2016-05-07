@@ -6,6 +6,7 @@
 #include <QInputDialog>
 #include <ui_mainwindow.h>
 #include <QMessageBox>
+#include <QDateTime>
 #include <QMovie>
 #include <QStringList>
 #include <QDir>
@@ -20,20 +21,19 @@ class MainWindow : public QMainWindow, public game
 {
     Q_OBJECT
 private:
-    QPushButton *maze_buttons[8][8];
+    QPushButton *maze_buttons[12][12]; // not good
     QMovie *blackAnimation;
     QMovie *whiteAnimation;
+    QMovie *wrongMoveAnimation;
     Ui::MainWindow *ui;
     int windowWidth;
-    int windowHeight;
+    int windowHeight;    
     void draw();
     void run();
     void initButtons();
     void initGraphics();
-    void connectSlots();
-    void Popupdialog();
-    void clearButtons();
-    void disableButtons();
+    void connectSlots();    
+    void clearButtons();    
 public:
     explicit MainWindow(QWidget *parent = 0);
     void init(int size);

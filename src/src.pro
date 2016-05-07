@@ -8,7 +8,9 @@ QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = src
+QMAKE_CXXFLAGS += -std=c++11
+
+TARGET = ../HRA2016
 TEMPLATE = app
 
 LIBS += -lboost_system -lboost_filesystem

@@ -8,8 +8,7 @@ game::game()
     future = new std::stack<move>();
 }
 void game::initPlayers(std::string nameOne, std::string nameTwo, bool computer){
-    actualPlayer1 = true;
-    //actualPlayer1 = false;
+    actualPlayer1 = true;    
     player1 = new player(nameOne, false, computer);
     player2 = new player(nameTwo, true, false); 
 }
@@ -25,28 +24,17 @@ void game::initGameField() {
     gameField = new int*[size];
 
     for(int i = 0; i < size; i++)
-        gameField[i] = new int[size];
-    /*int pole[6][6] = {
-        {WHITE,WHITE,WHITE,WHITE,BLACK,WHITE},
-        {WHITE,WHITE,WHITE,BLACK,BLACK,WHITE},
-        {WHITE,WHITE,WHITE,WHITE,BLACK,WHITE},
-        {WHITE,WHITE,WHITE,WHITE,BLACK,WHITE},
-        {WHITE,WHITE,WHITE,BLACK,WHITE,WHITE},
-        {WHITE,EMPTY,EMPTY,EMPTY,WHITE,WHITE}
-    };*/
+        gameField[i] = new int[size];    
     for(int x = 0; x < size; x++)
         for(int y = 0; y < size; y++)
             gameField[x][y] = EMPTY;
-            //gameField[x][y] = pole[y][x];
 
-        
     int center = size/2;
     
     gameField[center-1][center-1] = WHITE;
     gameField[center-1][center] = BLACK;
     gameField[center][center-1] = BLACK;
-    gameField[center][center] = WHITE;    
-    
+    gameField[center][center] = WHITE;        
 }
 
 
