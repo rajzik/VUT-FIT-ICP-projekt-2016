@@ -12,10 +12,10 @@ class player
         int score;
         std::string name;
         bool black;
-        bool computer;
+
     public:
         player(std::string name, bool black, bool computer);
-
+        bool computer;
         int getScore();
         void setScore(int score);
 

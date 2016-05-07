@@ -43,6 +43,24 @@ void gameCli::getGameInfo(){
         
     }
     initPlayers("Player 1", "Player 2", single == 1);
+    if(player1->computer){
+        while(true){
+            consol.clear();        
+            std::cout<< "select difficulty"<<std::endl;                
+            std::cout<<"1) Easy"<<std::endl
+            <<"2) Super Uber Hard"<<std::endl
+            <<"Please enter game type: ";
+            
+
+            std::getline(std::cin, a);
+            single = std::stoi("0"+a);
+            
+            if(single == 1 || single == 2)
+                break;
+        }
+        easyComputer = single == COMPUTEREASY;
+    }
+    
     
     
     int tempSize = -1;
@@ -167,6 +185,8 @@ void gameCli::printSavedGame(){
     std::getline(std::cin, a);
 
     while(true){
+        
+        
         std::cout<<"Please enter number of file "<<std::endl<<"or press enter to load last game: ";
         std::getline(std::cin, a);
 
@@ -198,6 +218,13 @@ void gameCli::run(){
     
     while (true)
     {
+        if(actualPlayer1 && player1->computer)
+        {
+            computerMove();
+            continue;
+        }
+        
+        
         std::string command;
 
         draw();

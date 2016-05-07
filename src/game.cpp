@@ -9,8 +9,8 @@ game::game()
 }
 void game::initPlayers(std::string nameOne, std::string nameTwo, bool computer){
     actualPlayer1 = true;    
-    player1 = new player(nameOne, false, computer);
-    player2 = new player(nameTwo, true, false); 
+    player1 = new player(nameOne, false, false);
+    player2 = new player(nameTwo, true, computer); 
 }
 game::~game()
 {
