@@ -76,10 +76,10 @@ void gameCli::drawScore(){
     std::cout<<"O";        
     
     consol.resetToDefault();
-    std::cout << "\t" << player2->getName() << ": " << player1->getScore() << " ";
+    std::cout << "\t" << player2->getName() << ": " << player2->getScore() << " ";
     consol.setFgColor(CSYELLOW);
     consol.setBgColor(CSBLACK);
-    std::cout<<"X";
+    std::cout<<"O";
     
     consol.resetToDefault();
     std::cout<<std::endl;
@@ -102,10 +102,10 @@ void gameCli::draw(){
     std::cout << std::endl;
     
     
-    for (int x = 0; x < size; x++)
+    for (int y = 0; y < size; y++)
     {
-        std::cout << (x+1) << " " << ((size>9 && x < 9)?" ":"");
-        for (int y = 0; y < size; y++)
+        std::cout << (y+1) << " " << ((size>9 && y < 9)?" ":"");
+        for (int x = 0; x < size; x++)
         {
             if(gameField[x][y] == EMPTY)
                 std::cout << "_";
@@ -113,7 +113,7 @@ void gameCli::draw(){
                 consol.setFgColor(gameField[x][y] == BLACK? CSYELLOW: CSBLACK);
                 consol.setBgColor(gameField[x][y] == BLACK? CSBLACK : CSWHITE);
             
-                std::cout << (gameField[x][y] == BLACK?"X":"O");        
+                std::cout << ("O");        
                 consol.setFgColor(CSBLACK);
                 consol.setBgColor(CSWHITE);
             }
@@ -231,7 +231,8 @@ void gameCli::run(){
         }
         else{
             //make move to be filed later
-            actualPlayer1 = !actualPlayer1;
+            // makeMove(WRITE);
+            
         }
         
     }

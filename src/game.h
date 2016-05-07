@@ -29,7 +29,7 @@ class game{
         int size;
         int **gameField;
         player * player1, * player2;
-        std::stack<move> * history, * future;
+        std::vector<move> * history, * future;
         bool actualPlayer1;
         
         int checkDirection(bool write, int x, int y, int xDirection, int yDirection);

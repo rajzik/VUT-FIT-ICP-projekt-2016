@@ -25,10 +25,13 @@ $(NAME):src/main-gui.cpp
 $(NAMECLI): src/main-cli.cpp
 	$(CC) $(CFLAGS) src/main-cli.cpp -o $(NAMECLI) src/game.cpp src/game-cli.cpp src/player.cpp src/console.cpp $(LFLAGS)
 
+cli: $(NAMECLI)
+	@./HRA2016-cli
 
-run-cli: $(NAMECLI)
-	@./HRA2016-cli 
+
+
+run: all
+	@./HRA2016 && ./HRA2016-cli 
 
 clean:
-	rm -f *~ *.bak
-	rm -f $(NAME)
+	rm -f $(NAME) $(NAMECLI)

@@ -4,8 +4,8 @@
 
 game::game()
 {
-    history = new std::stack<move>();
-    future = new std::stack<move>();
+    history = new std::vector<move>();
+    future = new std::vector<move>();
 }
 void game::initPlayers(std::string nameOne, std::string nameTwo, bool computer){
     actualPlayer1 = true;    
@@ -45,12 +45,13 @@ bool game::makeMove(bool write, int x, int y) {
         return false;
     bool validMove = checkMove(write, x, y);
     move mv = {actualPlayer1,x,y};
-    if(validMove){
+    if(validMove && write == WRITE){
         changeScore();
-        
-        history->push(mv);
-        std::stack<move> * empty = new std::stack<move>();
+
+        history->push_back(mv);
+        std::vector<move> * empty = new std::vector<move>();
         swap(future, empty);
+        actualPlayer1 = !actualPlayer1;
     }
     return validMove;
 }
@@ -219,40 +220,31 @@ bool game::saveGame() {
     savFile << size << std::endl;
     savFile << "fse"<<std::endl;
     
-    std::stack<move> * tempStack = new std::stack<move>(); 
 
     if(!history->empty())
     {
         savFile << "hs"<<std::endl;
         savFile << history->size()<<std::endl;
-        while(!history->empty()){
-            move m = history->top();
-            tempStack->push(m);
+        for(int a = 0, si =history->size(); a < si; a++){
+            move m = history->at(a);
             savFile << m.player <<";"<<m.x<<";"<<m.y<<";"<<std::endl;
-            history->pop(); 
+        }
+        for(int a = future->size()-1; a > 0; a--){
+            move m = future->at(a);
+            savFile << m.player <<";"<<m.x<<";"<<m.y<<";"<<std::endl;
         }
         savFile << "hse"<<std::endl;
-    }
-    while(!tempStack->empty()){
-        history->push(tempStack->top());
-        tempStack->pop();        
     }
     
     if(!future->empty())
     {
         savFile << "ft"<<std::endl;
         savFile << future->size()<<std::endl;
-        while(!future->empty()){
-            move m = future->top();
-            tempStack->push(m);
-            savFile << m.player <<";"<<m.x<<";"<<m.y<<";"<<std::endl;
-            future->pop(); 
-        }
+        // for(int a = 0, si =future->size(); a < si; a++){
+        //     move m = future->at(a);
+        //     savFile << m.player <<";"<<m.x<<";"<<m.y<<";"<<std::endl;
+        // }
         savFile << "fte"<<std::endl;
-    }
-    while(!tempStack->empty()){
-        future->push(tempStack->top());
-        tempStack->pop();        
     }
     
     savFile.close();
@@ -277,7 +269,7 @@ bool game::loadGame(std::string filename) {
     std::string a;
 
     
-    if((pos = content.find("fs\n")) == std::string::npos)
+    if((pos = content.find("fs")) == std::string::npos)
         return false;
     
     content.erase(0, 3);
@@ -294,7 +286,7 @@ bool game::loadGame(std::string filename) {
     content.erase(0, pos+1);
     size = tempSize;
     initGameField();
-        
+
     if((pos = content.find("fse")) == std::string::npos)
         return false;
     
@@ -310,7 +302,6 @@ bool game::loadGame(std::string filename) {
         if(tempSize <= 0)
             return false;
         
-        std::stack<move> * temp = new std::stack<move>();
         
         for(int i = 0; i < tempSize; i++){
             move m;
@@ -329,15 +320,16 @@ bool game::loadGame(std::string filename) {
             m.y = std::stoi("0" + content.substr(0, pos));
             content.erase(0, pos+2);
             
-            temp->push(m);
+            makeMove(WRITE, m.x, m.y);            
         }
         
-    
-        if((pos = content.find("hse")) != std::string::npos)
-            return false;
-        content.erase(0, pos + 3);
         
-        swap(temp, history);
+    
+        if((pos = content.find("hse")) == std::string::npos)
+            return false;
+        
+        content.erase(0, pos + 4);
+    
     }
     
     if((pos = content.find("ft")) != std::string::npos)
@@ -350,32 +342,12 @@ bool game::loadGame(std::string filename) {
         if(tempSize <= 0)
             return false;
         
-        std::stack<move> * temp = new std::stack<move>();
-        
         for(int i = 0; i < tempSize; i++){
-            move m;
-            if((pos = content.find(";")) == std::string::npos)
-                return false;
-            m.player = (bool)std::stoi("0" + content.substr(0, pos));
-            
-            content.erase(0, pos+1);
-            if((pos = content.find(";")) == std::string::npos)
-                return false;
-            m.x = std::stoi("0" + content.substr(0, pos));
-            content.erase(0, pos+1);
-            
-            if((pos = content.find(";")) == std::string::npos)
-                return false;
-            m.y = std::stoi("0" + content.substr(0, pos));
-            content.erase(0, pos+2);
-            
-            temp->push(m);
+            prevStep();
         }
         
         if((pos = content.find("fte")) != std::string::npos)
             content.erase(0, pos + 3);
-        
-        swap(temp, future);
     }
     
     
@@ -386,16 +358,16 @@ void game::nextStep() {
     if(future->empty())
         return; // ??
 
-    history->push(future->top());
-    future->pop();
+    history->push_back(future->back());
+    future->pop_back();
 }
 
 void game::prevStep() {
     if(history->empty())
         return; // ??
 
-    future->push(history->top());
-    history->pop();
+    future->push_back(history->back());
+    history->pop_back();
 }
 
 
