@@ -159,8 +159,8 @@ int game::checkDirection(bool write, int x, int y, int endX, int endY){
     { 
         return 0;
     }
-    
-    
+
+
     
     for(int i = 2; i <= stepCount; i++){
         dataField = gameField[x+i*xStep][y+i*yStep];
@@ -179,7 +179,7 @@ int game::colorPath(bool write, int x, int y, int endX, int endY){
     int stepCount = std::max(abs(x-endX),abs(y-endY));
     int xStep = (endX-x)/stepCount;
     int yStep = (endY-y)/stepCount;
-    
+
     int i;
     for(i = 0; i <= stepCount; i++){
         changeField(write, x+i*xStep, y+i*yStep);
