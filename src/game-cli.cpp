@@ -43,7 +43,7 @@ void gameCli::getGameInfo(){
         
     }
     initPlayers("Player 1", "Player 2", single == 1);
-    if(player1->computer){
+    if(player2->computer){
         while(true){
             consol.clear();        
             std::cout<< "select difficulty"<<std::endl;                
@@ -120,17 +120,16 @@ void gameCli::draw(){
     std::cout << std::endl;
     
     
-    for (int y = 0; y < size; y++)
+    for (int x = 0; x < size; x++)
     {
-        std::cout << (y+1) << " " << ((size>9 && y < 9)?" ":"");
-        for (int x = 0; x < size; x++)
+        std::cout << (x+1) << " " << ((size>9 && x < 9)?" ":"");
+        for (int y = 0; y < size; y++)
         {
             if(gameField[x][y] == EMPTY)
                 std::cout << "_";
             else{
                 consol.setFgColor(gameField[x][y] == BLACK? CSYELLOW: CSBLACK);
                 consol.setBgColor(gameField[x][y] == BLACK? CSBLACK : CSWHITE);
-            
                 std::cout << ("O");        
                 consol.setFgColor(CSBLACK);
                 consol.setBgColor(CSWHITE);
@@ -144,10 +143,13 @@ void gameCli::draw(){
     
     std::cout << std::endl;
     consol.setCursor(size*2 + 5, 5);
-    
-    std::cout << "Now Playing: "<< (actualPlayer1? player1->getName():player2->getName()) << std::endl;
+              
+    std::cout << "Now Playing: ";
+    consol.setFgColor(actualPlayer1? CSBLACK : CSYELLOW);
+    consol.setBgColor(actualPlayer1? CSWHITE : CSBLACK);
+    std::cout<< "O";
+    consol.resetToDefault();
     consol.setCursor(0, size*2+6);
-    
     drawScore();    
 }
 
@@ -163,7 +165,6 @@ void gameCli::printSavedGame(){
     for(auto& entry : boost::make_iterator_range(boost::filesystem::directory_iterator(dir), {}))
     {
         std::time_t t = boost::filesystem::last_write_time(entry);
-        // std::cout<< (++i) << ") " << buff << " " <<boost::filesystem::basename(entry) <<std::endl ;
         std::stringstream ss;
         ss << boost::filesystem::basename(entry);
         fileInfo fi;
@@ -218,7 +219,7 @@ void gameCli::run(){
     
     while (true)
     {
-        if(actualPlayer1 && player1->computer)
+        if(!actualPlayer1 && player2->computer)
         {
             computerMove();
             continue;
@@ -250,15 +251,34 @@ void gameCli::run(){
             printSavedGame();
         }
         else if((found = command.find("save")) != std::string::npos){
-            // consol.clear();
             if(!saveGame())
                 message = "Save Unsuccessful!!";
             else
                 message = "Save successful!";
         }
         else{
-            //make move to be filed later
-            // makeMove(WRITE);
+            
+            std::size_t i = -1;
+            std::string rowNum = "";
+            
+            while (isdigit(command[++i]))
+            {
+                rowNum += command[i];
+            }
+            int row = std::stoi("0" + rowNum) -1;
+            if(row == -1){
+                message = "Wrong row";
+            }
+            
+            command.erase(0, i);
+            
+            char a = command[0];
+            int col = (int)(a - 97);
+            
+            
+            
+            if(!makeMove(WRITE,row,col))
+                message = "Invalid move!";
             
         }
         
@@ -271,7 +291,7 @@ void gameCli::printHelp(){
     << "To quit write quit" << std::endl
     << "to save game type save" << std::endl
     << "to load game type load" << std::endl
-    << "To make move just write <column><row>" <<std::endl
+    << "To make move just write <row><column>" <<std::endl
     << "to continue to game press enter..." << std::endl;
     
     std::cin.get();
