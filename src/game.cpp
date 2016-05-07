@@ -75,7 +75,6 @@ int game::impossibleMove()
         }
     }
     actualPlayer1 = actualPlayerBackup;
-
     /* Nobody can move - return 2 */
     if (!blackCan && !whiteCan) {
         return 2;
@@ -185,6 +184,13 @@ int game::colorPath(bool write, int x, int y, int endX, int endY){
         changeField(write, x+i*xStep, y+i*yStep);
     }
     return i;
+}
+
+void game::changeField(bool write, int x, int y) {
+    // std::cout<<"obarvuji: "<< x << y<<std::endl;
+    if (write) {
+        gameField[x][y] = actualPlayer1? BLACK : WHITE;
+    }
 }
 
 bool game::saveGame() {
@@ -401,13 +407,6 @@ bool game::loadGame(std::string filename) {
     
     
     return true;
-}
-
-void game::changeField(bool write, int x, int y) {
-    // std::cout<<"obarvuji: "<< x << y<<std::endl;
-    if (write) {
-        gameField[x][y] = actualPlayer1? BLACK : WHITE;
-    }
 }
 
 void game::nextStep() {
