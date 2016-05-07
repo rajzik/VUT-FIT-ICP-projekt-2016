@@ -12,3 +12,6 @@ src/Makefile
 HRA2016
 moc_mainwindow.cpp
 moc_predefs.h
+doc/html
+xpospi88.zip
+

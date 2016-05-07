@@ -1,7 +1,7 @@
-Doxygen
+IN PROGRESS Doxygen
 Rozpor ve vykreslovani progrmau CLI vs. GUI
 Makefile
-	make run
-	make doxygen
-	make pack
-Jmena autoru do vsech modulu
+    DONE make run
+    DONE make doxygen
+	DONE make pack
+IN PROGRESS Jmena autoru do vsech modulu
