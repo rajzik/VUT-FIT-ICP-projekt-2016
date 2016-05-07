@@ -65,11 +65,11 @@ void MainWindow::initGraphics()
     ui->lblP2Score->setStyleSheet("background-color: rgba(0, 0, 0, 0%);");
 }
 
-void MainWindow::init(int size)
+void MainWindow::init(int size, bool computer)
 {
     game::size = size;
 
-    initPlayers("Player 1", "Player 2", 1);
+    initPlayers("Player 1", "Player 2", computer);
     initGameField();
     initGraphics();
     initButtons();
@@ -125,7 +125,7 @@ void MainWindow::undoHistory()
     QMessageBox msgBox;
 
     game::prevStep();
-    msgBox.setText("Step back ");
+    msgBox.setText("Undo!");
     msgBox.move(appMiddle);
     msgBox.exec();
 }
@@ -135,7 +135,7 @@ void MainWindow::redoHistory()
     QMessageBox msgBox;
 
     game::nextStep();
-    msgBox.setText("Krok vpřed proveden.");
+    msgBox.setText("Redo!");
     msgBox.move(appMiddle);
     msgBox.exec();
 }
@@ -159,13 +159,13 @@ void MainWindow::newGame()
     bool oponentSelected;
 
     gameSizes << "6" << "8" << "10" << "12";
-    gameOponents << "Člověk" << "Počítač - lehčí" << "Počítač - těžší";
-    selectedSize = QInputDialog::getItem(this, tr("Nová hra"), tr("Volba velikosti hrací plochy"), gameSizes, 0, false, &sizeSelected);
+    gameOponents << "Human" << "Computer - easy" << "Computer - hard";
+    selectedSize = QInputDialog::getItem(this, tr("New game"), tr("Choose playing area size"), gameSizes, 0, false, &sizeSelected);
     if (sizeSelected && !selectedSize.isEmpty()) {
-        selectedOponent = QInputDialog::getItem(this, tr("Nová hra"), tr("Volba protihráče"), gameOponents, 0, false, &oponentSelected);
+        selectedOponent = QInputDialog::getItem(this, tr("New game"), tr("Choose adversary"), gameOponents, 0, false, &oponentSelected);
         if (oponentSelected && !selectedOponent.isEmpty()) {
             clearButtons();
-            init(selectedSize.toInt());
+            init(selectedSize.toInt(), gameOponents.indexOf(selectedOponent));
         }
     }
 }
@@ -176,8 +176,8 @@ void MainWindow::saveGame()
 
     game::saveGame();
     msgBox.move(appMiddle);
-    msgBox.setWindowTitle("Uložit hru");
-    msgBox.setText("Hra uložena.");
+    msgBox.setWindowTitle("Save game");
+    msgBox.setText("Game saved.");
     msgBox.exec();
 }
 
@@ -194,12 +194,12 @@ void MainWindow::loadGame()
     for (int i = 0; i < list.size(); ++i) {
         fileNames << list.at(i).fileName();
     }
-    selectedFile = QInputDialog::getItem(this, tr("Nahrát hru"), tr("Volba uložené hry:"), fileNames, 0, false, &fileSelected);
+    selectedFile = QInputDialog::getItem(this, tr("Load game"), tr("Choose saved game:"), fileNames, 0, false, &fileSelected);
     if (fileSelected && !selectedFile.isEmpty()) {        
         game::loadGame(selectedFile.toStdString());
         QMessageBox msgBox;
         msgBox.move(appMiddle);
-        msgBox.setText("Hra " + selectedFile + "nahrána.");
+        msgBox.setText("Game " + selectedFile + "loaded.");
         msgBox.exec();
         draw();
     }
@@ -211,31 +211,35 @@ void MainWindow::exitGame()
 }
 
 void MainWindow::handleButton()
-{    
-    QMessageBox msgBox2;
-    QMessageBox msgBox;    
+{
+    QMessageBox msgBox;
+    msgBox.setWindowTitle("Game over");
+    int score;
 
     for(int i = 0; i < game::size; i++) {
         for (int j = 0; j < game::size; j++) {
             if (sender() == maze_buttons[i][j]) {
-                if (makeMove(WRITE, i, j)) {
+                score = makeMove(WRITE, i, j);
+                msgBox.setText(QString::number(score));
+                msgBox.exec();
+                if (score) {
                     draw();
-                    actualPlayer1 = !actualPlayer1;
-                    /* Kontrola následujícího hráče */
+                    //actualPlayer1 = !actualPlayer1;
+                    /* Opposite player check */
                     switch (impossibleMove()) {
                         case 0:
                             break;
                         case 1:                            
                             actualPlayer1 = !actualPlayer1;
                             draw();
-                            msgBox.setText("Nelze provést další tah, hráč bude přeskočen.");
+                            msgBox.setText("There is no possible move, player skipped.");
                             msgBox.move(appMiddle);
                             msgBox.exec();
                             break;
                         case 2:                            
-                            msgBox2.setText("Hra u konce!!");
-                            msgBox2.move(appMiddle);
-                            msgBox2.exec();                            
+                            msgBox.setText(QString((actualPlayer1==BLACK)?"Black":"White") + QString(" player wins!"));
+                            msgBox.move(appMiddle);
+                            msgBox.exec();
                         break;
                     }
                 } else {

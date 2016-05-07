@@ -5,7 +5,7 @@ gameGui::gameGui(int argc, char *argv[])
     a = new QApplication(argc, argv);
     window = new MainWindow();
 
-    window->init(DEFAULT_SIZE);
+    window->init(DEFAULT_SIZE, false);
     window->show();
     a->exec();
 }

@@ -18,6 +18,26 @@ game::~game()
     delete player2;
 }
 
+void game::computerMove()
+{
+    if (game::easyComputer) { // hard?
+        int maxX = 0, maxY = 0, maxScore = 0, actScore;
+        for (int i = 0; i < game::size; i++) {
+            for (int j = 0; j < game::size; j++) {
+                actScore = makeMove(READ, i, j);
+                if (actScore > maxScore) {
+                    maxScore = actScore;
+                    maxX = i;
+                    maxY = j;
+                }
+            }
+        }
+        makeMove(WRITE, maxX, maxY);
+    } else {
+        std::cout << "Zatim neimplementovano";
+    }
+}
+
 void game::initGameField() {
     if(!(size == 6 || size == 8 || size == 10 || size == 12 ))
         return;   
@@ -38,7 +58,7 @@ void game::initGameField() {
 }
 
 
-bool game::makeMove(bool write, int x, int y) {
+int game::makeMove(bool write, int x, int y) {
     if(x < 0 || y < 0 || x >= size || y >= size)
         return false;
     if(gameField[x][y] != EMPTY)
@@ -96,7 +116,7 @@ int game::impossibleMove()
     }
 }
 
-bool game::checkMove(bool write, int x, int y){
+int game::checkMove(bool write, int x, int y){
 
     int score = 0;
     // std::cout<<"leva"<<std::endl;    

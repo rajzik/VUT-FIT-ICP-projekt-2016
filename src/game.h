@@ -31,12 +31,14 @@ class game{
         player * player1, * player2;
         std::vector<move> * history, * future;
         bool actualPlayer1;
+        bool easyComputer;
         
         int checkDirection(bool write, int x, int y, int xDirection, int yDirection);
         void changeScore();
         int colorPath(bool write, int x, int y, int endX, int endY);
         void initGameField();        
         int impossibleMove();
+        void computerMove();
     public:
         game();
         ~game();
@@ -48,8 +50,8 @@ class game{
         void nextStep();
         void prevStep();
         
-        bool makeMove(bool write, int x, int y);
-        bool checkMove(bool write, int x, int y);
+        int makeMove(bool write, int x, int y);
+        int checkMove(bool write, int x, int y);
         void changeField(int x, int y);
         void initPlayers(std::string nameOne, std::string nameTwo, bool computer);
         virtual void run();
