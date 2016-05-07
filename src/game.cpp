@@ -12,8 +12,8 @@ void game::initPlayers(std::string nameOne, std::string nameTwo, int oppositePla
 {
     game::easyComputer = oppositePlayer % 2;
     actualPlayer1 = true;
-    player1 = new player(nameOne, false, false);
-    player2 = new player(nameTwo, true, oppositePlayer);
+    player1 = new player(nameOne, true, false);
+    player2 = new player(nameTwo, false, oppositePlayer);
 }
 
 game::~game()
