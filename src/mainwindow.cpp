@@ -65,11 +65,11 @@ void MainWindow::initGraphics()
     ui->lblP2Score->setStyleSheet("background-color: rgba(0, 0, 0, 0%);");
 }
 
-void MainWindow::init(int size, bool computer)
+void MainWindow::init(int size, int oppositePlayer)
 {
     game::size = size;
 
-    initPlayers("Player 1", "Player 2", computer);
+    initPlayers("Player 1", "Player 2", oppositePlayer);
     initGameField();
     initGraphics();
     initButtons();
@@ -246,6 +246,9 @@ void MainWindow::handleButton()
                     wrongMoveAnimation->start();                    
                 }
                 draw();
+            }
+            if (actualPlayer1 && player1->computer) {
+                computerMove();
             }
         }
     }

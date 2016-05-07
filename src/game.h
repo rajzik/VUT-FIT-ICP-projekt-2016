@@ -53,7 +53,7 @@ class game{
         int makeMove(bool write, int x, int y);
         int checkMove(bool write, int x, int y);
         void changeField(int x, int y);
-        void initPlayers(std::string nameOne, std::string nameTwo, bool computer);
+        void initPlayers(std::string nameOne, std::string nameTwo, int oppositePlayer);
         virtual void run();
         virtual void draw();
 };
