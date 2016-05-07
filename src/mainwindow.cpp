@@ -2,7 +2,7 @@
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), game(), ui(new Ui::MainWindow)
 {
-    ui->setupUi(this);
+    ui->setupUi(this);    
 }
 
 MainWindow::~MainWindow()
@@ -165,6 +165,7 @@ void MainWindow::newGame()
         selectedOponent = QInputDialog::getItem(this, tr("New game"), tr("Choose adversary"), gameOponents, 0, false, &oponentSelected);
         if (oponentSelected && !selectedOponent.isEmpty()) {
             clearButtons();
+            initGameField();
             init(selectedSize.toInt(), gameOponents.indexOf(selectedOponent));
         }
     }
@@ -197,10 +198,9 @@ void MainWindow::loadGame()
     selectedFile = QInputDialog::getItem(this, tr("Load game"), tr("Choose saved game:"), fileNames, 0, false, &fileSelected);
     if (fileSelected && !selectedFile.isEmpty()) {        
         game::loadGame(selectedFile.toStdString());
-        QMessageBox msgBox;
-        msgBox.move(appMiddle);
-        msgBox.setText("Game " + selectedFile + "loaded.");
-        msgBox.exec();
+        clearButtons();
+        init(game::size, COMPUTEREASY);
+        game::loadGame(selectedFile.toStdString());
         draw();
     }
 }
@@ -212,54 +212,46 @@ void MainWindow::exitGame()
 
 void MainWindow::handleButton()
 {
-    QMessageBox msgBox;
-    msgBox.setWindowTitle("Game over");
-    int score;
-
     for(int i = 0; i < game::size; i++) {
         for (int j = 0; j < game::size; j++) {
-            if (sender() == maze_buttons[i][j]) {
-                score = makeMove(WRITE, i, j);
-                msgBox.setText(QString::number(score));
-                msgBox.exec();
-                if (score) {
+            if (sender() == maze_buttons[i][j]) {                
+                if (makeMove(WRITE, i, j)) {
                     draw();
-                    //actualPlayer1 = !actualPlayer1;
-                    /* Opposite player check */
-                    switch (impossibleMove()) {
-                        case 0:
-                            break;
-                        case 1:                            
-                            actualPlayer1 = !actualPlayer1;
-                            draw();
-                            msgBox.setText("There is no possible move, player skipped.");
-                            msgBox.move(appMiddle);
-                            msgBox.exec();
-                            break;
-                        case 2:                            
-                            msgBox.setText(QString((actualPlayer1==BLACK)?"Black":"White") + QString(" player wins!"));
-                            msgBox.move(appMiddle);
-                            msgBox.exec();
-                        break;
-                    }
+                    run();
                 } else {
                     wrongMoveAnimation->start();                    
                 }
-                draw();
-            }
-            if (actualPlayer1 && player1->computer) {
-                computerMove();
             }
         }
-    }
+    }    
 }
 
 void MainWindow::run()
 {
+    QMessageBox msgBox;
 
-}
-
-void MainWindow::makeComputerMove()
-{
-
+    switch (impossibleMove()) {
+        case 0:
+            if (!actualPlayer1 && player2->computer) {
+                computerMove();
+                draw();
+                run();
+            }
+            break;
+        case 1:
+            msgBox.setWindowTitle(QString((actualPlayer1)?"Black":"White") + QString(" player skipped!"));
+            actualPlayer1 = !actualPlayer1;
+            msgBox.setText("There is no possible move.");
+            msgBox.move(appMiddle);
+            msgBox.exec();
+            draw();
+            run();
+            break;
+        case 2:
+            msgBox.setWindowTitle("Game over");
+            msgBox.setText(QString((player1->getScore() > player2->getScore())?"Black":"White") + QString(" player wins!"));
+            msgBox.move(appMiddle);
+            msgBox.exec();
+        break;
+    }
 }

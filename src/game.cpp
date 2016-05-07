@@ -24,7 +24,15 @@ game::~game()
 
 void game::computerMove()
 {
-    if (game::easyComputer) { // hard?
+    if (game::easyComputer) {
+        int randomX;
+        int randomY;
+        std::srand(std::time(0));
+        do {
+            randomX = std::rand() % game::size;
+            randomY = std::rand() % game::size;
+        } while (!makeMove(WRITE, randomX, randomY));
+    } else {        
         int maxX = 0, maxY = 0, maxScore = 0, actScore;
         for (int i = 0; i < game::size; i++) {
             for (int j = 0; j < game::size; j++) {
@@ -37,8 +45,6 @@ void game::computerMove()
             }
         }
         makeMove(WRITE, maxX, maxY);
-    } else {
-        std::cout << "Zatim neimplementovano";
     }
 }
 

@@ -36,13 +36,13 @@ class game{
         int checkDirection(bool write, int x, int y, int xDirection, int yDirection);
         void changeScore();
         int colorPath(bool write, int x, int y, int endX, int endY);
-        void initGameField();        
+        void initGameField();
         int impossibleMove();
         void computerMove();
     public:
         game();
         ~game();
-        
+
 
         bool saveGame();
         bool loadGame(std::string filename);

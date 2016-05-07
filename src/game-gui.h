@@ -6,7 +6,6 @@
 #include <iostream>
 #include <cstdlib>
 #include <QApplication>
-//#include <QPushButton>
 
 class gameGui
 {
