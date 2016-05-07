@@ -1,8 +1,20 @@
+/*
+ * @file mainwindow.cpp
+ *
+ * Project name:
+ * HRA 2016
+ *
+ * Authors:
+ * Jak Silhan xsilha10
+ * Pavel Pospisil xpospi88
+ *
+ */
+
 #include "mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), game(), ui(new Ui::MainWindow)
 {
-    ui->setupUi(this);
+    ui->setupUi(this);    
 }
 
 MainWindow::~MainWindow()
@@ -25,13 +37,13 @@ void MainWindow::initButtons()
 
 void MainWindow::connectSlots()
 {
-    connect(ui->actionNew, SIGNAL (triggered()), this, SLOT (newGame()));
-    connect(ui->actionAbout, SIGNAL (triggered()), this, SLOT (openAbout()));
-    connect(ui->actionExit, SIGNAL (triggered()), this, SLOT (exitGame()));
-    connect(ui->actionSave, SIGNAL (triggered()), this, SLOT (saveGame()));
-    connect(ui->actionLoad, SIGNAL (triggered()), this, SLOT (loadGame()));
-    connect(ui->actionUndo, SIGNAL (triggered()), this, SLOT (undoHistory()));
-    connect(ui->actionRedo, SIGNAL (triggered()), this, SLOT (redoHistory()));
+    connect(ui->actionNew, SIGNAL (triggered()), this, SLOT (newGame()), Qt::UniqueConnection);
+    connect(ui->actionAbout, SIGNAL (triggered()), this, SLOT (openAbout()), Qt::UniqueConnection);
+    connect(ui->actionExit, SIGNAL (triggered()), this, SLOT (exitGame()), Qt::UniqueConnection);
+    connect(ui->actionSave, SIGNAL (triggered()), this, SLOT (saveGame()), Qt::UniqueConnection);
+    connect(ui->actionLoad, SIGNAL (triggered()), this, SLOT (loadGame()), Qt::UniqueConnection);
+    connect(ui->actionUndo, SIGNAL (triggered()), this, SLOT (undoHistory()), Qt::UniqueConnection);
+    connect(ui->actionRedo, SIGNAL (triggered()), this, SLOT (redoHistory()), Qt::UniqueConnection);
 }
 
 void MainWindow::initGraphics()
@@ -107,6 +119,9 @@ void MainWindow::draw()
         whiteAnimation->start();
         blackAnimation->jumpToFrame(1);
     }
+    /* Score font size */
+    ui->lblP1Score->setFont(QFont("Cantarell", (ui->lblP1Score->text().toInt() > 99)?30:40));
+    ui->lblP2Score->setFont(QFont("Cantarell", (ui->lblP2Score->text().toInt() > 99)?30:40));
 }
 
 void MainWindow::openAbout()
@@ -165,6 +180,7 @@ void MainWindow::newGame()
         selectedOponent = QInputDialog::getItem(this, tr("New game"), tr("Choose adversary"), gameOponents, 0, false, &oponentSelected);
         if (oponentSelected && !selectedOponent.isEmpty()) {
             clearButtons();
+            initGameField();
             init(selectedSize.toInt(), gameOponents.indexOf(selectedOponent));
         }
     }
@@ -197,11 +213,11 @@ void MainWindow::loadGame()
     selectedFile = QInputDialog::getItem(this, tr("Load game"), tr("Choose saved game:"), fileNames, 0, false, &fileSelected);
     if (fileSelected && !selectedFile.isEmpty()) {        
         game::loadGame(selectedFile.toStdString());
-        QMessageBox msgBox;
-        msgBox.move(appMiddle);
-        msgBox.setText("Game " + selectedFile + "loaded.");
-        msgBox.exec();
+        clearButtons();
+        init(game::size, COMPUTEREASY);
+        game::loadGame(selectedFile.toStdString());
         draw();
+        run();
     }
 }
 
@@ -212,54 +228,47 @@ void MainWindow::exitGame()
 
 void MainWindow::handleButton()
 {
-    QMessageBox msgBox;
-    msgBox.setWindowTitle("Game over");
-    int score;
-
     for(int i = 0; i < game::size; i++) {
         for (int j = 0; j < game::size; j++) {
-            if (sender() == maze_buttons[i][j]) {
-                score = makeMove(WRITE, i, j);
-                msgBox.setText(QString::number(score));
-                msgBox.exec();
-                if (score) {
+            if (sender() == maze_buttons[i][j]) {                
+                if (makeMove(WRITE, i, j)) {
                     draw();
-                    //actualPlayer1 = !actualPlayer1;
-                    /* Opposite player check */
-                    switch (impossibleMove()) {
-                        case 0:
-                            break;
-                        case 1:                            
-                            actualPlayer1 = !actualPlayer1;
-                            draw();
-                            msgBox.setText("There is no possible move, player skipped.");
-                            msgBox.move(appMiddle);
-                            msgBox.exec();
-                            break;
-                        case 2:                            
-                            msgBox.setText(QString((actualPlayer1==BLACK)?"Black":"White") + QString(" player wins!"));
-                            msgBox.move(appMiddle);
-                            msgBox.exec();
-                        break;
-                    }
+                    run();
                 } else {
                     wrongMoveAnimation->start();                    
                 }
-                draw();
-            }
-            if (actualPlayer1 && player1->computer) {
-                computerMove();
             }
         }
-    }
+    }    
 }
 
 void MainWindow::run()
 {
+    QMessageBox msgBox;
 
-}
-
-void MainWindow::makeComputerMove()
-{
-
+    switch (impossibleMove()) {
+        case 0:
+            if (!actualPlayer1 && player2->computer) {
+                computerMove();
+                draw();
+                run();
+            }
+            break;
+        case 1:
+            msgBox.setWindowTitle("Reversi");
+            actualPlayer1 = !actualPlayer1;
+            msgBox.setText(QString("There is no possible move.\n") +
+                           QString((actualPlayer1)?"Black":"White") + QString(" player skipped!"));
+            msgBox.move(appMiddle);
+            msgBox.exec();
+            draw();
+            run();
+            break;
+        case 2:
+            msgBox.setWindowTitle("Game over");
+            msgBox.setText(QString((player1->getScore() > player2->getScore())?"Black":"White") + QString(" player wins!"));
+            msgBox.move(appMiddle);
+            msgBox.exec();
+        break;
+    }
 }
