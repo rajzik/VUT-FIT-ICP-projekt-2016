@@ -20,16 +20,21 @@ game::~game()
 
 void game::computerMove()
 {
-    if (game::easyComputer) {
-        int maxX = 0, maxY = 0, maxVal = 0, value;
+    if (game::easyComputer) { // hard?
+        int maxX = 0, maxY = 0, maxScore = 0, actScore;
         for (int i = 0; i < game::size; i++) {
             for (int j = 0; j < game::size; j++) {
-
-                //game::gameField[i][j]
+                actScore = makeMove(READ, i, j);
+                if (actScore > maxScore) {
+                    maxScore = actScore;
+                    maxX = i;
+                    maxY = j;
+                }
             }
         }
+        makeMove(WRITE, maxX, maxY);
     } else {
-
+        std::cout << "Zatim neimplementovano";
     }
 }
 
