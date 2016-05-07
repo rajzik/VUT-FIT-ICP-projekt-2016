@@ -153,6 +153,10 @@ void gameCli::draw(){
     drawScore();
 }
 
+void gameCli::printGameOver(){
+    //Todo print game over
+}
+
 void gameCli::printSavedGame(){
     consol.clear();
     boost::filesystem::path dir("saves");
@@ -224,7 +228,21 @@ void gameCli::run(){
             computerMove();
             continue;
         }
+        int possible;
+        switch(possible = impossibleMove()){
+            case 1:
+                 actualPlayer1 = !actualPlayer1;
+                 message = "You were skipped";
+            break;
+            case 2: 
+                printGameOver();
+                getGameInfo();
+                
+            break;
+        }
 
+        if(possible > 0)
+            continue;
 
         std::string command;
 
@@ -258,6 +276,7 @@ void gameCli::run(){
         }
         else{
 
+            
             std::size_t i = -1;
             std::string rowNum = "";
 

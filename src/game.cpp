@@ -163,15 +163,20 @@ int game::checkMove(bool write, int x, int y){
         score += checkDirection(write,x,y,x+minimum, y-minimum);
     }
     
+    if(score == 1)
+    {
+        score--;
+        gameField[x][y] = EMPTY;
+    }
     
-    return score != 0;
+    return score;
 }
 
 int game::checkDirection(bool write, int x, int y, int endX, int endY){
     // std::cout<<"x:"<<x<<" y: "<<y<<" endX: "<<endX<< " endY: "<<endY<<std::endl;
     
-    int color = actualPlayer1?BLACK:WHITE;
     int revColor = actualPlayer1?WHITE:BLACK;
+    int color = actualPlayer1?BLACK:WHITE;
     
     
     int stepCount = std::max(abs(x-endX),abs(y-endY));
@@ -215,7 +220,7 @@ int game::colorPath(bool write, int x, int y, int endX, int endY){
 
 void game::changeField(int x, int y) {
     // std::cout<<"obarvuji: "<< x << y<<std::endl;
-    gameField[x][y] = actualPlayer1? BLACK : WHITE;
+    gameField[x][y] = actualPlayer1 ? BLACK : WHITE;
 }
 
 bool game::saveGame() {

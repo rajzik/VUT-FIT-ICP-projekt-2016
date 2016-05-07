@@ -10,6 +10,7 @@ private:
     std::string message;
     bool actualPlayer;
     void printSavedGame();
+    void printGameOver();
     
 public:
     gameCli();
