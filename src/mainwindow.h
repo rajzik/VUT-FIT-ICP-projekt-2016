@@ -25,6 +25,9 @@ private:
     QMovie *blackAnimation;
     QMovie *whiteAnimation;
     QMovie *wrongMoveAnimation;
+    QMovie *leftStepAnimation;
+    QMovie *rightStepAnimation;
+    QMovie *centerAnimation;
     Ui::MainWindow *ui;
     int windowWidth;
     int windowHeight;

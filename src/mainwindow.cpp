@@ -58,7 +58,7 @@ void MainWindow::initGraphics()
     /* Positions */
     ui->lblP2Color->setGeometry(QRect(QPoint(windowWidth-50-120, 20), QSize(120, 120)));
     ui->lblP2Score->setGeometry(QRect(QPoint(windowWidth-50-120, 20), QSize(120, 120)));
-    ui->lblWrongMove->setGeometry(QRect(QPoint(windowWidth/2-25, 20+35), QSize(50, 50)));
+    ui->lblCenterAnimation->setGeometry(QRect(QPoint(windowWidth/2-25, 20+35), QSize(50, 50)));
     /* Black Animation */
     blackAnimation = new QMovie("./graphics/blackPlayer.gif");
     ui->lblP1Color->setMovie(blackAnimation);
@@ -68,9 +68,14 @@ void MainWindow::initGraphics()
     ui->lblP2Color->setMovie(whiteAnimation);
     whiteAnimation->start();
     /* Wrong animation */
-    wrongMoveAnimation = new QMovie("./graphics/wrongMove.gif");
-    ui->lblWrongMove->setMovie(wrongMoveAnimation);
+    wrongMoveAnimation = new QMovie("./graphics/wrongMove.gif");    
     wrongMoveAnimation->setSpeed(500);
+    /* Left step animation */
+    leftStepAnimation = new QMovie("./graphics/leftStep.gif");
+    leftStepAnimation->setSpeed(500);
+    /* Right step animation */
+    rightStepAnimation = new QMovie("./graphics/rightStep.gif");
+    rightStepAnimation->setSpeed(500);
     /* Backgrounds */
     ui->centralWidget->setStyleSheet("background-color: rgb(128, 128, 128);");
     ui->lblP1Score->setStyleSheet("background-color: rgba(0, 0, 0, 0%);");
@@ -137,22 +142,26 @@ void MainWindow::openAbout()
 
 void MainWindow::undoHistory()
 {
-    QMessageBox msgBox;
-
-    game::prevStep();
-    msgBox.setText("Undo!");
-    msgBox.move(appMiddle);
-    msgBox.exec();
+    if (!game::prevStep()) {
+        ui->lblCenterAnimation->setMovie(wrongMoveAnimation);
+        wrongMoveAnimation->start();
+    } else {
+        ui->lblCenterAnimation->setMovie(leftStepAnimation);
+        leftStepAnimation->start();
+        draw();
+    }
 }
 
 void MainWindow::redoHistory()
 {
-    QMessageBox msgBox;
-
-    game::nextStep();
-    msgBox.setText("Redo!");
-    msgBox.move(appMiddle);
-    msgBox.exec();
+    if (!game::nextStep()) {
+        ui->lblCenterAnimation->setMovie(wrongMoveAnimation);
+        wrongMoveAnimation->start();
+    } else {
+        ui->lblCenterAnimation->setMovie(rightStepAnimation);
+        rightStepAnimation->start();
+        draw();
+    }
 }
 
 void MainWindow::clearButtons()
@@ -235,6 +244,7 @@ void MainWindow::handleButton()
                     draw();
                     run();
                 } else {
+                    ui->lblCenterAnimation->setMovie(wrongMoveAnimation);
                     wrongMoveAnimation->start();                    
                 }
             }

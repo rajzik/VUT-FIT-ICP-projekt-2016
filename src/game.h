@@ -48,8 +48,8 @@ class game{
         bool saveGame();
         bool loadGame(std::string filename);
 
-        void nextStep();
-        void prevStep();
+        bool nextStep();
+        bool prevStep();
         
         int makeMove(bool write, int x, int y,  bool clearHistory = true);
         int checkMove(bool write, int x, int y);

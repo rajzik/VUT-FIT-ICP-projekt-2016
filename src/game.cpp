@@ -450,19 +450,20 @@ bool game::loadGame(std::string filename) {
     return true;
 }
 
-void game::nextStep() {
+bool game::nextStep() {
     if(future->empty())
-        return; // ??
+        return false;
 
     history->push_back(future->back());
     future->pop_back();
     
     timeTravel();
+    return true;
 }
 
-void game::prevStep() {
+bool game::prevStep() {
     if(history->empty())
-        return; // ??
+        return false;
     future->push_back(history->back());
     history->pop_back();
     if(player2->computer)
@@ -471,6 +472,7 @@ void game::prevStep() {
         history->pop_back();  
     }
     timeTravel();
+    return true;
 }
 
 

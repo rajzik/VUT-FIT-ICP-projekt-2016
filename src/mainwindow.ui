@@ -1754,11 +1754,11 @@
      <string/>
     </property>
    </widget>
-   <widget class="QLabel" name="lblWrongMove">
+   <widget class="QLabel" name="lblCenterAnimation">
     <property name="geometry">
      <rect>
       <x>180</x>
-      <y>40</y>
+      <y>60</y>
       <width>50</width>
       <height>50</height>
      </rect>
@@ -2189,7 +2189,7 @@
    <zorder>lblP1Color</zorder>
    <zorder>lblP1Score</zorder>
    <zorder>lblP2Score</zorder>
-   <zorder>lblWrongMove</zorder>
+   <zorder>lblCenterAnimation</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
