@@ -25,13 +25,13 @@ void MainWindow::initButtons()
 
 void MainWindow::connectSlots()
 {
-    connect(ui->actionNew, SIGNAL (triggered()), this, SLOT (newGame()));
-    connect(ui->actionAbout, SIGNAL (triggered()), this, SLOT (openAbout()));
-    connect(ui->actionExit, SIGNAL (triggered()), this, SLOT (exitGame()));
-    connect(ui->actionSave, SIGNAL (triggered()), this, SLOT (saveGame()));
-    connect(ui->actionLoad, SIGNAL (triggered()), this, SLOT (loadGame()));
-    connect(ui->actionUndo, SIGNAL (triggered()), this, SLOT (undoHistory()));
-    connect(ui->actionRedo, SIGNAL (triggered()), this, SLOT (redoHistory()));
+    connect(ui->actionNew, SIGNAL (triggered()), this, SLOT (newGame()), Qt::UniqueConnection);
+    connect(ui->actionAbout, SIGNAL (triggered()), this, SLOT (openAbout()), Qt::UniqueConnection);
+    connect(ui->actionExit, SIGNAL (triggered()), this, SLOT (exitGame()), Qt::UniqueConnection);
+    connect(ui->actionSave, SIGNAL (triggered()), this, SLOT (saveGame()), Qt::UniqueConnection);
+    connect(ui->actionLoad, SIGNAL (triggered()), this, SLOT (loadGame()), Qt::UniqueConnection);
+    connect(ui->actionUndo, SIGNAL (triggered()), this, SLOT (undoHistory()), Qt::UniqueConnection);
+    connect(ui->actionRedo, SIGNAL (triggered()), this, SLOT (redoHistory()), Qt::UniqueConnection);
 }
 
 void MainWindow::initGraphics()
@@ -107,6 +107,9 @@ void MainWindow::draw()
         whiteAnimation->start();
         blackAnimation->jumpToFrame(1);
     }
+    /* Score font size */
+    ui->lblP1Score->setFont(QFont("Cantarell", (ui->lblP1Score->text().toInt() > 99)?30:40));
+    ui->lblP2Score->setFont(QFont("Cantarell", (ui->lblP2Score->text().toInt() > 99)?30:40));
 }
 
 void MainWindow::openAbout()
@@ -202,6 +205,7 @@ void MainWindow::loadGame()
         init(game::size, COMPUTEREASY);
         game::loadGame(selectedFile.toStdString());
         draw();
+        run();
     }
 }
 
@@ -239,9 +243,10 @@ void MainWindow::run()
             }
             break;
         case 1:
-            msgBox.setWindowTitle(QString((actualPlayer1)?"Black":"White") + QString(" player skipped!"));
+            msgBox.setWindowTitle("Reversi");
             actualPlayer1 = !actualPlayer1;
-            msgBox.setText("There is no possible move.");
+            msgBox.setText(QString("There is no possible move.\n") +
+                           QString((actualPlayer1)?"Black":"White") + QString(" player skipped!"));
             msgBox.move(appMiddle);
             msgBox.exec();
             draw();
