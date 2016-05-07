@@ -179,18 +179,18 @@ int game::colorPath(bool write, int x, int y, int endX, int endY){
     int xStep = (endX-x)/stepCount;
     int yStep = (endY-y)/stepCount;
 
+    if (write == READ)
+        return stepCount;
     int i;
     for(i = 0; i <= stepCount; i++){
-        changeField(write, x+i*xStep, y+i*yStep);
+        changeField(x+i*xStep, y+i*yStep);
     }
     return i;
 }
 
-void game::changeField(bool write, int x, int y) {
+void game::changeField(int x, int y) {
     // std::cout<<"obarvuji: "<< x << y<<std::endl;
-    if (write) {
-        gameField[x][y] = actualPlayer1? BLACK : WHITE;
-    }
+    gameField[x][y] = actualPlayer1? BLACK : WHITE;
 }
 
 bool game::saveGame() {

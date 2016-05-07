@@ -113,9 +113,9 @@ void MainWindow::openAbout()
 {
     QMessageBox msgBox;
 
-    msgBox.setWindowTitle("O aplikaci");
+    msgBox.setWindowTitle("About");
     msgBox.setText("Reversi - ICP 2016\n"
-                   "Jan Šilhan a Pavel Pospíšil\n");
+                   "Jan Šilhan and Pavel Pospíšil\n");
     msgBox.move(appMiddle);
     msgBox.exec();
 }
@@ -125,7 +125,7 @@ void MainWindow::undoHistory()
     QMessageBox msgBox;
 
     game::prevStep();
-    msgBox.setText("Krok zpět proveden.");
+    msgBox.setText("Step back ");
     msgBox.move(appMiddle);
     msgBox.exec();
 }
@@ -159,7 +159,7 @@ void MainWindow::newGame()
     bool oponentSelected;
 
     gameSizes << "6" << "8" << "10" << "12";
-    gameOponents << "Člověk" << "Počítač - lehčí" << "Počítač těžší";
+    gameOponents << "Člověk" << "Počítač - lehčí" << "Počítač - těžší";
     selectedSize = QInputDialog::getItem(this, tr("Nová hra"), tr("Volba velikosti hrací plochy"), gameSizes, 0, false, &sizeSelected);
     if (sizeSelected && !selectedSize.isEmpty()) {
         selectedOponent = QInputDialog::getItem(this, tr("Nová hra"), tr("Volba protihráče"), gameOponents, 0, false, &oponentSelected);
@@ -248,6 +248,11 @@ void MainWindow::handleButton()
 }
 
 void MainWindow::run()
+{
+
+}
+
+void MainWindow::makeComputerMove()
 {
 
 }

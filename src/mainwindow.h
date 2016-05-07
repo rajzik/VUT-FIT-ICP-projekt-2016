@@ -34,7 +34,8 @@ private:
     void initButtons();
     void initGraphics();
     void connectSlots();    
-    void clearButtons();    
+    void clearButtons();
+    void makeComputerMove();
 public:
     explicit MainWindow(QWidget *parent = 0);
     void init(int size);

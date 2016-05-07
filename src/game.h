@@ -50,7 +50,7 @@ class game{
         
         bool makeMove(bool write, int x, int y);
         bool checkMove(bool write, int x, int y);
-        void changeField(bool write,int x, int y);
+        void changeField(int x, int y);
         void initPlayers(std::string nameOne, std::string nameTwo, bool computer);
         virtual void run();
         virtual void draw();
