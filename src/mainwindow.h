@@ -38,7 +38,7 @@ private:
     void makeComputerMove();
 public:
     explicit MainWindow(QWidget *parent = 0);
-    void init(int size);
+    void init(int size, bool computer);
     ~MainWindow();
 private slots:
     void openAbout();

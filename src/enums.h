@@ -14,4 +14,11 @@ enum write_perms
     WRITE
 };
 
+enum opposite_player
+{
+    HUMAN,
+    COMPUTEREASY,
+    COMPUTERHARD
+};
+
 #endif // ENUMS_H
