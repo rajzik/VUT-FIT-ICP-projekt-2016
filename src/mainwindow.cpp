@@ -18,6 +18,7 @@ void MainWindow::initButtons()
             maze_buttons[i][j]->setGeometry(QRect(QPoint(30+60*i, 205+60*j), QSize(50, 50)));
             maze_buttons[i][j]->setIconSize(QSize(50,50));
             connect(maze_buttons[i][j], SIGNAL (released()), this, SLOT (handleButton()));
+            maze_buttons[i][j]->show();
         }
     }
 }
@@ -25,7 +26,7 @@ void MainWindow::initButtons()
 void MainWindow::connectSlots()
 {
     connect(ui->actionNew, SIGNAL (triggered()), this, SLOT (newGame()));
-    connect(ui->actionAbout, SIGNAL (triggered()), this, SLOT (openHelp()));
+    connect(ui->actionAbout, SIGNAL (triggered()), this, SLOT (openAbout()));
     connect(ui->actionExit, SIGNAL (triggered()), this, SLOT (exitGame()));
     connect(ui->actionSave, SIGNAL (triggered()), this, SLOT (saveGame()));
     connect(ui->actionLoad, SIGNAL (triggered()), this, SLOT (loadGame()));
@@ -39,6 +40,9 @@ void MainWindow::initGraphics()
     windowWidth = 50 + game::size*60;
     windowHeight = 225 + game::size*60;
     this->setFixedSize(windowWidth, windowHeight);
+    appMiddle = ui->centralWidget->mapToGlobal(ui->centralWidget->pos());
+    appMiddle.setX(appMiddle.x() + windowWidth/2);
+    appMiddle.setY(appMiddle.y() + windowHeight/2);
     /* Positions */
     ui->lblP2Color->setGeometry(QRect(QPoint(windowWidth-50-120, 20), QSize(120, 120)));
     ui->lblP2Score->setGeometry(QRect(QPoint(windowWidth-50-120, 20), QSize(120, 120)));
@@ -90,7 +94,7 @@ void MainWindow::draw()
                 break;
             }
         }
-    }    
+    }
     /* Score and animations */
     ui->lblP1Score->setText(QString::number(player1->getScore()));
     ui->lblP2Score->setText(QString::number(player2->getScore()));
@@ -105,11 +109,14 @@ void MainWindow::draw()
     }
 }
 
-void MainWindow::openHelp()
+void MainWindow::openAbout()
 {
     QMessageBox msgBox;
 
-    msgBox.setText("Nápověda");
+    msgBox.setWindowTitle("O aplikaci");
+    msgBox.setText("Reversi - ICP 2016\n"
+                   "Jan Šilhan a Pavel Pospíšil\n");
+    msgBox.move(appMiddle);
     msgBox.exec();
 }
 
@@ -117,7 +124,9 @@ void MainWindow::undoHistory()
 {
     QMessageBox msgBox;
 
-    msgBox.setText("Historie zpět");
+    game::prevStep();
+    msgBox.setText("Krok zpět proveden.");
+    msgBox.move(appMiddle);
     msgBox.exec();
 }
 
@@ -125,7 +134,9 @@ void MainWindow::redoHistory()
 {
     QMessageBox msgBox;
 
-    msgBox.setText("Historie vpřed");
+    game::nextStep();
+    msgBox.setText("Krok vpřed proveden.");
+    msgBox.move(appMiddle);
     msgBox.exec();
 }
 
@@ -141,27 +152,31 @@ void MainWindow::clearButtons()
 void MainWindow::newGame()
 {
     QString selectedSize;
-    QStringList fileNames;
+    QString selectedOponent;
+    QStringList gameSizes;
+    QStringList gameOponents;
     bool sizeSelected;
+    bool oponentSelected;
 
-    fileNames << "6" << "8" << "10" << "12";
-    selectedSize = QInputDialog::getItem(this, tr("Nová hra"), tr("Volba velikosti hrací plochy"), fileNames, 0, false, &sizeSelected);
+    gameSizes << "6" << "8" << "10" << "12";
+    gameOponents << "Člověk" << "Počítač - lehčí" << "Počítač těžší";
+    selectedSize = QInputDialog::getItem(this, tr("Nová hra"), tr("Volba velikosti hrací plochy"), gameSizes, 0, false, &sizeSelected);
     if (sizeSelected && !selectedSize.isEmpty()) {
-        clearButtons();
-        //game::size = selectedSize.toInt();
-        //game::initPlayers("Player 1", "Player 2", 1);
-        //game::initGameField();
-        init(selectedSize.toInt());
-        //draw();
+        selectedOponent = QInputDialog::getItem(this, tr("Nová hra"), tr("Volba protihráče"), gameOponents, 0, false, &oponentSelected);
+        if (oponentSelected && !selectedOponent.isEmpty()) {
+            clearButtons();
+            init(selectedSize.toInt());
+        }
     }
 }
 
 void MainWindow::saveGame()
-{
-    game::saveGame();
+{    
     QMessageBox msgBox;
 
-    msgBox.setWindowTitle("Reversi");
+    game::saveGame();
+    msgBox.move(appMiddle);
+    msgBox.setWindowTitle("Uložit hru");
     msgBox.setText("Hra uložena.");
     msgBox.exec();
 }
@@ -177,17 +192,15 @@ void MainWindow::loadGame()
     savesDir.setFilter(QDir::Files | QDir::Hidden | QDir::NoSymLinks);
     list = savesDir.entryInfoList();
     for (int i = 0; i < list.size(); ++i) {
-        fileNames << list.at(i).created().toString("dd.MM.yyyy hh:mm:ss");
+        fileNames << list.at(i).fileName();
     }
     selectedFile = QInputDialog::getItem(this, tr("Nahrát hru"), tr("Volba uložené hry:"), fileNames, 0, false, &fileSelected);
-    if (fileSelected && !selectedFile.isEmpty()) {
-        /**/
-        QMessageBox msgBox;
-        msgBox.setText(selectedFile);
-        msgBox.exec();
-        return;
-        /**/
+    if (fileSelected && !selectedFile.isEmpty()) {        
         game::loadGame(selectedFile.toStdString());
+        QMessageBox msgBox;
+        msgBox.move(appMiddle);
+        msgBox.setText("Hra " + selectedFile + "nahrána.");
+        msgBox.exec();
         draw();
     }
 }
@@ -216,10 +229,12 @@ void MainWindow::handleButton()
                             actualPlayer1 = !actualPlayer1;
                             draw();
                             msgBox.setText("Nelze provést další tah, hráč bude přeskočen.");
+                            msgBox.move(appMiddle);
                             msgBox.exec();
                             break;
                         case 2:                            
                             msgBox2.setText("Hra u konce!!");
+                            msgBox2.move(appMiddle);
                             msgBox2.exec();                            
                         break;
                     }

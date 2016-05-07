@@ -27,7 +27,8 @@ private:
     QMovie *wrongMoveAnimation;
     Ui::MainWindow *ui;
     int windowWidth;
-    int windowHeight;    
+    int windowHeight;
+    QPoint appMiddle;
     void draw();
     void run();
     void initButtons();
@@ -39,7 +40,7 @@ public:
     void init(int size);
     ~MainWindow();
 private slots:
-    void openHelp();
+    void openAbout();
     void saveGame();
     void newGame();    
     void loadGame();
