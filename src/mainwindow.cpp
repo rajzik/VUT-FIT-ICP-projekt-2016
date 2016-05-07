@@ -1,3 +1,15 @@
+/*
+ * @file mainwindow.cpp
+ *
+ * Project name:
+ * HRA 2016
+ *
+ * Authors:
+ * Jak Silhan xsilha10
+ * Pavel Pospisil xpospi88
+ *
+ */
+
 #include "mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), game(), ui(new Ui::MainWindow)
