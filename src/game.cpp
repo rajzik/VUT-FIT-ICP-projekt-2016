@@ -217,13 +217,6 @@ bool game::saveGame() {
         return false;
     savFile << "fs" << std::endl;
     savFile << size << std::endl;
-    for(int x = 0; x < size; x++)
-    {
-        for(int y = 0; y < size; y++)
-            savFile << gameField[x][y];
-        savFile<<std::endl;
-    }
-    
     savFile << "fse"<<std::endl;
     
     std::stack<move> * tempStack = new std::stack<move>(); 
@@ -289,7 +282,6 @@ bool game::loadGame(std::string filename) {
     
     content.erase(0, 3);
     
-        
     if((pos = content.find("\n")) == std::string::npos)
         return false;
     
@@ -300,28 +292,9 @@ bool game::loadGame(std::string filename) {
         return false;
         
     content.erase(0, pos+1);
-
-    
-    std::cout<<content<<std::endl;
-    std::getline(std::cin, a);
-    
-    
-    
     size = tempSize;
     initGameField();
-    
-    for(int x = 0; x < size; x++){
-        for(int y = 0; y < size; y++){
-            int tempColor = std::stoi("0"+ content.substr(0,1));
-    
-            if(tempColor > 2 || tempColor < 0)
-                return false;
-            gameField[x][y] = tempColor;
-            content.erase(0,1); 
-        }        
-        content.erase(0,1);
-    }
-    
+        
     if((pos = content.find("fse")) == std::string::npos)
         return false;
     
