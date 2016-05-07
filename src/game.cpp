@@ -7,11 +7,15 @@ game::game()
     history = new std::vector<move>();
     future = new std::vector<move>();
 }
-void game::initPlayers(std::string nameOne, std::string nameTwo, bool computer){
-    actualPlayer1 = true;    
+
+void game::initPlayers(std::string nameOne, std::string nameTwo, int oppositePlayer)
+{
+    game::easyComputer = oppositePlayer % 2;
+    actualPlayer1 = true;
     player1 = new player(nameOne, false, false);
-    player2 = new player(nameTwo, true, computer); 
+    player2 = new player(nameTwo, true, oppositePlayer);
 }
+
 game::~game()
 {
     delete player1;
