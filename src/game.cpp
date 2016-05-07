@@ -62,7 +62,7 @@ void game::initGameField() {
 }
 
 
-int game::makeMove(bool write, int x, int y) {
+int game::makeMove(bool write, int x, int y, bool clearHistory) {
     if(x < 0 || y < 0 || x >= size || y >= size)
         return false;
     if(gameField[x][y] != EMPTY)
@@ -73,8 +73,8 @@ int game::makeMove(bool write, int x, int y) {
         changeScore();
 
         history->push_back(mv);
-        std::vector<move> * empty = new std::vector<move>();
-        swap(future, empty);
+        if(clearHistory && write == WRITE)
+            future->clear();
         actualPlayer1 = !actualPlayer1;
     }
     return validMove;
@@ -172,6 +172,21 @@ int game::checkMove(bool write, int x, int y){
     return score;
 }
 
+void game::timeTravel(){
+    actualPlayer1 = true;
+    initGameField();
+    
+    std::vector<move> * tempVector = new std::vector<move>();
+    
+    swap(tempVector, history);
+    
+    for(int i = 0, a = tempVector->size(); i < a; i++){
+        move m = tempVector->at(i);
+        makeMove(WRITE, m.x, m.y, false);
+    }
+    changeScore();
+    
+}
 int game::checkDirection(bool write, int x, int y, int endX, int endY){
     // std::cout<<"x:"<<x<<" y: "<<y<<" endX: "<<endX<< " endY: "<<endY<<std::endl;
     
@@ -249,6 +264,14 @@ bool game::saveGame() {
     savFile << size << std::endl;
     savFile << "fse"<<std::endl;
     
+    if(player2->computer){
+        savFile << "pc"<<std::endl;
+        savFile << easyComputer << ";"<<std::endl;
+        savFile << "pce"<<std::endl;
+    }
+    
+    
+    
 
     if(!history->empty())
     {
@@ -269,12 +292,11 @@ bool game::saveGame() {
     {
         savFile << "ft"<<std::endl;
         savFile << future->size()<<std::endl;
-        // for(int a = 0, si =future->size(); a < si; a++){
-        //     move m = future->at(a);
-        //     savFile << m.player <<";"<<m.x<<";"<<m.y<<";"<<std::endl;
-        // }
         savFile << "fte"<<std::endl;
     }
+    
+
+    
     
     savFile.close();
     return true;
@@ -320,6 +342,32 @@ bool game::loadGame(std::string filename) {
         return false;
     
     content.erase(0, pos+4);
+        
+    if((pos = content.find("pc")) != std::string::npos)
+    {
+        
+        content.erase(0, pos+3);
+        if((pos = content.find(";")) == std::string::npos)
+            return false;    
+        int tempComputer = std::stoi("0" + content.substr(0,pos));
+        if(tempComputer < 0 || tempComputer > 2)
+            return false;
+            
+        std::cout<<tempComputer<<std::endl;
+        
+        initPlayers("Player 1", "Player2", tempComputer);
+        player2->computer =true;
+        content.erase(0, pos+2);
+        
+        if((pos = content.find("pce")) == std::string::npos)
+            return false;    
+        content.erase(0, pos+4);
+    }
+    else
+    {
+        initPlayers("Player 1", "Player2", 0);
+    }
+    
     
     if((pos = content.find("hs")) != std::string::npos)
     {
@@ -331,7 +379,7 @@ bool game::loadGame(std::string filename) {
         if(tempSize <= 0)
             return false;
         
-        
+        actualPlayer1 = true;
         for(int i = 0; i < tempSize; i++){
             move m;
             if((pos = content.find(";")) == std::string::npos)
@@ -389,14 +437,21 @@ void game::nextStep() {
 
     history->push_back(future->back());
     future->pop_back();
+    
+    timeTravel();
 }
 
 void game::prevStep() {
     if(history->empty())
         return; // ??
-
     future->push_back(history->back());
     history->pop_back();
+    if(player2->computer)
+    {
+        future->push_back(history->back());
+        history->pop_back();  
+    }
+    timeTravel();
 }
 
 

@@ -33,6 +33,7 @@ class game{
         bool actualPlayer1;
         bool easyComputer;
         
+        void timeTravel();
         int checkDirection(bool write, int x, int y, int xDirection, int yDirection);
         void changeScore();
         int colorPath(bool write, int x, int y, int endX, int endY);
@@ -50,7 +51,7 @@ class game{
         void nextStep();
         void prevStep();
         
-        int makeMove(bool write, int x, int y);
+        int makeMove(bool write, int x, int y,  bool clearHistory = true);
         int checkMove(bool write, int x, int y);
         void changeField(int x, int y);
         void initPlayers(std::string nameOne, std::string nameTwo, int oppositePlayer);

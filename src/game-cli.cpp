@@ -40,9 +40,10 @@ void gameCli::getGameInfo(){
 
         if(single == 1 || single == 2)
             break;
-
+    
     }
-    initPlayers("Player 1", "Player 2", single == 1);
+    initPlayers("Player 1", "Player 2",single == 1);
+    
     if(player2->computer){
         while(true){
             consol.clear();
@@ -59,8 +60,9 @@ void gameCli::getGameInfo(){
                 break;
         }
         easyComputer = single == COMPUTEREASY;
+    
     }
-
+    
 
 
     int tempSize = -1;
@@ -207,8 +209,10 @@ void gameCli::printSavedGame(){
             if(selected != 0)
                 selected--;
 
-            if(loadGame(v[selected].basename + ".sav"))
+            if(loadGame(v[selected].basename + ".sav")){
                 message = "Load was successful";
+                std::cin.get();
+            }
             else
                 message = "Load was unsuccessful";
             return;
@@ -259,6 +263,16 @@ void gameCli::run(){
         if((found = command.find("quit"))!= std::string::npos){
             return;
         }
+        else if((found = command.find("back"))!= std::string::npos){
+            prevStep();
+            // draw();
+            continue;
+        }
+        else if((found = command.find("forward"))!= std::string::npos){
+            nextStep();            
+            // draw();
+            continue;
+        }
         else if((found = command.find("help"))!= std::string::npos){
             consol.clear();
             printHelp();
@@ -285,16 +299,9 @@ void gameCli::run(){
                 rowNum += command[i];
             }
             int row = std::stoi("0" + rowNum) -1;
-            if(row == -1){
-                message = "Wrong row";
-            }
 
             command.erase(0, i);
-
-            char a = command[0];
-            int col = (int)(a - 97);
-
-
+            int col = (int)(command[0] - 97);
 
             if(!makeMove(WRITE,row,col))
                 message = "Invalid move!";
