@@ -53,7 +53,15 @@ class game{
         int impossibleMove();
         void computerMove();
     public:
+        /**
+         * Constructor of Game called by kids
+         *
+         */
         game();
+        /**
+         * Destructor of Game called by kids
+         *
+         */
         ~game();
 
 
@@ -66,6 +74,10 @@ class game{
         int makeMove(bool write, int x, int y,  bool clearHistory = true);
         int checkMove(bool write, int x, int y);
         void changeField(int x, int y);
+        /**
+        * Initialization of
+        *
+        */
         void initPlayers(std::string nameOne, std::string nameTwo, int oppositePlayer);
         virtual void run();
         virtual void draw();
