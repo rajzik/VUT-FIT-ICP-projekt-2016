@@ -171,7 +171,44 @@ void gameCli::draw(){
 }
 
 void gameCli::printGameOver(){
-    
+    consol.clear();
+    std::cout<<std::endl;
+    std::cout<<std::endl;
+    std::cout<<std::endl;
+    std::cout<<std::endl;
+    int score1 = player1->getScore(), score2 = player2->getScore();
+    if(score1 == score2)
+        std::cout<<gStrings[Gdraw];
+    else if(score1 > score2){
+        consol.setFgColor(CSYELLOW);
+        consol.setBgColor(CSBLACK);
+        std::cout<<"O";
+        consol.resetToDefault();
+        std::cout<<gStrings[Gwin];
+    }
+    else{
+        consol.setFgColor(CSBLACK);
+        consol.setBgColor(CSWHITE);
+        std::cout<<"O";
+        consol.resetToDefault();
+        std::cout<<gStrings[Gwin];
+    }
+    std::cout<<std::endl;
+    std::cout<<std::endl;
+    std::cout<<std::endl;
+    std::cout<<std::endl;
+    std::cout<<std::endl;
+    std::cout<<"Do you wanna play again? (YES/NO): ";
+    std::string command;
+    std::getline(std::cin, command);
+    std::getline(std::cin, command);
+    std::size_t a;
+    if(command.find("YES") != std::string::npos){
+        getGameInfo();
+    }
+    else{
+        exit(0);
+    }
 }
 
 void gameCli::printSavedGame(){
@@ -256,7 +293,7 @@ void gameCli::run(){
             case 2: 
                 
                 printGameOver();
-                getGameInfo();
+
                 
             break;
         }
