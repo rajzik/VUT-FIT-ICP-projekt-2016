@@ -8,21 +8,12 @@
 #include "game.h"
 #include "player.h"
 
-
-/**
- * Constructor of Game called by kids
- *
- */
 game::game()
 {
     history = new std::vector<move>();
     future = new std::vector<move>();
 }
 
-/**
-* Initialization of 
-*
-*/
 void game::initPlayers(std::string nameOne, std::string nameTwo, int oppositePlayer)
 {
     game::easyComputer = oppositePlayer % 2;
@@ -30,10 +21,7 @@ void game::initPlayers(std::string nameOne, std::string nameTwo, int oppositePla
     player1 = new player(nameOne, true, false);
     player2 = new player(nameTwo, false, oppositePlayer);
 }
-/**
- * Destructor of Game called by kids
- *
- */
+
 game::~game()
 {
     delete player1;
@@ -509,8 +497,10 @@ bool game::nextStep() {
     
     if(player2->computer && !future->empty())
     {
-        history->push_back(future->back());
-        future->pop_back();
+        while(!future->empty() && history->back().player == true){
+            history->push_back(future->back());
+            future->pop_back();
+        }
     }
     
     timeTravel();
@@ -523,10 +513,13 @@ bool game::prevStep() {
     future->push_back(history->back());
     history->pop_back();
     
-    if(player2->computer && !history->empty())
+    if(player2->computer && !history->empty() && history->back().player)
     {
-        future->push_back(history->back());
-        history->pop_back();  
+        do {
+            future->push_back(history->back());
+            history->pop_back();
+        } while(!history->empty() && !future->back().player);
+
     }
     timeTravel();
     return true;

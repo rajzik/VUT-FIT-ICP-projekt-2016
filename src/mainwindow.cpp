@@ -99,7 +99,7 @@ void MainWindow::init()
 
 void MainWindow::draw()
 {
-    /* Buttons */
+    /* Buttons icons */
     for (int i =0; i < game::size; i++) {
         for (int j =0; j < game::size; j++) {
             switch (gameField[i][j]) {

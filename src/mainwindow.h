@@ -2,7 +2,7 @@
  * @file   mainwindow.h
  * @author Jan Silhan (xsilha10@stud.fit.vutbr.cz), Pavel Pospisil (xpospi88@stud.fit.vutbr.cz)
  * @date   May 2016
- * @brief  My dream class
+ * @brief  class from gui part
  */
 
 #pragma once
@@ -10,13 +10,12 @@
 #include <QMainWindow>
 #include <QPushButton>
 #include <QInputDialog>
-#include <ui_mainwindow.h>
 #include <QMessageBox>
 #include <QDateTime>
 #include <QMovie>
 #include <QStringList>
 #include <QDir>
-#include <iostream>
+#include <ui_mainwindow.h>
 #include "game.h"
 
 namespace Ui {
