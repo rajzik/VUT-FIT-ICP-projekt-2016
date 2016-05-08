@@ -17,8 +17,8 @@ all: $(NAMECLI) gui
 
 
 gui:
-	qmake-qt5 src/src.pro -o gui-compiled/Makefile  
-	$(MAKE) CXX=$(CC) -C gui-compiled -o $(NAME)
+	qmake src/src.pro -o gui-compiled/Makefile  
+	$(MAKE) -B CXX=$(CC) -C gui-compiled -o $(NAME)
 	rm -rf gui-compiled/
 
 $(NAME):src/main-gui.cpp
