@@ -25,6 +25,7 @@
 #include <iomanip>
 #include <boost/filesystem.hpp>
 #include <boost/range/iterator_range.hpp>
+#include <boost/algorithm/string.hpp>
 #include "player.h"
 #include "enums.h"
 

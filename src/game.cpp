@@ -302,9 +302,14 @@ bool game::saveGame() {
     int biggest = 0;
     for(auto& entry : boost::make_iterator_range(boost::filesystem::directory_iterator(dir), {}))
     {
-        std::stringstream ss;
-        ss << boost::filesystem::basename(entry);
-        int actualNum = std::stoi("0" + ss.str());
+        /*std::stringstream ss;
+        ss << boost::filesystem::basename(entry);*/
+
+        std::string baseName = boost::filesystem::basename(entry);
+        if (baseName.length() > 5) {
+            baseName = baseName.substr(5);
+        }
+        int actualNum = std::stoi("0" + baseName);
         if(actualNum > biggest)
             biggest = actualNum;
     }
