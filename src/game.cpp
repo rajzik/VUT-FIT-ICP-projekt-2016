@@ -241,7 +241,7 @@ void game::timeTravel(){
     
     swap(tempVector, history);
     
-    std::cout<<history->size()<<std::endl;
+    //std::cout<<history->size()<<std::endl;
     for (std::vector<move>::iterator it = tempVector->begin() ; it != tempVector->end(); ++it) {
         move m = *it;
         actualPlayer1 = m.player;
@@ -408,7 +408,7 @@ bool game::loadGame(std::string filename) {
         return false;
     
     content.erase(0, pos+4);
-    int computer = 0;
+    //int computer = 0;
     if((pos = content.find("pc")) != std::string::npos)
     {
         
@@ -423,7 +423,7 @@ bool game::loadGame(std::string filename) {
         player2->computer =true;
         content.erase(0, pos+2);
         
-        computer = tempComputer;
+        //computer = tempComputer;
         if((pos = content.find("pce")) == std::string::npos)
             return false;    
         content.erase(0, pos+4);

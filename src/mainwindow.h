@@ -38,24 +38,80 @@ private:
     int windowWidth;
     int windowHeight;
     QPoint appMiddle;
+    /**
+     * @brief redraw buttons, score, animations
+     */
     void draw();
+    /**
+     * @brief playing "loop", check move possibilities, skips, game over
+     */
     void run();
+    /**
+     * @brief init buttons matrix, place them, connect to functions
+     */
     void initButtons();
+    /**
+     * @brief init labels posstition, load animations, set backgrounds
+     */
     void initGraphics();
-    void connectSlots();    
+    /**
+     * @brief connects menu bar buttons to functions
+     */
+    void connectSlots();
+    /**
+     * @brief delete field buttons
+     */
     void clearButtons();
 public:
+    /**
+     * @brief application window constructor, setup ui from mainwindow.iu file
+     *
+     * @param parent
+     */
     explicit MainWindow(QWidget *parent = 0);
+    /**
+     * @brief init game at start
+     */
     void init();
+    /**
+     * @brief call graphics init methods
+     */
     void initUi();
+    /**
+     * @brief application window destructor, delete ui
+     */
     ~MainWindow();
 private slots:
+    /**
+     * @brief open about dialog
+     */
     void openAbout();
+    /**
+     * @brief open save dialog, save game
+     */
     void saveGame();
-    void newGame();    
+    /**
+     * @brief open dialog, get info from user, init new game
+     */
+    void newGame();
+    /**
+     * @brief open load dialog, load game
+     */
     void loadGame();
+    /**
+     * @brief exit game with code 0
+     */
     void exitGame();
+    /**
+     * @brief react on button click
+     */
     void handleButton();
+    /**
+     * @brief go to the future!
+     */
     void redoHistory();
+    /**
+     * @brief go back in time
+     */
     void undoHistory();
 };
