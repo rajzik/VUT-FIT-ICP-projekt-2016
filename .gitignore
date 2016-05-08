@@ -15,3 +15,6 @@ moc_predefs.h
 doc/html
 xpospi88.zip
 
+Debug/HRA2016.exe
+Debug/HRA2016.ilk
+*.pdb

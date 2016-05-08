@@ -12,9 +12,11 @@
 
 #include <iostream>
 #include <cstdlib>
+#include <sstream>
 
 #define ISWINDOWS false
-#ifdef WINDOWS
+
+#ifdef _WIN32
     #include <windows.h>
     #define ISWINDOWS true
 #endif

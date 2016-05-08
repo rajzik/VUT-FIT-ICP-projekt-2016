@@ -64,15 +64,13 @@ void console::setFgColor(int color){
 void console::setConsoleColor(){
     if (ISWINDOWS)
     {
-        std::string toCharArr = "color "+ std::to_string(colorsNumber[bgColor]) + std::to_string(colorsNumber[fgColor]);
-        // std::string toCharArr = "color "+ std::to_string(0) + std::to_string(0);
-        
-        system(toCharArr.c_str());
+		std::stringstream ss;
+		ss << "color " << colorsNumber[bgColor] << colorsNumber[fgColor];	
+        system(ss.str().c_str());
     }
     else
     {
-        std::cout << "\033[3"+std::to_string(colorsNumber[fgColor])+";4"+std::to_string(colorsNumber[bgColor]) + "m";
-        // std::cout << "\e[3"+std::to_string(0)+";4"+std::to_string(0);   
+        std::cout << "\033[3" << colorsNumber[fgColor] << ";4" << colorsNumber[bgColor] << "m";
     }
     
     
@@ -80,22 +78,20 @@ void console::setConsoleColor(){
 
 void console::setCursor(int x, int y){
     y = y/2;
-    std::string a;
     if (ISWINDOWS)
     {
         
     }
     else
     {
-        a = "\033["+std::to_string(y)+";"+std::to_string(x)+"H";
-        std::cout << a;
+        std::cout << "\033[" << y << ";" <<x <<"H";
     }
 }
 void console::clear(){
-    if (ISWINDOWS)
-    {
-        
-    }
+	if (ISWINDOWS)
+	{
+		system("cls");
+	}
     else
     {
         std::cout << "\033[2J\033c";

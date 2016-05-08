@@ -9,6 +9,8 @@
 
 #include "game-cli.h"
 
+#pragma warning(disable: 4996)
+
 typedef struct fileLoad{
     std::time_t time;
     std::string basename;
