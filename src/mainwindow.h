@@ -14,10 +14,14 @@
 #include <QDateTime>
 #include <QMovie>
 #include <QStringList>
+#include <QSpacerItem>
+#include <QGridLayout>
 #include <QDir>
 #include <ui_mainwindow.h>
 #include "game.h"
 
+
+#define msgBoxSpacer QString("\n                                                           ")
 namespace Ui {
     class MainWindow;
 }
@@ -60,7 +64,8 @@ private:
     /**
      * @brief delete field buttons
      */
-    void clearButtons();
+    void clearButtons();    
+    void centerAppMiddle();
 public:
     /**
      * @brief application window constructor, setup ui from mainwindow.iu file

@@ -42,7 +42,7 @@ void MainWindow::connectSlots()
     connect(ui->actionSave, SIGNAL (triggered()), this, SLOT (saveGame()), Qt::UniqueConnection);
     connect(ui->actionLoad, SIGNAL (triggered()), this, SLOT (loadGame()), Qt::UniqueConnection);
     connect(ui->actionUndo, SIGNAL (triggered()), this, SLOT (undoHistory()), Qt::UniqueConnection);
-    connect(ui->actionRedo, SIGNAL (triggered()), this, SLOT (redoHistory()), Qt::UniqueConnection);
+    connect(ui->actionRedo, SIGNAL (triggered()), this, SLOT (redoHistory()), Qt::UniqueConnection);    
 }
 
 void MainWindow::initGraphics()
@@ -51,9 +51,6 @@ void MainWindow::initGraphics()
     windowWidth = 50 + game::size*60;
     windowHeight = 225 + game::size*60;
     this->setFixedSize(windowWidth, windowHeight);
-    appMiddle = ui->centralWidget->mapToGlobal(ui->centralWidget->pos());
-    appMiddle.setX(appMiddle.x() + windowWidth/2);
-    appMiddle.setY(appMiddle.y() + windowHeight/2);
     /* Positions */
     ui->lblP2Color->setGeometry(QRect(QPoint(windowWidth-50-120, 20), QSize(120, 120)));
     ui->lblP2Score->setGeometry(QRect(QPoint(windowWidth-50-120, 20), QSize(120, 120)));
@@ -132,14 +129,25 @@ void MainWindow::draw()
     ui->lblP2Score->setFont(QFont("Cantarell", (ui->lblP2Score->text().toInt() > 99)?30:40));
 }
 
+void MainWindow::centerAppMiddle()
+{
+    appMiddle.setX(this->geometry().x());
+    appMiddle.setY(this->geometry().y());
+    appMiddle.setX(appMiddle.x() + windowWidth/2 - 140);
+    appMiddle.setY(appMiddle.y() + windowHeight/2);
+}
+
 void MainWindow::openAbout()
 {
     QMessageBox msgBox;
 
     msgBox.setWindowTitle("About");
-    msgBox.setText("Reversi - ICP 2016\n"
-                   "Jan Šilhan and Pavel Pospíšil\n");
+    msgBox.setText(QString("Reversi - ICP 2016\n"
+                   "Jan Šilhan and Pavel Pospíšil\n"
+                    + msgBoxSpacer));
+    centerAppMiddle();
     msgBox.move(appMiddle);
+
     msgBox.exec();
 }
 
@@ -185,24 +193,31 @@ void MainWindow::newGame()
     QString selectedOponent;
     QStringList gameSizes;
     QStringList gameOponents;
-    QInputDialog newGameDialog;
+    QInputDialog gameSizeDialog;
+    QInputDialog oponentDialog;
 
-    newGameDialog.setOptions(QInputDialog::UseListViewForComboBoxItems);
-    newGameDialog.move(appMiddle);
-    newGameDialog.resize(150, 200);
+    gameSizeDialog.setOptions(QInputDialog::UseListViewForComboBoxItems);
+    centerAppMiddle();
+    gameSizeDialog.move(appMiddle);
+    gameSizeDialog.resize(150, 200);
+    oponentDialog.setOptions(QInputDialog::UseListViewForComboBoxItems);
+    centerAppMiddle();
+    oponentDialog.move(appMiddle);
+    oponentDialog.resize(150, 200);
 
     gameOponents << QString::fromStdString(gStrings[Ghuman]) << QString::fromStdString(gStrings[GcomputerEasy]) << QString::fromStdString(gStrings[GcomputerHard]);
     gameSizes << "6" << "8" << "10" << "12";
 
-    newGameDialog.setComboBoxItems(gameSizes);
-    newGameDialog.setWindowTitle("New game");
-    newGameDialog.setLabelText("Playing area size");
-    if (newGameDialog.exec()) {
-            selectedSize = newGameDialog.textValue();
-            newGameDialog.setComboBoxItems(gameOponents);
-            newGameDialog.setLabelText("Choose oponent");
-            if (newGameDialog.exec()) {
-                selectedOponent = newGameDialog.textValue();
+    gameSizeDialog.setComboBoxItems(gameSizes);
+    gameSizeDialog.setWindowTitle("New game");
+    gameSizeDialog.setLabelText("Playing area size" + msgBoxSpacer);
+    if (gameSizeDialog.exec()) {
+            selectedSize = gameSizeDialog.textValue();
+            oponentDialog.setComboBoxItems(gameOponents);
+            oponentDialog.setWindowTitle("New game");
+            oponentDialog.setLabelText("Choose oponent" + msgBoxSpacer);
+            if (oponentDialog.exec()) {
+                selectedOponent = oponentDialog.textValue();
                 clearButtons();
                 game::size = selectedSize.toInt();
                 clearHistory();
@@ -218,12 +233,13 @@ void MainWindow::saveGame()
 {    
     QMessageBox msgBox;
 
+    centerAppMiddle();
     msgBox.move(appMiddle);
     msgBox.setWindowTitle("Reversi");
     if (game::saveGame()) {
-        msgBox.setText(QString::fromStdString(gStrings[Gsave]));
+        msgBox.setText(QString::fromStdString(gStrings[Gsave]) + msgBoxSpacer);
     } else {
-        msgBox.setText(QString::fromStdString(eStrings[Esave]));
+        msgBox.setText(QString::fromStdString(eStrings[Esave]) + msgBoxSpacer);
     }
     msgBox.exec();
 }
@@ -242,11 +258,12 @@ void MainWindow::loadGame()
         fileNames << list.at(i).fileName();
     }
     loadDialog.setOptions(QInputDialog::UseListViewForComboBoxItems);
+    centerAppMiddle();
     loadDialog.move(appMiddle);
     loadDialog.resize(150, 200);
     loadDialog.setComboBoxItems(fileNames);
     loadDialog.setWindowTitle("Reversi");
-    loadDialog.setLabelText("Choose game for load");
+    loadDialog.setLabelText("Choose game for load" + msgBoxSpacer);
     if (loadDialog.exec()) {
         selectedFile = loadDialog.textValue();
         clearButtons();
@@ -257,9 +274,10 @@ void MainWindow::loadGame()
         } else {
             QMessageBox msgBox;
 
+            centerAppMiddle();
             msgBox.move(appMiddle);
             msgBox.setWindowTitle("Reversi");
-            msgBox.setText(QString::fromStdString(eStrings[Eload]));
+            msgBox.setText(QString::fromStdString(eStrings[Eload]) + msgBoxSpacer);
             msgBox.exec();
         }
     }
@@ -298,7 +316,8 @@ void MainWindow::run()
         case 1:
             msgBox.setWindowTitle("Reversi");            
             msgBox.setText(QString("There is no possible move.\n") +
-                           QString((actualPlayer1)?"Black player":"White player") + QString::fromStdString(gStrings[Gskip]));
+                           QString((actualPlayer1)?"Black player":"White player") + QString::fromStdString(gStrings[Gskip]) + msgBoxSpacer);
+            centerAppMiddle();
             msgBox.move(appMiddle);
             msgBox.exec();
             actualPlayer1 = !actualPlayer1;
@@ -310,8 +329,9 @@ void MainWindow::run()
             if (player1->getScore() == player2->getScore()) {
                 msgBox.setText(QString::fromStdString(gStrings[Gdraw]));
             } else {
-                msgBox.setText(QString((player1->getScore() > player2->getScore())?"Black player":"White player") + QString::fromStdString(gStrings[Gwin]));
+                msgBox.setText(QString((player1->getScore() > player2->getScore())?"Black player":"White player") + QString::fromStdString(gStrings[Gwin]) + msgBoxSpacer);
             }
+            centerAppMiddle();
             msgBox.move(appMiddle);
             msgBox.exec();
             draw();
