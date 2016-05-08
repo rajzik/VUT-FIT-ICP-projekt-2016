@@ -6,7 +6,7 @@ ZIPNAME=xpospi88.zip
 ZIPFILES = src/* examples/* Makefile README.txt doxy.config 
 
 CC=g++
-CFLAGS=-Wall -Wextra --std=c++11 -pedantic
+CFLAGS=-Wall -Wextra --std=c++11 -pedantic -O3
 LFLAGS=-lboost_system -lboost_filesystem
 LFLAGS += $(shell command -v g++-4.8 >/dev/null 2>&1 && echo -n "-static-libstdc++")
 

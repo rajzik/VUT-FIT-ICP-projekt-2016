@@ -26,7 +26,11 @@ enum consoleColor
     CSBLACK,
     CSWHITE,
     CSRED,
-    CSYELLOW  
+    CSYELLOW,
+    CSGREEN,
+    CSBLUE,
+    CSMAGENTA,
+    CSCYAN
 };
 
 

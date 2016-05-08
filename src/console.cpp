@@ -23,6 +23,10 @@ console::console(){
        colorsNumber[2] = 7;
        colorsNumber[3] = 4;
        colorsNumber[4] = 6;
+       colorsNumber[5] = 2;
+       colorsNumber[6] = 4;
+       colorsNumber[7] = 5;
+       colorsNumber[8] = 6;
     }
     else{
        colorsNumber[0] = 0;
@@ -30,6 +34,10 @@ console::console(){
        colorsNumber[2] = 7;
        colorsNumber[3] = 1;
        colorsNumber[4] = 3;
+       colorsNumber[5] = 2;
+       colorsNumber[6] = 4;
+       colorsNumber[7] = 5;
+       colorsNumber[8] = 6;
     }
 }
 
