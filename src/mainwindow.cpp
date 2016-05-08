@@ -185,22 +185,32 @@ void MainWindow::newGame()
     QString selectedOponent;
     QStringList gameSizes;
     QStringList gameOponents;
-    bool sizeSelected;
-    bool oponentSelected;
+    QInputDialog newGameDialog;
 
-    gameSizes << "6" << "8" << "10" << "12";
+    newGameDialog.setOptions(QInputDialog::UseListViewForComboBoxItems);
+    newGameDialog.move(appMiddle);
+    newGameDialog.resize(150, 200);
+
     gameOponents << QString::fromStdString(gStrings[Ghuman]) << QString::fromStdString(gStrings[GcomputerEasy]) << QString::fromStdString(gStrings[GcomputerHard]);
-    selectedSize = QInputDialog::getItem(this, tr("New game"), tr("Choose playing area size"), gameSizes, 0, false, &sizeSelected);
-    if (sizeSelected && !selectedSize.isEmpty()) {
-        selectedOponent = QInputDialog::getItem(this, tr("New game"), tr("Choose adversary"), gameOponents, 0, false, &oponentSelected);
-        if (oponentSelected && !selectedOponent.isEmpty()) {
-            clearButtons();
-            game::size = selectedSize.toInt();
-            initPlayers("Player1", "Player2", gameOponents.indexOf(selectedOponent));
-            initGameField();
-            initUi();
-            run();
-        }
+    gameSizes << "6" << "8" << "10" << "12";
+
+    newGameDialog.setComboBoxItems(gameSizes);
+    newGameDialog.setWindowTitle("New game");
+    newGameDialog.setLabelText("Playing area size");
+    if (newGameDialog.exec()) {
+            selectedSize = newGameDialog.textValue();
+            newGameDialog.setComboBoxItems(gameOponents);
+            newGameDialog.setLabelText("Choose oponent");
+            if (newGameDialog.exec()) {
+                selectedOponent = newGameDialog.textValue();
+                clearButtons();
+                game::size = selectedSize.toInt();
+                clearHistory();
+                initPlayers("Player1", "Player2", gameOponents.indexOf(selectedOponent));
+                initGameField();
+                initUi();
+                run();
+            }
     }
 }
 

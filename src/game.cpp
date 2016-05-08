@@ -356,6 +356,12 @@ bool game::saveGame() {
     return true;
 }
 
+void game::clearHistory()
+{
+    future->clear();
+    history->clear();
+}
+
 bool game::loadGame(std::string filename) {
     boost::filesystem::path dir("saves");
     boost::filesystem::create_directory(dir);
@@ -421,7 +427,7 @@ bool game::loadGame(std::string filename) {
         initPlayers("Player 1", "Player2", 0);
     }
     
-    
+    clearHistory();
     
     
     if((pos = content.find("hs")) != std::string::npos)

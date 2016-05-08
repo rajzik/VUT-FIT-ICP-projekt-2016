@@ -45,6 +45,7 @@ class game{
         bool actualPlayer1;
         bool easyComputer;
         
+        void clearHistory();
         void timeTravel();
         int checkDirection(bool write, int x, int y, int xDirection, int yDirection);
         void changeScore();
