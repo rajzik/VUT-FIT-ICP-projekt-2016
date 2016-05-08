@@ -20,8 +20,8 @@
 #include <ui_mainwindow.h>
 #include "game.h"
 
+#define msgBoxSpacer QString("\n                                                           ") /* QT hack to resize QMessagebox*/
 
-#define msgBoxSpacer QString("\n                                                           ")
 namespace Ui {
     class MainWindow;
 }
@@ -64,7 +64,10 @@ private:
     /**
      * @brief delete field buttons
      */
-    void clearButtons();    
+    void clearButtons();
+    /**
+     * @brief refresh middle point to show dialog
+     */
     void centerAppMiddle();
 public:
     /**
