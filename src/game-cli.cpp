@@ -131,10 +131,10 @@ void gameCli::draw(){
     std::cout << std::endl;
 
 
-    for (int x = 0; x < size; x++)
+    for (int y = 0; y < size; y++)
     {
-        std::cout << (x+1) << " " << ((size>9 && x < 9)?" ":"");
-        for (int y = 0; y < size; y++)
+        std::cout << (y+1) << " " << ((size>9 && y < 9)?" ":"");
+        for (int x = 0; x < size; x++)
         {
             if(gameField[x][y] == EMPTY)
                 std::cout << "_";
@@ -312,7 +312,7 @@ void gameCli::run(){
             command.erase(0, i);
             int col = (int)(command[0] - 97);
 
-            if(!makeMove(WRITE,row,col))
+            if(!makeMove(WRITE,col,row))
                 message = "Invalid move!";
 
         }
