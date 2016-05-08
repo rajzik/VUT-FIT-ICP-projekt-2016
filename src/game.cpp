@@ -292,7 +292,7 @@ bool game::saveGame() {
     
     if(player2->computer){
         savFile << "pc"<<std::endl;
-        savFile << easyComputer << ";"<<std::endl;
+        savFile << (1+easyComputer) << ";"<<std::endl;
         savFile << "pce"<<std::endl;
     }
     
@@ -328,7 +328,7 @@ bool game::saveGame() {
     return true;
 }
 
-bool game::loadGame(std::string filename) {
+bool game::loadGame(std::string filename, void (*callback)(int,int)) {
     boost::filesystem::path dir("saves");
     boost::filesystem::create_directory(dir);
     
@@ -368,7 +368,7 @@ bool game::loadGame(std::string filename) {
         return false;
     
     content.erase(0, pos+4);
-        
+    int computer = 0;
     if((pos = content.find("pc")) != std::string::npos)
     {
         
@@ -383,6 +383,7 @@ bool game::loadGame(std::string filename) {
         player2->computer =true;
         content.erase(0, pos+2);
         
+        computer = tempComputer;
         if((pos = content.find("pce")) == std::string::npos)
             return false;    
         content.erase(0, pos+4);
@@ -391,6 +392,10 @@ bool game::loadGame(std::string filename) {
     {
         initPlayers("Player 1", "Player2", 0);
     }
+    
+    if(callback != NULL)
+        (*callback)(size, computer);
+    
     
     
     if((pos = content.find("hs")) != std::string::npos)

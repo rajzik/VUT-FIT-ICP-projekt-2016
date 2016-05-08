@@ -54,7 +54,7 @@ class game{
 
 
         bool saveGame();
-        bool loadGame(std::string filename);
+        bool loadGame(std::string filename, void (*callback)(int,int) = NULL);
 
         bool nextStep();
         bool prevStep();

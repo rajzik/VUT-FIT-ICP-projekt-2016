@@ -220,7 +220,6 @@ void gameCli::printSavedGame(){
 
             if(loadGame(v[selected].basename + ".sav")){
                 message = "Load was successful";
-                std::cin.get();
             }
             else
                 message = "Load was unsuccessful";
