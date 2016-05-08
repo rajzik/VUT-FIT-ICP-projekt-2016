@@ -409,8 +409,9 @@ bool game::loadGame(std::string filename) {
             move m;
             if((pos = content.find(";")) == std::string::npos)
                 return false;
-            actualPlayer1 = m.player = std::stoi("0" + content.substr(0, pos)) == 1;
             
+            actualPlayer1 = m.player = std::stoi("0" + content.substr(0, pos)) == 1;
+            std::cout<<"player1: " << actualPlayer1<<std::endl;
             content.erase(0, pos+1);
             if((pos = content.find(";")) == std::string::npos)
                 return false;
