@@ -1,11 +1,15 @@
 /**
  * @file   game.cpp
- * @Author Jan Silhan (xsilha10@stud.fit.vutbr.cz), Pavel Pospisil (xpospi88@stud.fit.vutbr.cz)
+ * @author Jan Silhan (xsilha10@stud.fit.vutbr.cz), Pavel Pospisil (xpospi88@stud.fit.vutbr.cz)
  * @date   May 2016
+<<<<<<< HEAD
  * @brief  Base class for game logic
  *
  * Base class with 2 virtual functions
  *
+=======
+ * @brief
+>>>>>>> 228e378fa12da0f083bfb200710fc3133f2c4c28
  */
 
 #include "game.h"

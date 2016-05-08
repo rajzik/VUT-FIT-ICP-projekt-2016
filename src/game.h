@@ -1,9 +1,13 @@
 /**
  * @file   game.h
- * @Author Jan Silhan (xsilha10@stud.fit.vutbr.cz), Pavel Pospisil (xpospi88@stud.fit.vutbr.cz)
+ * @author Jan Silhan (xsilha10@stud.fit.vutbr.cz), Pavel Pospisil (xpospi88@stud.fit.vutbr.cz)
  * @date   May 2016
+<<<<<<< HEAD
  * @brief 
  *
+=======
+ * @brief
+>>>>>>> 228e378fa12da0f083bfb200710fc3133f2c4c28
  */
 
 #pragma once
