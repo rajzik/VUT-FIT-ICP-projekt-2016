@@ -60,7 +60,7 @@ void MainWindow::connectSlots()
 }
 
 /**
- * @brief
+ * @brief init labels posstition, load animations, set backgrounds
  */
 void MainWindow::initGraphics()
 {
@@ -99,7 +99,7 @@ void MainWindow::initGraphics()
 }
 
 /**
- * @brief
+ * @brief call graphics init methods
  */
 void MainWindow::initUi()
 {
@@ -110,7 +110,7 @@ void MainWindow::initUi()
 }
 
 /**
- * @brief
+ * @brief init game at start
  */
 void MainWindow::init()
 {
@@ -121,7 +121,7 @@ void MainWindow::init()
 }
 
 /**
- * @brief
+ * @brief redraw buttons, score, animations
  */
 void MainWindow::draw()
 {
@@ -159,7 +159,7 @@ void MainWindow::draw()
 }
 
 /**
- * @brief
+ * @brief open about dialog
  */
 void MainWindow::openAbout()
 {
@@ -173,7 +173,7 @@ void MainWindow::openAbout()
 }
 
 /**
- * @brief
+ * @brief go back in time
  */
 void MainWindow::undoHistory()
 {
@@ -189,7 +189,7 @@ void MainWindow::undoHistory()
 }
 
 /**
- * @brief
+ * @brief go to the future!
  */
 void MainWindow::redoHistory()
 {
@@ -205,7 +205,7 @@ void MainWindow::redoHistory()
 }
 
 /**
- * @brief
+ * @brief delete field buttons
  */
 void MainWindow::clearButtons()
 {
@@ -218,7 +218,7 @@ void MainWindow::clearButtons()
 }
 
 /**
- * @brief
+ * @brief open dialog, get info from user, init new game
  */
 void MainWindow::newGame()
 {
@@ -246,7 +246,7 @@ void MainWindow::newGame()
 }
 
 /**
- * @brief
+ * @brief open save dialog, save game
  */
 void MainWindow::saveGame()
 {    
@@ -263,7 +263,7 @@ void MainWindow::saveGame()
 }
 
 /**
- * @brief
+ * @brief open load dialog, load game
  */
 void MainWindow::loadGame()
 {
@@ -297,7 +297,7 @@ void MainWindow::loadGame()
 }
 
 /**
- * @brief
+ * @brief exit game with code 0
  */
 void MainWindow::exitGame()
 {
@@ -305,7 +305,7 @@ void MainWindow::exitGame()
 }
 
 /**
- * @brief
+ * @brief react on button click
  */
 void MainWindow::handleButton()
 {
@@ -321,7 +321,7 @@ void MainWindow::handleButton()
 }
 
 /**
- * @brief
+ * @brief playing "loop", check move possibilities, skips, game over
  */
 void MainWindow::run()
 {
