@@ -249,9 +249,8 @@ void game::timeTravel(){
     swap(tempVector, history);
     
     std::cout<<history->size()<<std::endl;
-    
-    for(int i = 0, a = tempVector->size(); i < a; i++){
-        move m = tempVector->at(i);
+    for (std::vector<move>::iterator it = tempVector->begin() ; it != tempVector->end(); ++it) {
+        move m = *it;
         makeMove(WRITE, m.x, m.y, false);
     }
     changeScore();
@@ -514,6 +513,12 @@ bool game::nextStep() {
     history->push_back(future->back());
     future->pop_back();
     
+    if(player2->computer && !future->empty())
+    {
+        history->push_back(future->back());
+        future->pop_back();
+    }
+    
     timeTravel();
     return true;
 }
@@ -523,7 +528,8 @@ bool game::prevStep() {
         return false;
     future->push_back(history->back());
     history->pop_back();
-    if(player2->computer)
+    
+    if(player2->computer && !history->empty())
     {
         future->push_back(history->back());
         history->pop_back();  
