@@ -21,6 +21,6 @@ private:
     MainWindow * window;
 public:
     gameGui(int argc, char * argv[]);
-    void run();
+    int run();
     ~gameGui();
 };

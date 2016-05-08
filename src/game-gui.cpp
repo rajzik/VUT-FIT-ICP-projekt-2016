@@ -8,7 +8,7 @@
 #include "game-gui.h"
 
 /**
- * @brief gameGui::gameGui - gameGui contructor, create QT application and run it
+ * @brief gameGui contructor, create QT application
  *
  * @param argc main application arguments count
  * @param argv main application arguments array
@@ -16,23 +16,21 @@
 gameGui::gameGui(int argc, char *argv[])
 {
     a = new QApplication(argc, argv);
-    window = new MainWindow();
+}
 
+/**
+ * @brief create window, init game and run application
+ */
+int gameGui::run()
+{
+    window = new MainWindow();
     window->init();
     window->show();
-    a->exec();
+    return a->exec();
 }
 
 /**
- * @brief gameGui::run - unused method (application runs from gameGui contructor)
- */
-void gameGui::run()
-{
-
-}
-
-/**
- * @brief gameGui::~gameGui - delete QT application
+ * @brief delete QT application and window
  */
 gameGui::~gameGui()
 {

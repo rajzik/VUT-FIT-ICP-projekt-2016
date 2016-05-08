@@ -2,13 +2,14 @@
  * @file   mainwindow.cpp
  * @author Jan Silhan (xsilha10@stud.fit.vutbr.cz), Pavel Pospisil (xpospi88@stud.fit.vutbr.cz)
  * @date   May 2016
- * @brief
+ * @brief  file contains GUI logic, graphics initialization
  */
 
 #include "mainwindow.h"
 
 /**
- * @brief MainWindow::MainWindow
+ * @brief application window constructor, setup ui from mainwindow.iu file
+ *
  * @param parent
  */
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), game(), ui(new Ui::MainWindow)
@@ -17,7 +18,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), game(), ui(new Ui
 }
 
 /**
- * @brief MainWindow::~MainWindow
+ * @brief application window destructor, delete ui
  */
 MainWindow::~MainWindow()
 {
@@ -25,7 +26,7 @@ MainWindow::~MainWindow()
 }
 
 /**
- * @brief MainWindow::initButtons
+ * @brief init buttons matrix, place them, connect to functions
  */
 void MainWindow::initButtons()
 {
@@ -37,6 +38,7 @@ void MainWindow::initButtons()
             maze_buttons[i][j] = new QPushButton(this);
             maze_buttons[i][j]->setGeometry(QRect(QPoint(30+60*i, 205+60*j), QSize(50, 50)));
             maze_buttons[i][j]->setIconSize(QSize(50,50));
+            maze_buttons[i][j]->setObjectName(QString("btn_") + QString::number(i) + QString("_") + QString::number(j));
             connect(maze_buttons[i][j], SIGNAL (released()), this, SLOT (handleButton()));
             maze_buttons[i][j]->show();
         }
@@ -44,7 +46,7 @@ void MainWindow::initButtons()
 }
 
 /**
- * @brief MainWindow::connectSlots
+ * @brief connects menu bar buttons to functions
  */
 void MainWindow::connectSlots()
 {
@@ -58,7 +60,7 @@ void MainWindow::connectSlots()
 }
 
 /**
- * @brief MainWindow::initGraphics
+ * @brief
  */
 void MainWindow::initGraphics()
 {
@@ -97,7 +99,7 @@ void MainWindow::initGraphics()
 }
 
 /**
- * @brief MainWindow::initUi
+ * @brief
  */
 void MainWindow::initUi()
 {
@@ -108,7 +110,7 @@ void MainWindow::initUi()
 }
 
 /**
- * @brief MainWindow::init
+ * @brief
  */
 void MainWindow::init()
 {
@@ -119,7 +121,7 @@ void MainWindow::init()
 }
 
 /**
- * @brief MainWindow::draw
+ * @brief
  */
 void MainWindow::draw()
 {
@@ -157,7 +159,7 @@ void MainWindow::draw()
 }
 
 /**
- * @brief MainWindow::openAbout
+ * @brief
  */
 void MainWindow::openAbout()
 {
@@ -171,7 +173,7 @@ void MainWindow::openAbout()
 }
 
 /**
- * @brief MainWindow::undoHistory
+ * @brief
  */
 void MainWindow::undoHistory()
 {
@@ -187,7 +189,7 @@ void MainWindow::undoHistory()
 }
 
 /**
- * @brief MainWindow::redoHistory
+ * @brief
  */
 void MainWindow::redoHistory()
 {
@@ -203,7 +205,7 @@ void MainWindow::redoHistory()
 }
 
 /**
- * @brief MainWindow::clearButtons
+ * @brief
  */
 void MainWindow::clearButtons()
 {
@@ -216,7 +218,7 @@ void MainWindow::clearButtons()
 }
 
 /**
- * @brief MainWindow::newGame
+ * @brief
  */
 void MainWindow::newGame()
 {
@@ -244,7 +246,7 @@ void MainWindow::newGame()
 }
 
 /**
- * @brief MainWindow::saveGame
+ * @brief
  */
 void MainWindow::saveGame()
 {    
@@ -252,13 +254,13 @@ void MainWindow::saveGame()
 
     game::saveGame();
     msgBox.move(appMiddle);
-    msgBox.setWindowTitle("Save game");
+    msgBox.setWindowTitle("Reversi");
     msgBox.setText("Game saved.");
     msgBox.exec();
 }
 
 /**
- * @brief MainWindow::loadGame
+ * @brief
  */
 void MainWindow::loadGame()
 {
@@ -273,7 +275,7 @@ void MainWindow::loadGame()
     for (int i = 0; i < list.size(); ++i) {
         fileNames << list.at(i).fileName();
     }
-    selectedFile = QInputDialog::getItem(this, tr("Load game"), tr("Choose saved game:"), fileNames, 0, false, &fileSelected);
+    selectedFile = QInputDialog::getItem(this, tr("Reversi"), tr("Choose game for load:"), fileNames, 0, false, &fileSelected);
     if (fileSelected && !selectedFile.isEmpty()) {        
         clearButtons();
         game::loadGame(selectedFile.toStdString());
@@ -284,7 +286,7 @@ void MainWindow::loadGame()
 }
 
 /**
- * @brief MainWindow::exitGame
+ * @brief
  */
 void MainWindow::exitGame()
 {
@@ -292,27 +294,23 @@ void MainWindow::exitGame()
 }
 
 /**
- * @brief MainWindow::handleButton
+ * @brief
  */
 void MainWindow::handleButton()
 {
-    for(int i = 0; i < game::size; i++) {
-        for (int j = 0; j < game::size; j++) {
-            if (sender() == maze_buttons[i][j]) {                
-                if (makeMove(WRITE, i, j)) {
-                    draw();
-                    run();
-                } else {
-                    ui->lblCenterAnimation->setMovie(wrongMoveAnimation);
-                    wrongMoveAnimation->start();                    
-                }
-            }
-        }
-    }    
+    QStringList senderPosition = sender()->objectName().split( "_" );
+
+    if (makeMove(WRITE, senderPosition.at(1).toInt(), senderPosition.at(2).toInt())) {
+        draw();
+        run();
+    } else {
+        ui->lblCenterAnimation->setMovie(wrongMoveAnimation);
+        wrongMoveAnimation->start();
+    }
 }
 
 /**
- * @brief MainWindow::run
+ * @brief
  */
 void MainWindow::run()
 {
@@ -337,8 +335,12 @@ void MainWindow::run()
             run();
             break;
         case 2:
-            msgBox.setWindowTitle("Game over");
-            msgBox.setText(QString((player1->getScore() > player2->getScore())?"Black":"White") + QString(" player wins!"));
+            msgBox.setWindowTitle("Reversi");
+            if (player1->getScore() == player2->getScore()) {
+                msgBox.setText("It's a draw!");
+            } else {
+                msgBox.setText(QString((player1->getScore() > player2->getScore())?"Black":"White") + QString(" player wins!"));
+            }
             msgBox.move(appMiddle);
             msgBox.exec();
             draw();
