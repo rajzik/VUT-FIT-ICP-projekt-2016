@@ -7,16 +7,26 @@
 
 #include "mainwindow.h"
 
+/**
+ * @brief MainWindow::MainWindow
+ * @param parent
+ */
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), game(), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);    
 }
 
+/**
+ * @brief MainWindow::~MainWindow
+ */
 MainWindow::~MainWindow()
 {
     delete ui;
 }
 
+/**
+ * @brief MainWindow::initButtons
+ */
 void MainWindow::initButtons()
 {
     maze_buttons = new QPushButton**[game::size];
@@ -33,6 +43,9 @@ void MainWindow::initButtons()
     }
 }
 
+/**
+ * @brief MainWindow::connectSlots
+ */
 void MainWindow::connectSlots()
 {
     connect(ui->actionNew, SIGNAL (triggered()), this, SLOT (newGame()), Qt::UniqueConnection);
@@ -44,6 +57,9 @@ void MainWindow::connectSlots()
     connect(ui->actionRedo, SIGNAL (triggered()), this, SLOT (redoHistory()), Qt::UniqueConnection);
 }
 
+/**
+ * @brief MainWindow::initGraphics
+ */
 void MainWindow::initGraphics()
 {
     /* Window size */
@@ -80,20 +96,31 @@ void MainWindow::initGraphics()
     ui->lblP2Score->setStyleSheet("background-color: rgba(0, 0, 0, 0%);");
 }
 
-void MainWindow::init(int size, int oppositePlayer, bool changeField)
+/**
+ * @brief MainWindow::initUi
+ */
+void MainWindow::initUi()
 {
-    game::size = size;
-
-    initPlayers("Player 1", "Player 2", oppositePlayer);
-    if (changeField) {
-        initGameField();
-    }
     initGraphics();
     initButtons();
     connectSlots();
     draw();
 }
 
+/**
+ * @brief MainWindow::init
+ */
+void MainWindow::init()
+{
+    game::size = DEFAULT_SIZE;
+    initPlayers("Player 1", "Player 2", HUMAN);
+    initGameField();
+    initUi();
+}
+
+/**
+ * @brief MainWindow::draw
+ */
 void MainWindow::draw()
 {
     /* Buttons */
@@ -129,6 +156,9 @@ void MainWindow::draw()
     ui->lblP2Score->setFont(QFont("Cantarell", (ui->lblP2Score->text().toInt() > 99)?30:40));
 }
 
+/**
+ * @brief MainWindow::openAbout
+ */
 void MainWindow::openAbout()
 {
     QMessageBox msgBox;
@@ -140,6 +170,9 @@ void MainWindow::openAbout()
     msgBox.exec();
 }
 
+/**
+ * @brief MainWindow::undoHistory
+ */
 void MainWindow::undoHistory()
 {
     if (!game::prevStep()) {
@@ -149,9 +182,13 @@ void MainWindow::undoHistory()
         ui->lblCenterAnimation->setMovie(leftStepAnimation);
         leftStepAnimation->start();
         draw();
+        run();
     }
 }
 
+/**
+ * @brief MainWindow::redoHistory
+ */
 void MainWindow::redoHistory()
 {
     if (!game::nextStep()) {
@@ -161,9 +198,13 @@ void MainWindow::redoHistory()
         ui->lblCenterAnimation->setMovie(rightStepAnimation);
         rightStepAnimation->start();
         draw();
+        run();
     }
 }
 
+/**
+ * @brief MainWindow::clearButtons
+ */
 void MainWindow::clearButtons()
 {
     for (int i = 0; i < game::size; i++) {
@@ -174,6 +215,9 @@ void MainWindow::clearButtons()
     delete maze_buttons;
 }
 
+/**
+ * @brief MainWindow::newGame
+ */
 void MainWindow::newGame()
 {
     QString selectedSize;
@@ -189,12 +233,19 @@ void MainWindow::newGame()
     if (sizeSelected && !selectedSize.isEmpty()) {
         selectedOponent = QInputDialog::getItem(this, tr("New game"), tr("Choose adversary"), gameOponents, 0, false, &oponentSelected);
         if (oponentSelected && !selectedOponent.isEmpty()) {
-            clearButtons();            
-            init(selectedSize.toInt(), gameOponents.indexOf(selectedOponent));
+            clearButtons();
+            game::size = selectedSize.toInt();
+            initPlayers("Player1", "Player2", gameOponents.indexOf(selectedOponent));
+            initGameField();
+            initUi();
+            run();
         }
     }
 }
 
+/**
+ * @brief MainWindow::saveGame
+ */
 void MainWindow::saveGame()
 {    
     QMessageBox msgBox;
@@ -206,6 +257,9 @@ void MainWindow::saveGame()
     msgBox.exec();
 }
 
+/**
+ * @brief MainWindow::loadGame
+ */
 void MainWindow::loadGame()
 {
     QStringList fileNames;
@@ -223,17 +277,23 @@ void MainWindow::loadGame()
     if (fileSelected && !selectedFile.isEmpty()) {        
         clearButtons();
         game::loadGame(selectedFile.toStdString());
-        init(game::size, COMPUTEREASY, false);
+        initUi();
         draw();
         run();
     }
 }
 
+/**
+ * @brief MainWindow::exitGame
+ */
 void MainWindow::exitGame()
 {
     exit(0);
 }
 
+/**
+ * @brief MainWindow::handleButton
+ */
 void MainWindow::handleButton()
 {
     for(int i = 0; i < game::size; i++) {
@@ -251,6 +311,9 @@ void MainWindow::handleButton()
     }    
 }
 
+/**
+ * @brief MainWindow::run
+ */
 void MainWindow::run()
 {
     QMessageBox msgBox;
@@ -264,12 +327,12 @@ void MainWindow::run()
             }
             break;
         case 1:
-            msgBox.setWindowTitle("Reversi");
-            actualPlayer1 = !actualPlayer1;
+            msgBox.setWindowTitle("Reversi");            
             msgBox.setText(QString("There is no possible move.\n") +
                            QString((actualPlayer1)?"Black":"White") + QString(" player skipped!"));
             msgBox.move(appMiddle);
             msgBox.exec();
+            actualPlayer1 = !actualPlayer1;
             draw();
             run();
             break;
@@ -278,6 +341,7 @@ void MainWindow::run()
             msgBox.setText(QString((player1->getScore() > player2->getScore())?"Black":"White") + QString(" player wins!"));
             msgBox.move(appMiddle);
             msgBox.exec();
+            draw();
         break;
     }
 }

@@ -46,7 +46,8 @@ private:
     void clearButtons();
 public:
     explicit MainWindow(QWidget *parent = 0);
-    void init(int size, int oppositePlayer, bool changeField = true);
+    void init();
+    void initUi();
     ~MainWindow();
 private slots:
     void openAbout();
