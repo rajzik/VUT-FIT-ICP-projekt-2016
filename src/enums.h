@@ -37,7 +37,10 @@ enum messagesGame
     Gsave,
     Gskip,
     Gplayer1,
-    Gplayer2
+    Gplayer2,
+    Ghuman,
+    GcomputerEasy,
+    GcomputerHard
 };
 
 
@@ -49,9 +52,12 @@ std::string const gStrings[] = {
     "It's a draw!",
 	"Load successful.",
 	"Save successful.",
-	"You were skipped.",
+    " skipped.",
 	"Player 1",
-	"Player 2"
+    "Player 2",
+    "Human",
+    "Computer - easy",
+    "Computer - hard"
 };
 
 #endif

@@ -230,7 +230,7 @@ void MainWindow::newGame()
     bool oponentSelected;
 
     gameSizes << "6" << "8" << "10" << "12";
-    gameOponents << "Human" << "Computer - easy" << "Computer - hard";
+    gameOponents << QString::fromStdString(gStrings[Ghuman]) << QString::fromStdString(gStrings[GcomputerEasy]) << QString::fromStdString(gStrings[GcomputerHard]);
     selectedSize = QInputDialog::getItem(this, tr("New game"), tr("Choose playing area size"), gameSizes, 0, false, &sizeSelected);
     if (sizeSelected && !selectedSize.isEmpty()) {
         selectedOponent = QInputDialog::getItem(this, tr("New game"), tr("Choose adversary"), gameOponents, 0, false, &oponentSelected);
@@ -252,10 +252,13 @@ void MainWindow::saveGame()
 {    
     QMessageBox msgBox;
 
-    game::saveGame();
     msgBox.move(appMiddle);
     msgBox.setWindowTitle("Reversi");
-    msgBox.setText("Game saved.");
+    if (game::saveGame()) {
+        msgBox.setText(QString::fromStdString(gStrings[Gsave]));
+    } else {
+        msgBox.setText(QString::fromStdString(eStrings[Esave]));
+    }
     msgBox.exec();
 }
 
@@ -278,10 +281,18 @@ void MainWindow::loadGame()
     selectedFile = QInputDialog::getItem(this, tr("Reversi"), tr("Choose game for load:"), fileNames, 0, false, &fileSelected);
     if (fileSelected && !selectedFile.isEmpty()) {        
         clearButtons();
-        game::loadGame(selectedFile.toStdString());
-        initUi();
-        draw();
-        run();
+        if (game::loadGame(selectedFile.toStdString())) {
+            initUi();
+            draw();
+            run();
+        } else {
+            QMessageBox msgBox;
+
+            msgBox.move(appMiddle);
+            msgBox.setWindowTitle("Reversi");
+            msgBox.setText(QString::fromStdString(eStrings[Eload]));
+            msgBox.exec();
+        }
     }
 }
 
@@ -327,7 +338,7 @@ void MainWindow::run()
         case 1:
             msgBox.setWindowTitle("Reversi");            
             msgBox.setText(QString("There is no possible move.\n") +
-                           QString((actualPlayer1)?"Black":"White") + QString(" player skipped!"));
+                           QString((actualPlayer1)?"Black player":"White player") + QString::fromStdString(gStrings[Gskip]));
             msgBox.move(appMiddle);
             msgBox.exec();
             actualPlayer1 = !actualPlayer1;
@@ -337,9 +348,9 @@ void MainWindow::run()
         case 2:
             msgBox.setWindowTitle("Reversi");
             if (player1->getScore() == player2->getScore()) {
-                msgBox.setText("It's a draw!");
+                msgBox.setText(QString::fromStdString(gStrings[Gdraw]));
             } else {
-                msgBox.setText(QString((player1->getScore() > player2->getScore())?"Black":"White") + QString(" player wins!"));
+                msgBox.setText(QString((player1->getScore() > player2->getScore())?"Black player":"White player") + QString::fromStdString(gStrings[Gwin]));
             }
             msgBox.move(appMiddle);
             msgBox.exec();
