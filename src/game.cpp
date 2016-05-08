@@ -241,7 +241,7 @@ int game::checkMove(bool write, int x, int y){
 }
 
 void game::timeTravel(){
-    actualPlayer1 = true;
+
     initGameField();
     
     std::vector<move> * tempVector = new std::vector<move>();
@@ -251,6 +251,7 @@ void game::timeTravel(){
     std::cout<<history->size()<<std::endl;
     for (std::vector<move>::iterator it = tempVector->begin() ; it != tempVector->end(); ++it) {
         move m = *it;
+        actualPlayer1 = m.player;
         makeMove(WRITE, m.x, m.y, false);
     }
     changeScore();
