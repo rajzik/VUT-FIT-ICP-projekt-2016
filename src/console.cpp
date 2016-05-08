@@ -102,6 +102,6 @@ void console::resetToDefault(){
     }
     else
     {
-        std::cout << "\033[0m ";
+        std::cout << "\033[0m";
     }
 }

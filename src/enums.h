@@ -6,6 +6,9 @@
  */
 
 #pragma once
+#include <string>
+
+
 enum field_color
 {
     EMPTY,
@@ -25,3 +28,50 @@ enum opposite_player
     COMPUTEREASY,
     COMPUTERHARD
 };
+
+enum messagesGame
+{
+    Gwin, 
+    Gdraw,
+    Gload,
+    Gsave,
+    Gskip,
+    Gplayer1,
+    Gplayer2
+};
+
+
+#ifndef GSTR
+#define GSTR
+
+std::string const gStrings[] = {
+    " WIN!",
+    "It's a draw!",
+	"Load successful.",
+	"Save successful.",
+	"You were skipped.",
+	"Player 1",
+	"Player 2"
+};
+
+#endif
+enum EmessagesGame{
+    Esave,
+    Eload,
+    Enext,
+    Eback,
+    Einvalid
+};
+
+
+#ifndef ESTR
+#define ESTR
+std::string const eStrings[] = {
+    "Save failed!",
+    "Load failed!",
+	"No forward moves!",
+	"No back moves!",
+	"Invalid move."
+};
+#endif
+

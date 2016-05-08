@@ -17,6 +17,7 @@ class gameCli : public game
 private: 
     console consol;    
     std::string message;
+    std::string Emessage;
     bool actualPlayer;
     void printSavedGame();
     void printGameOver();

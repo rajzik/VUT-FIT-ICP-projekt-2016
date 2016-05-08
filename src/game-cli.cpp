@@ -24,6 +24,7 @@ gameCli::gameCli()
     printHelp();
     getGameInfo();
     message = "";
+    Emessage = "";
 }
 
 gameCli::~gameCli(){
@@ -118,6 +119,12 @@ void gameCli::draw(){
     consol.clear();
     if(!message.empty())
         std::cout<<message<<std::endl;
+    if(!Emessage.empty()){
+        consol.setFgColor(CSWHITE);
+        consol.setBgColor(CSRED);
+        std::cout<<Emessage<<std::endl;
+        consol.resetToDefault();
+    }
     consol.setFgColor(CSBLACK);
     consol.setBgColor(CSWHITE);
 
@@ -164,7 +171,7 @@ void gameCli::draw(){
 }
 
 void gameCli::printGameOver(){
-    //Todo print game over
+    
 }
 
 void gameCli::printSavedGame(){
@@ -202,7 +209,7 @@ void gameCli::printSavedGame(){
     while(true){
 
 
-        std::cout<<"Please enter number of file "<<std::endl<<"or press enter to load last game: ";
+        std::cout<<"Please enter number of file,"<<std::endl<<"to return write return or press enter to load last game: ";
         std::getline(std::cin, a);
 
 
@@ -218,10 +225,10 @@ void gameCli::printSavedGame(){
                 selected--;
 
             if(loadGame(v[selected].basename + ".sav")){
-                message = "Load was successful";
+                message = gStrings[Gload];
             }
             else
-                message = "Load was unsuccessful";
+                Emessage = eStrings[Eload];
             return;
         }
 
@@ -263,7 +270,7 @@ void gameCli::run(){
 
         draw();
         message = "";
-
+        Emessage = "";
 
 
         std::cin >> command;
@@ -276,12 +283,12 @@ void gameCli::run(){
         }
         else if((found = command.find("back"))!= std::string::npos){
             if(!prevStep())
-                message = "no back moves";
+                Emessage = eStrings[Eback];
             continue;
         }
         else if((found = command.find("forward"))!= std::string::npos){
             if(!nextStep())            
-                message = "no forward moves";
+                Emessage = eStrings[Enext];
             continue;
         }
         else if((found = command.find("help"))!= std::string::npos){
@@ -295,9 +302,9 @@ void gameCli::run(){
         }
         else if((found = command.find("save")) != std::string::npos){
             if(!saveGame())
-                message = "Save Unsuccessful!!";
+                Emessage = eStrings[Esave];
             else
-                message = "Save successful!";
+                message = gStrings[Gsave];
         }
         else{
                 
@@ -315,7 +322,7 @@ void gameCli::run(){
             int col = (int)(command[0] - 97);
 
             if(!makeMove(WRITE,col,row))
-                message = "Invalid move!";
+                Emessage = eStrings[Einvalid];
 
         }
 
