@@ -378,9 +378,7 @@ bool game::loadGame(std::string filename) {
         int tempComputer = std::stoi("0" + content.substr(0,pos));
         if(tempComputer < 0 || tempComputer > 2)
             return false;
-            
-        std::cout<<tempComputer<<std::endl;
-        
+                    
         initPlayers("Player 1", "Player2", tempComputer);
         player2->computer =true;
         content.erase(0, pos+2);
@@ -411,7 +409,7 @@ bool game::loadGame(std::string filename) {
             move m;
             if((pos = content.find(";")) == std::string::npos)
                 return false;
-            actualPlayer1 = m.player = (bool)std::stoi("0" + content.substr(0, pos));
+            actualPlayer1 = m.player = std::stoi("0" + content.substr(0, pos)) == 1;
             
             content.erase(0, pos+1);
             if((pos = content.find(";")) == std::string::npos)
