@@ -2,19 +2,30 @@
  * @file   game.cpp
  * @Author Jan Silhan (xsilha10@stud.fit.vutbr.cz), Pavel Pospisil (xpospi88@stud.fit.vutbr.cz)
  * @date   May 2016
- * @brief
+ * @brief  Base class for game logic
+ *
+ * Base class with 2 virtual functions
  *
  */
 
 #include "game.h"
 #include "player.h"
 
+
+/**
+ * Constructor of Game called by kids
+ *
+ */
 game::game()
 {
     history = new std::vector<move>();
     future = new std::vector<move>();
 }
 
+/**
+* Initialization of 
+*
+*/
 void game::initPlayers(std::string nameOne, std::string nameTwo, int oppositePlayer)
 {
     game::easyComputer = oppositePlayer % 2;
@@ -22,7 +33,10 @@ void game::initPlayers(std::string nameOne, std::string nameTwo, int oppositePla
     player1 = new player(nameOne, true, false);
     player2 = new player(nameTwo, false, oppositePlayer);
 }
-
+/**
+ * Destructor of Game called by kids
+ *
+ */
 game::~game()
 {
     delete player1;
@@ -124,6 +138,8 @@ int game::impossibleMove()
             if (game::makeMove(READ, i, j))
                 whiteCan = true;
         }
+        if(blackCan && whiteCan)
+            break;
     }
     actualPlayer1 = actualPlayerBackup;
     /* Nobody can move - return 2 */
@@ -153,38 +169,60 @@ int game::checkMove(bool write, int x, int y){
     if(x > 0)
         score += checkDirection(write, x,y, 0,y);
     
+    
     // std::cout<<"prava"<<std::endl;
     if(x < size-1)
+    {   
         score += checkDirection(write, x,y, size-1,y);
+    }
         
     // std::cout<<"nahoru"<<std::endl;
-    if(y > 0)
+    if(y > 0){
+        
+        
         score += checkDirection(write, x,y, x,0);
+    }
+    
+    // down
+    if(y < size-1){
         
-    // std::cout<<"dolu"<<std::endl;
-    if(y < size-1)
+        
+    
         score += checkDirection(write, x,y, x,size-1);
-        
+    }
     // std::cout<<"leva nahoru"<<std::endl;
     if(x > 0 && y > 0){
+        
+        
+    
+        
         int minimum = std::min(x,y);
         score += checkDirection(write, x, y, x-minimum, y-minimum);
     }
     
     // std::cout<<"leva dolu"<<std::endl;
     if(x > 0 && y < size-1){
+        
+        
+    
         int minimum = std::min(x,size-1-y);
         score += checkDirection(write, x, y, x-minimum, y+minimum);
     }
     
     // std::cout<<"prava dolu"<<std::endl;
     if(x<size-1 && y < size-1){
+        
+        
+    
         int minimum = std::min(size-1-x, size-1-y);
         score += checkDirection(write, x, y, x + minimum, y+minimum);
     }
     
     // std::cout<<"prava nahoru"<<std::endl;
     if(x<size-1 && y > 0){
+        
+        
+    
         int minimum = std::min(size-1-x, y);
         score += checkDirection(write,x,y,x+minimum, y-minimum);
     }
@@ -205,6 +243,8 @@ void game::timeTravel(){
     std::vector<move> * tempVector = new std::vector<move>();
     
     swap(tempVector, history);
+    
+    std::cout<<history->size()<<std::endl;
     
     for(int i = 0, a = tempVector->size(); i < a; i++){
         move m = tempVector->at(i);
@@ -250,13 +290,16 @@ int game::colorPath(bool write, int x, int y, int endX, int endY){
     int xStep = (endX-x)/stepCount;
     int yStep = (endY-y)/stepCount;
 
+    if(stepCount == 1)
+        return 0;
     if (write == READ)
         return stepCount;
-    int i;
-    for(i = 0; i <= stepCount; i++){
+    
+    for(int i = 0; i <= stepCount; i++){
         changeField(x+i*xStep, y+i*yStep);
     }
-    return i;
+
+    return stepCount;
 }
 
 void game::changeField(int x, int y) {

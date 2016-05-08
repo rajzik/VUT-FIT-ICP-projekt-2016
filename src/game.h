@@ -2,7 +2,7 @@
  * @file   game.h
  * @Author Jan Silhan (xsilha10@stud.fit.vutbr.cz), Pavel Pospisil (xpospi88@stud.fit.vutbr.cz)
  * @date   May 2016
- * @brief
+ * @brief 
  *
  */
 

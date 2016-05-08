@@ -27,7 +27,6 @@ gameCli::gameCli()
 }
 
 gameCli::~gameCli(){
-
 }
 
 void gameCli::getGameInfo(){
@@ -91,7 +90,7 @@ void gameCli::getGameInfo(){
         }
 
     }
-
+    
     size = tempSize;
     initGameField();
 
@@ -240,13 +239,15 @@ void gameCli::run(){
             computerMove();
             continue;
         }
+
         int possible;
         switch(possible = impossibleMove()){
             case 1:
-                 actualPlayer1 = !actualPlayer1;
-                 message = "You were skipped";
+                actualPlayer1 = !actualPlayer1;
+                message = "You were skipped";
             break;
             case 2: 
+                
                 printGameOver();
                 getGameInfo();
                 
@@ -255,6 +256,8 @@ void gameCli::run(){
 
         if(possible > 0)
             continue;
+
+
 
         std::string command;
 
@@ -272,13 +275,13 @@ void gameCli::run(){
             return;
         }
         else if((found = command.find("back"))!= std::string::npos){
-            prevStep();
-            // draw();
+            if(!prevStep())
+                message = "no back moves";
             continue;
         }
         else if((found = command.find("forward"))!= std::string::npos){
-            nextStep();            
-            // draw();
+            if(!nextStep())            
+                message = "no forward moves";
             continue;
         }
         else if((found = command.find("help"))!= std::string::npos){
@@ -297,7 +300,7 @@ void gameCli::run(){
                 message = "Save successful!";
         }
         else{
-
+                
             
             std::size_t i = -1;
             std::string rowNum = "";
