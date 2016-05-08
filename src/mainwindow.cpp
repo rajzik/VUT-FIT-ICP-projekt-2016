@@ -7,27 +7,16 @@
 
 #include "mainwindow.h"
 
-/**
- * @brief application window constructor, setup ui from mainwindow.iu file
- *
- * @param parent
- */
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), game(), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);    
 }
 
-/**
- * @brief application window destructor, delete ui
- */
 MainWindow::~MainWindow()
 {
     delete ui;
 }
 
-/**
- * @brief init buttons matrix, place them, connect to functions
- */
 void MainWindow::initButtons()
 {
     maze_buttons = new QPushButton**[game::size];
@@ -45,9 +34,6 @@ void MainWindow::initButtons()
     }
 }
 
-/**
- * @brief connects menu bar buttons to functions
- */
 void MainWindow::connectSlots()
 {
     connect(ui->actionNew, SIGNAL (triggered()), this, SLOT (newGame()), Qt::UniqueConnection);
@@ -59,9 +45,6 @@ void MainWindow::connectSlots()
     connect(ui->actionRedo, SIGNAL (triggered()), this, SLOT (redoHistory()), Qt::UniqueConnection);
 }
 
-/**
- * @brief init labels posstition, load animations, set backgrounds
- */
 void MainWindow::initGraphics()
 {
     /* Window size */
@@ -98,9 +81,6 @@ void MainWindow::initGraphics()
     ui->lblP2Score->setStyleSheet("background-color: rgba(0, 0, 0, 0%);");
 }
 
-/**
- * @brief call graphics init methods
- */
 void MainWindow::initUi()
 {
     initGraphics();
@@ -109,9 +89,6 @@ void MainWindow::initUi()
     draw();
 }
 
-/**
- * @brief init game at start
- */
 void MainWindow::init()
 {
     game::size = DEFAULT_SIZE;
@@ -120,9 +97,6 @@ void MainWindow::init()
     initUi();
 }
 
-/**
- * @brief redraw buttons, score, animations
- */
 void MainWindow::draw()
 {
     /* Buttons */
@@ -158,9 +132,6 @@ void MainWindow::draw()
     ui->lblP2Score->setFont(QFont("Cantarell", (ui->lblP2Score->text().toInt() > 99)?30:40));
 }
 
-/**
- * @brief open about dialog
- */
 void MainWindow::openAbout()
 {
     QMessageBox msgBox;
@@ -172,9 +143,6 @@ void MainWindow::openAbout()
     msgBox.exec();
 }
 
-/**
- * @brief go back in time
- */
 void MainWindow::undoHistory()
 {
     if (!game::prevStep()) {
@@ -188,9 +156,6 @@ void MainWindow::undoHistory()
     }
 }
 
-/**
- * @brief go to the future!
- */
 void MainWindow::redoHistory()
 {
     if (!game::nextStep()) {
@@ -204,9 +169,6 @@ void MainWindow::redoHistory()
     }
 }
 
-/**
- * @brief delete field buttons
- */
 void MainWindow::clearButtons()
 {
     for (int i = 0; i < game::size; i++) {
@@ -217,9 +179,6 @@ void MainWindow::clearButtons()
     delete maze_buttons;
 }
 
-/**
- * @brief open dialog, get info from user, init new game
- */
 void MainWindow::newGame()
 {
     QString selectedSize;
@@ -245,9 +204,6 @@ void MainWindow::newGame()
     }
 }
 
-/**
- * @brief open save dialog, save game
- */
 void MainWindow::saveGame()
 {    
     QMessageBox msgBox;
@@ -262,9 +218,6 @@ void MainWindow::saveGame()
     msgBox.exec();
 }
 
-/**
- * @brief open load dialog, load game
- */
 void MainWindow::loadGame()
 {
     QStringList fileNames;
@@ -296,17 +249,11 @@ void MainWindow::loadGame()
     }
 }
 
-/**
- * @brief exit game with code 0
- */
 void MainWindow::exitGame()
 {
     exit(0);
 }
 
-/**
- * @brief react on button click
- */
 void MainWindow::handleButton()
 {
     QStringList senderPosition = sender()->objectName().split( "_" );
@@ -320,9 +267,6 @@ void MainWindow::handleButton()
     }
 }
 
-/**
- * @brief playing "loop", check move possibilities, skips, game over
- */
 void MainWindow::run()
 {
     QMessageBox msgBox;
