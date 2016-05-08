@@ -1,10 +1,9 @@
 /**
- * @file   console.cpp
+ * @file   mainwindow.cpp
  * @Author Jan Silhan (xsilha10@stud.fit.vutbr.cz), Pavel Pospisil (xpospi88@stud.fit.vutbr.cz)
- * @date   may 2016
- * @brief  work with console in both systems
+ * @date   May 2016
+ * @brief
  *
- * sometimes i believe compiler ignores all my comments, but doxygen don't
  */
 
 #include "mainwindow.h"
@@ -218,8 +217,8 @@ void MainWindow::loadGame()
     }
     selectedFile = QInputDialog::getItem(this, tr("Load game"), tr("Choose saved game:"), fileNames, 0, false, &fileSelected);
     if (fileSelected && !selectedFile.isEmpty()) {        
-        game::loadGame(selectedFile.toStdString());
         clearButtons();
+        game::loadGame(selectedFile.toStdString());
         init(game::size, COMPUTEREASY);
         game::loadGame(selectedFile.toStdString());
         draw();

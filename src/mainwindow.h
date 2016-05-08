@@ -1,13 +1,12 @@
 /**
- * @file   console.cpp
+ * @file   mainwindow.h
  * @Author Jan Silhan (xsilha10@stud.fit.vutbr.cz), Pavel Pospisil (xpospi88@stud.fit.vutbr.cz)
- * @date   may 2016
- * @brief  work with console in both systems
+ * @date   May 2016
+ * @brief
  *
- * sometimes i believe compiler ignores all my comments, but doxygen don't
  */
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+
+#pragma once
 
 #include <QMainWindow>
 #include <QPushButton>
@@ -60,5 +59,3 @@ private slots:
     void redoHistory();
     void undoHistory();
 };
-
-#endif // MAINWINDOW_H
