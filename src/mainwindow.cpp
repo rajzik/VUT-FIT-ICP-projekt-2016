@@ -234,15 +234,21 @@ void MainWindow::loadGame()
     QDir savesDir("./saves");
     QFileInfoList list;
     QString selectedFile;
-    bool fileSelected;
+    QInputDialog loadDialog;
 
     savesDir.setFilter(QDir::Files | QDir::Hidden | QDir::NoSymLinks);
     list = savesDir.entryInfoList();
     for (int i = 0; i < list.size(); ++i) {
         fileNames << list.at(i).fileName();
     }
-    selectedFile = QInputDialog::getItem(this, tr("Reversi"), tr("Choose game for load:"), fileNames, 0, false, &fileSelected);
-    if (fileSelected && !selectedFile.isEmpty()) {        
+    loadDialog.setOptions(QInputDialog::UseListViewForComboBoxItems);
+    loadDialog.move(appMiddle);
+    loadDialog.resize(150, 200);
+    loadDialog.setComboBoxItems(fileNames);
+    loadDialog.setWindowTitle("Reversi");
+    loadDialog.setLabelText("Choose game for load");
+    if (loadDialog.exec()) {
+        selectedFile = loadDialog.textValue();
         clearButtons();
         if (game::loadGame(selectedFile.toStdString())) {
             initUi();
