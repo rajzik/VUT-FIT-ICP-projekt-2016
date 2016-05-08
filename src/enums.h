@@ -8,7 +8,6 @@
 #pragma once
 #include <string>
 
-
 enum field_color
 {
     EMPTY,
@@ -80,4 +79,3 @@ std::string const eStrings[] = {
 	"Invalid move."
 };
 #endif
-

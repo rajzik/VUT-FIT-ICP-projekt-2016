@@ -7,20 +7,11 @@
 
 #include "game-gui.h"
 
-/**
- * @brief gameGui contructor, create QT application
- *
- * @param argc main application arguments count
- * @param argv main application arguments array
- */
 gameGui::gameGui(int argc, char *argv[])
 {
     a = new QApplication(argc, argv);
 }
 
-/**
- * @brief create window, init game and run application
- */
 int gameGui::run()
 {
     window = new MainWindow();
@@ -29,9 +20,6 @@ int gameGui::run()
     return a->exec();
 }
 
-/**
- * @brief delete QT application and window
- */
 gameGui::~gameGui()
 {
     delete window;

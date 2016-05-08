@@ -20,7 +20,19 @@ private:
     QApplication * a;
     MainWindow * window;
 public:
+    /**
+     * @brief gameGui contructor, create QT application
+     *
+     * @param argc main application arguments count
+     * @param argv main application arguments array
+     */
     gameGui(int argc, char * argv[]);
+    /**
+     * @brief create window, init game and run application
+     */
     int run();
+    /**
+     * @brief delete QT application and window
+     */
     ~gameGui();
 };
