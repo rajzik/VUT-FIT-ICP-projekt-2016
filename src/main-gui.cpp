@@ -8,14 +8,14 @@
 #include "game-gui.h"
 
 /**
- * @brief main input point for GUI application
- * @param argc parameters count
- * @param argv parameters array
- * @return
+ * @brief  input point for GUI application
+ * @param  argc parameters count
+ * @param  argv parameters array
+ * @return return value returned from game run
  */
 int main(int argc, char * argv[])
 {
     gameGui * game = new gameGui(argc, argv);
 
-    game->run();
+    return game->run();
 }
