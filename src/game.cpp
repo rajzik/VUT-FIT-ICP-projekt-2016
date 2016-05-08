@@ -60,7 +60,7 @@ void game::computerMove()
                 }
             }
         }
-        /* Random select from max */
+        /* Random select from max values */
         std::srand(std::time(0));
         randomPos = std::rand() % xVals.size();
         makeMove(WRITE, xVals.at(randomPos), yVals.at(randomPos));
@@ -287,8 +287,8 @@ int game::colorPath(bool write, int x, int y, int endX, int endY){
     return stepCount;
 }
 
-void game::changeField(int x, int y) {
-    // std::cout<<"obarvuji: "<< x << y<<std::endl;
+void game::changeField(int x, int y)
+{
     gameField[x][y] = actualPlayer1 ? BLACK : WHITE;
 }
 
