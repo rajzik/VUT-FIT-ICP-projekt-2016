@@ -1,9 +1,8 @@
 /**
  * @file   mainwindow.cpp
- * @Author Jan Silhan (xsilha10@stud.fit.vutbr.cz), Pavel Pospisil (xpospi88@stud.fit.vutbr.cz)
+ * @author Jan Silhan (xsilha10@stud.fit.vutbr.cz), Pavel Pospisil (xpospi88@stud.fit.vutbr.cz)
  * @date   May 2016
  * @brief
- *
  */
 
 #include "mainwindow.h"
@@ -20,7 +19,10 @@ MainWindow::~MainWindow()
 
 void MainWindow::initButtons()
 {
+    maze_buttons = new QPushButton**[game::size];
+
     for (int i =0; i < game::size; i++) {
+        maze_buttons[i] = new QPushButton*[game::size];
         for (int j = 0; j < game::size; j++) {
             maze_buttons[i][j] = new QPushButton(this);
             maze_buttons[i][j]->setGeometry(QRect(QPoint(30+60*i, 205+60*j), QSize(50, 50)));
@@ -78,12 +80,14 @@ void MainWindow::initGraphics()
     ui->lblP2Score->setStyleSheet("background-color: rgba(0, 0, 0, 0%);");
 }
 
-void MainWindow::init(int size, int oppositePlayer)
+void MainWindow::init(int size, int oppositePlayer, bool changeField)
 {
     game::size = size;
 
     initPlayers("Player 1", "Player 2", oppositePlayer);
-    initGameField();
+    if (changeField) {
+        initGameField();
+    }
     initGraphics();
     initButtons();
     connectSlots();
@@ -167,6 +171,7 @@ void MainWindow::clearButtons()
             delete maze_buttons[i][j];
         }
     }
+    delete maze_buttons;
 }
 
 void MainWindow::newGame()
@@ -184,8 +189,7 @@ void MainWindow::newGame()
     if (sizeSelected && !selectedSize.isEmpty()) {
         selectedOponent = QInputDialog::getItem(this, tr("New game"), tr("Choose adversary"), gameOponents, 0, false, &oponentSelected);
         if (oponentSelected && !selectedOponent.isEmpty()) {
-            clearButtons();
-            initGameField();
+            clearButtons();            
             init(selectedSize.toInt(), gameOponents.indexOf(selectedOponent));
         }
     }
@@ -219,8 +223,7 @@ void MainWindow::loadGame()
     if (fileSelected && !selectedFile.isEmpty()) {        
         clearButtons();
         game::loadGame(selectedFile.toStdString());
-        init(game::size, COMPUTEREASY);
-        game::loadGame(selectedFile.toStdString());
+        init(game::size, COMPUTEREASY, false);
         draw();
         run();
     }

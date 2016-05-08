@@ -1,9 +1,8 @@
 /**
  * @file   mainwindow.h
- * @Author Jan Silhan (xsilha10@stud.fit.vutbr.cz), Pavel Pospisil (xpospi88@stud.fit.vutbr.cz)
+ * @author Jan Silhan (xsilha10@stud.fit.vutbr.cz), Pavel Pospisil (xpospi88@stud.fit.vutbr.cz)
  * @date   May 2016
- * @brief
- *
+ * @brief  My dream class
  */
 
 #pragma once
@@ -28,7 +27,7 @@ class MainWindow : public QMainWindow, public game
 {
     Q_OBJECT
 private:
-    QPushButton *maze_buttons[12][12]; // not good
+    QPushButton ***maze_buttons;
     QMovie *blackAnimation;
     QMovie *whiteAnimation;
     QMovie *wrongMoveAnimation;
@@ -47,7 +46,7 @@ private:
     void clearButtons();
 public:
     explicit MainWindow(QWidget *parent = 0);
-    void init(int size, int oppositePlayer);
+    void init(int size, int oppositePlayer, bool changeField = true);
     ~MainWindow();
 private slots:
     void openAbout();

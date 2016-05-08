@@ -16,7 +16,7 @@ Spustitelnost   ✔
 Hratelnost      ✔
 Ukládání a načítání   ✔
 Chytrý protihráč ✔
-Hloupý protihráč ×
+Hloupý protihráč ✔
 Vrátit tah zpět ✔
 Generování dokumentace ✔
 Dokumentace v kodu ×
