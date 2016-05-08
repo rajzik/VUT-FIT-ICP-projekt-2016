@@ -22,6 +22,7 @@
 #include <algorithm>
 #include <sstream>
 #include <math.h>
+#include <iomanip>
 #include <boost/filesystem.hpp>
 #include <boost/range/iterator_range.hpp>
 #include "player.h"

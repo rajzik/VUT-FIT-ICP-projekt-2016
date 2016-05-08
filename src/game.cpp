@@ -299,7 +299,7 @@ bool game::saveGame() {
     boost::filesystem::create_directory(dir);
     
     std::stringstream filename; 
-    int biggest = -1;
+    int biggest = 0;
     for(auto& entry : boost::make_iterator_range(boost::filesystem::directory_iterator(dir), {}))
     {
         std::stringstream ss;
@@ -308,7 +308,8 @@ bool game::saveGame() {
         if(actualNum > biggest)
             biggest = actualNum;
     }
-    filename << (++biggest) << "a.sav";
+
+    filename <<"Save " << std::setw(2) << std::setfill('0') << (++biggest) << ".sav";
     
     std::ofstream savFile;
     savFile.open(("saves/"+ filename.str()), std::ios::out | std::ios::binary);
@@ -362,7 +363,8 @@ void game::clearHistory()
     history->clear();
 }
 
-bool game::loadGame(std::string filename) {
+bool game::loadGame(std::string filename)
+{
     boost::filesystem::path dir("saves");
     boost::filesystem::create_directory(dir);
     
@@ -494,7 +496,8 @@ bool game::loadGame(std::string filename) {
     return true;
 }
 
-bool game::nextStep() {
+bool game::nextStep()
+{
     if(future->empty())
         return false;
 
@@ -531,8 +534,8 @@ bool game::prevStep() {
     return true;
 }
 
-
-void game::changeScore(){
+void game::changeScore()
+{
     int black = 0, white = 0;
     for(int x = 0; x < size;x ++)
     {
@@ -545,8 +548,6 @@ void game::changeScore(){
     player1->setScore(black);
     player2->setScore(white);    
 }
-
-
 
 void game::draw(){}
 void game::run(){}
