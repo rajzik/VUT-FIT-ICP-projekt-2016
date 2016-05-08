@@ -53,7 +53,7 @@ class game{
 
 
         bool saveGame();
-        bool loadGame(std::string filename, void (*callback)(int,int) = NULL);
+        bool loadGame(std::string filename);
 
         bool nextStep();
         bool prevStep();

@@ -327,7 +327,7 @@ bool game::saveGame() {
     return true;
 }
 
-bool game::loadGame(std::string filename, void (*callback)(int,int)) {
+bool game::loadGame(std::string filename) {
     boost::filesystem::path dir("saves");
     boost::filesystem::create_directory(dir);
     
@@ -392,8 +392,6 @@ bool game::loadGame(std::string filename, void (*callback)(int,int)) {
         initPlayers("Player 1", "Player2", 0);
     }
     
-    if(callback != NULL)
-        (*callback)(size, computer);
     
     
     
