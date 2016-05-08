@@ -405,12 +405,13 @@ bool game::loadGame(std::string filename) {
         if(tempSize <= 0)
             return false;
         
-        actualPlayer1 = true;
+        // actualPlayer1 = true;
+        
         for(int i = 0; i < tempSize; i++){
             move m;
             if((pos = content.find(";")) == std::string::npos)
                 return false;
-            m.player = (bool)std::stoi("0" + content.substr(0, pos));
+            actualPlayer1 = m.player = (bool)std::stoi("0" + content.substr(0, pos));
             
             content.erase(0, pos+1);
             if((pos = content.find(";")) == std::string::npos)
