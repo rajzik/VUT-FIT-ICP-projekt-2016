@@ -43,6 +43,7 @@ void MainWindow::connectSlots()
     connect(ui->actionLoad, SIGNAL (triggered()), this, SLOT (loadGame()), Qt::UniqueConnection);
     connect(ui->actionUndo, SIGNAL (triggered()), this, SLOT (undoHistory()), Qt::UniqueConnection);
     connect(ui->actionRedo, SIGNAL (triggered()), this, SLOT (redoHistory()), Qt::UniqueConnection);
+    connect(ui->actionHelp, SIGNAL (triggered()), this, SLOT (openHelp()), Qt::UniqueConnection);
 }
 
 void MainWindow::initGraphics()
@@ -60,8 +61,7 @@ void MainWindow::initGraphics()
     whiteAnimation = new QMovie("./graphics/whitePlayer.gif");
     wrongMoveAnimation = new QMovie("./graphics/wrongMove.gif");    
     wrongMoveAnimation->setSpeed(500);
-    warningAnimatrion = new QMovie("./graphics/warning.gif");    
-    wheelAnimation = new QMovie("./graphics/wheel.png");
+    warningAnimatrion = new QMovie("./graphics/warning.gif");
     leftStepAnimation = new QMovie("./graphics/leftStep.gif");
     leftStepAnimation->setSpeed(500);    
     rightStepAnimation = new QMovie("./graphics/rightStep.gif");
@@ -134,6 +134,22 @@ void MainWindow::centerAppMiddle()
     appMiddle.setY(this->geometry().y());
     appMiddle.setX(appMiddle.x() + windowWidth/2 - 140);
     appMiddle.setY(appMiddle.y() + windowHeight/2);
+}
+
+void MainWindow::openHelp()
+{
+    QMessageBox msgBox;
+
+    msgBox.setWindowTitle("Help");
+    msgBox.setText(QString("Red circle\n") + QString::fromUtf8("\u2022") + QString(" wrong move\n") +
+                   QString::fromUtf8("\u2022") + QString(" select correct position\n") +
+                   QString("Red exclamation mark\n") + QString::fromUtf8("\u2022") + QString(" player skipped\n") +
+                   QString::fromUtf8("\u2022") + QString(" opposite players's move") +
+                   QString(MSGBOXSPACER));
+    centerAppMiddle();
+    msgBox.move(appMiddle);
+
+    msgBox.exec();
 }
 
 void MainWindow::openAbout()
@@ -303,13 +319,13 @@ void MainWindow::handleButton()
     }
 }
 
-void MainWindow::computerMovePause()
+void MainWindow::pauseGame()
 {
     sleeper = true;    
-    QTimer::singleShot(COMPUTERDELAY, this, SLOT(computerMoveContinue()));
+    QTimer::singleShot(PAUSEDELAY, this, SLOT(continueGame()));
 }
 
-void MainWindow::computerMoveContinue()
+void MainWindow::continueGame()
 {
     sleeper = false;    
     draw();
@@ -323,15 +339,14 @@ void MainWindow::run()
         case 0:
             if (!actualPlayer1 && player2->computer) {                
                 computerMove();
-                computerMovePause();
+                pauseGame();
             }
             break;
         case 1:            
             ui->lblCenterAnimation->setMovie(warningAnimatrion);
             warningAnimatrion->start();
             actualPlayer1 = !actualPlayer1;
-            draw();
-            run();
+            pauseGame();
             break;
         case 2:
             QMessageBox msgBox;

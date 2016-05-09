@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Reversi - ICP 2016</string>
+   <string>Reversi </string>
   </property>
   <property name="statusTip">
    <string notr="true"/>
@@ -2213,6 +2213,7 @@
     <property name="title">
      <string>Help</string>
     </property>
+    <addaction name="actionHelp"/>
     <addaction name="actionAbout"/>
    </widget>
    <widget class="QMenu" name="menuHistory">
@@ -2268,7 +2269,7 @@
     <string>About</string>
    </property>
    <property name="shortcut">
-    <string>F1</string>
+    <string>Ctrl+A</string>
    </property>
   </action>
   <action name="actionUndo">
@@ -2290,6 +2291,14 @@
   <action name="actionTest">
    <property name="text">
     <string>test</string>
+   </property>
+  </action>
+  <action name="actionHelp">
+   <property name="text">
+    <string>Help</string>
+   </property>
+   <property name="shortcut">
+    <string>F1</string>
    </property>
   </action>
  </widget>

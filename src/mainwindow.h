@@ -23,7 +23,7 @@
 #include "game.h"
 
 #define MSGBOXSPACER QString("\n                                                           ") /* QT hack to resize QMessagebox*/
-#define COMPUTERDELAY 500
+#define PAUSEDELAY 500
 
 namespace Ui {
     class MainWindow;
@@ -75,9 +75,9 @@ private:
      */
     void centerAppMiddle();
     /**
-     * @brief pause game and let computer think about move
+     * @brief pause game (inactive buttons)
      */
-    void computerMovePause();
+    void pauseGame();
 public:
     /**
      * @brief application window constructor, setup ui from mainwindow.iu file
@@ -102,6 +102,10 @@ private slots:
      * @brief open about dialog
      */
     void openAbout();
+    /**
+     * @brief open help dialog
+     */
+    void openHelp();
     /**
      * @brief open save dialog, save game
      */
@@ -131,7 +135,7 @@ private slots:
      */
     void undoHistory();
     /**
-     * @brief continue game after computer move
+     * @brief continue game (activate buttons)
      */
-    void computerMoveContinue();
+    void continueGame();
 };
