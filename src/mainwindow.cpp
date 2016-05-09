@@ -42,7 +42,7 @@ void MainWindow::connectSlots()
     connect(ui->actionSave, SIGNAL (triggered()), this, SLOT (saveGame()), Qt::UniqueConnection);
     connect(ui->actionLoad, SIGNAL (triggered()), this, SLOT (loadGame()), Qt::UniqueConnection);
     connect(ui->actionUndo, SIGNAL (triggered()), this, SLOT (undoHistory()), Qt::UniqueConnection);
-    connect(ui->actionRedo, SIGNAL (triggered()), this, SLOT (redoHistory()), Qt::UniqueConnection);    
+    connect(ui->actionRedo, SIGNAL (triggered()), this, SLOT (redoHistory()), Qt::UniqueConnection);
 }
 
 void MainWindow::initGraphics()
@@ -55,24 +55,23 @@ void MainWindow::initGraphics()
     ui->lblP2Color->setGeometry(QRect(QPoint(windowWidth-50-120, 20), QSize(120, 120)));
     ui->lblP2Score->setGeometry(QRect(QPoint(windowWidth-50-120, 20), QSize(120, 120)));
     ui->lblCenterAnimation->setGeometry(QRect(QPoint(windowWidth/2-25, 20+35), QSize(50, 50)));
-    /* Black Animation */
+    /* Animations */
     blackAnimation = new QMovie("./graphics/blackPlayer.gif");
-    ui->lblP1Color->setMovie(blackAnimation);
-    blackAnimation->start();
-    /* White animation */
     whiteAnimation = new QMovie("./graphics/whitePlayer.gif");
-    ui->lblP2Color->setMovie(whiteAnimation);
-    whiteAnimation->start();
-    /* Wrong animation */
     wrongMoveAnimation = new QMovie("./graphics/wrongMove.gif");    
     wrongMoveAnimation->setSpeed(500);
-    /* Left step animation */
+    warningAnimatrion = new QMovie("./graphics/warning.gif");
+    //warningAnimatrion->setSpeed(500);
+    wheelAnimation = new QMovie("./graphics/wheel.png");
     leftStepAnimation = new QMovie("./graphics/leftStep.gif");
-    leftStepAnimation->setSpeed(500);
-    /* Right step animation */
+    leftStepAnimation->setSpeed(500);    
     rightStepAnimation = new QMovie("./graphics/rightStep.gif");
     rightStepAnimation->setSpeed(500);
     /* Backgrounds */
+    ui->lblP1Color->setMovie(blackAnimation);
+    blackAnimation->start();
+    ui->lblP2Color->setMovie(whiteAnimation);
+    whiteAnimation->start();
     ui->centralWidget->setStyleSheet("background-color: rgb(128, 128, 128);");
     ui->lblP1Score->setStyleSheet("background-color: rgba(0, 0, 0, 0%);");
     ui->lblP2Score->setStyleSheet("background-color: rgba(0, 0, 0, 0%);");
@@ -88,6 +87,7 @@ void MainWindow::initUi()
 
 void MainWindow::init()
 {
+    sleeper = false;
     game::size = DEFAULT_SIZE;
     initPlayers("Player 1", "Player 2", HUMAN);
     initGameField();
@@ -292,6 +292,9 @@ void MainWindow::handleButton()
 {
     QStringList senderPosition = sender()->objectName().split( "_" );
 
+    if (sleeper)
+        return;
+
     if (makeMove(WRITE, senderPosition.at(1).toInt(), senderPosition.at(2).toInt())) {
         draw();
         run();
@@ -301,25 +304,37 @@ void MainWindow::handleButton()
     }
 }
 
+void MainWindow::computerMovePause()
+{
+    sleeper = true;
+    ui->lblCenterAnimation->setMovie(wheelAnimation);
+    wheelAnimation->start();
+    QTimer::singleShot(3000, this, SLOT(computerMoveContinue()));
+}
+
+void MainWindow::computerMoveContinue()
+{
+    sleeper = false;
+    wheelAnimation->stop();
+    ui->lblCenterAnimation->setMovie(wrongMoveAnimation);
+    draw();
+    run();
+}
+
 void MainWindow::run()
 {
     QMessageBox msgBox;
 
     switch (impossibleMove()) {
         case 0:
-            if (!actualPlayer1 && player2->computer) {
+            if (!actualPlayer1 && player2->computer) {                
                 computerMove();
-                draw();
-                run();
+                computerMovePause();
             }
             break;
-        case 1:
-            msgBox.setWindowTitle("Reversi");            
-            msgBox.setText(QString("There is no possible move.\n") +
-                           QString((actualPlayer1)?"Black player":"White player") + QString::fromStdString(gStrings[Gskip]) + msgBoxSpacer);
-            centerAppMiddle();
-            msgBox.move(appMiddle);
-            msgBox.exec();
+        case 1:            
+            ui->lblCenterAnimation->setMovie(warningAnimatrion);
+            warningAnimatrion->start();
             actualPlayer1 = !actualPlayer1;
             draw();
             run();

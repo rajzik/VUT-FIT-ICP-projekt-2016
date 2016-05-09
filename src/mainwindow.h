@@ -17,6 +17,8 @@
 #include <QSpacerItem>
 #include <QGridLayout>
 #include <QDir>
+#include <QTimer>
+#include <QThread>
 #include <ui_mainwindow.h>
 #include "game.h"
 
@@ -37,10 +39,13 @@ private:
     QMovie *leftStepAnimation;
     QMovie *rightStepAnimation;
     QMovie *centerAnimation;
+    QMovie *warningAnimatrion;
+    QMovie *wheelAnimation;
     Ui::MainWindow *ui;
     int windowWidth;
     int windowHeight;
-    QPoint appMiddle;
+    QPoint appMiddle;    
+    bool sleeper;
     /**
      * @brief redraw buttons, score, animations
      */
@@ -69,6 +74,7 @@ private:
      * @brief refresh middle point to show dialog
      */
     void centerAppMiddle();
+    void computerMovePause();
 public:
     /**
      * @brief application window constructor, setup ui from mainwindow.iu file
@@ -121,4 +127,5 @@ private slots:
      * @brief go back in time
      */
     void undoHistory();
+    void computerMoveContinue();
 };
