@@ -123,7 +123,7 @@ void MainWindow::draw()
         whiteAnimation->start();
         blackAnimation->jumpToFrame(1);
     }
-    /* Score font size */
+    /* Score font size when reach 100 points */
     ui->lblP1Score->setFont(QFont("Cantarell", (ui->lblP1Score->text().toInt() > 99)?30:40));
     ui->lblP2Score->setFont(QFont("Cantarell", (ui->lblP2Score->text().toInt() > 99)?30:40));
 }

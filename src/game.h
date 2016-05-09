@@ -38,13 +38,40 @@ class game{
         bool actualPlayer1;
         bool easyComputer;        
         /**
-         * @brief clear history and future stacks
+         * @brief Clear history and future stacks
          */
         void clearHistory();
+        /**
+         * @brief Clear game field and perform all moves from histor
+         */
         void timeTravel();
+        /**
+         * @brief Check fields in specified direction
+         * @param write Change field permission
+         * @param x
+         * @param y
+         * @param xDirection
+         * @param yDirection
+         * @return score change
+         */
         int checkDirection(bool write, int x, int y, int xDirection, int yDirection);
+        /**
+         * @brief Change score of actual player
+         */
         void changeScore();
+        /**
+         * @brief Color path from [x,y] to [endX,endY]
+         * @param write Change field permissio
+         * @param x
+         * @param y
+         * @param endX
+         * @param endY
+         * @return Changed fields coun
+         */
         int colorPath(bool write, int x, int y, int endX, int endY);
+        /**
+         * @brief Game field initialization
+         */
         void initGameField();
         /**
          * @brief check move possibilities
