@@ -42,4 +42,4 @@ pack:
 
 
 clean:
-	rm -f $(NAME) $(NAMECLI)
+	rm -rf $(NAME) $(NAMECLI) doc/ 
