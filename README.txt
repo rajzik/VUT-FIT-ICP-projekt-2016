@@ -19,7 +19,7 @@ Chytrý protihráč ✔
 Hloupý protihráč ✔
 Vrátit tah zpět ✔
 Generování dokumentace ✔
-Dokumentace v kodu ×
+Dokumentace v kodu ✔
 Konsolová hra ✔
 Grafické rozhraní ✔
 Konečnost hry ✔
