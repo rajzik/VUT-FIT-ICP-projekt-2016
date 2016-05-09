@@ -88,7 +88,7 @@ void MainWindow::init()
 {
     sleeper = false;
     game::size = DEFAULT_SIZE;
-    initPlayers("Player 1", "Player 2", HUMAN);
+    initPlayers(HUMAN);
     initGameField();
     initUi();
 }
@@ -236,7 +236,7 @@ void MainWindow::newGame()
                 clearButtons();
                 game::size = selectedSize.toInt();
                 clearHistory();
-                initPlayers("Player1", "Player2", gameOponents.indexOf(selectedOponent));
+                initPlayers(gameOponents.indexOf(selectedOponent));
                 initGameField();
                 initUi();
                 run();
