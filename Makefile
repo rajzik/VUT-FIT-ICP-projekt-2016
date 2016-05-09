@@ -3,7 +3,7 @@ NAME=HRA2016
 NAMECLI=$(NAME)-cli 
 
 ZIPNAME=xpospi88.zip
-ZIPFILES = src/* examples/* Makefile README.txt doxy.config 
+ZIPFILES = src/* examples/* Makefile README.txt doxy.config graphics/*
 
 CC=g++
 CFLAGS=-Wall -Wextra --std=c++11 -pedantic -O3
