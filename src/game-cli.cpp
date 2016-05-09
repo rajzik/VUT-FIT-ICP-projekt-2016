@@ -52,10 +52,8 @@ void gameCli::getGameInfo(){
         if(single == 1 || single == 2)
             break;
     
-    }
-    initPlayers("Player 1", "Player 2",single == 1);
-    
-    if(player2->computer){
+    } 
+    if(single == 1){
         while(true){
             consol.clear();
             std::cout<< "select difficulty"<<std::endl;
@@ -63,19 +61,18 @@ void gameCli::getGameInfo(){
             <<"2) Super Uber Hard"<<std::endl
             <<"Please enter game type: ";
 
-
             std::getline(std::cin, a);
             single = std::stoi("0"+a);
 
             if(single == 1 || single == 2)
                 break;
         }
-        easyComputer = single == COMPUTEREASY;
-    
+		initPlayers(single);    
     }
+	else {
+		initPlayers(0);
+	}
     
-
-
     int tempSize = -1;
     while(true){
         consol.clear();
@@ -93,10 +90,9 @@ void gameCli::getGameInfo(){
         }
 
     }
-    
+
     size = tempSize;
     initGameField();
-
 }
 
 void gameCli::drawScore(){
