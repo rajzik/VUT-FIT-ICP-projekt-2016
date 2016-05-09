@@ -22,7 +22,13 @@
 #include <ui_mainwindow.h>
 #include "game.h"
 
+/**
+ * @brief Make all dialogs same width
+ */
 #define MSGBOXSPACER QString("\n                                                           ") /* QT hack to resize QMessagebox*/
+/**
+ * @brief Delay after warning and computer mve speed
+ */
 #define PAUSEDELAY 500
 
 namespace Ui {
@@ -36,18 +42,53 @@ class MainWindow : public QMainWindow, public game
 {
     Q_OBJECT
 private:
+    /**
+     * @brief Gae field buttons matix
+     */
     QPushButton ***maze_buttons;
+    /**
+     * @brief Black player background animation
+     */
     QMovie *blackAnimation;
+    /**
+     * @brief White player background animation
+     */
     QMovie *whiteAnimation;
+    /**
+     * @brief Animation for wrong moves
+     */
     QMovie *wrongMoveAnimation;
+    /**
+     * @brief Back in time animation
+     */
     QMovie *leftStepAnimation;
+    /**
+     * @brief To the future animation
+     */
     QMovie *rightStepAnimation;
-    QMovie *centerAnimation;
-    QMovie *warningAnimatrion;    
+    /**
+     * @brief Warning animation (player skipped)
+     */
+    QMovie *warningAnimatrion;
+    /**
+     * @brief Application UI class
+     */
     Ui::MainWindow *ui;
+    /**
+     * @brief Game window width
+     */
     int windowWidth;
+    /**
+     * @brief Game window height
+     */
     int windowHeight;
+    /**
+     * @brief Middle of the game window
+     */
     QPoint appMiddle;
+    /**
+     * @brief True when game is paused, game buttons are disabled
+     */
     bool sleeper;
     /**
      * @brief Redraw buttons, score, animations
