@@ -294,17 +294,14 @@ bool game::saveGame() {
     
     
 
-    if(!history->empty() || !future->empty())
+    if(!history->empty())
     {
         savFile << "hs"<<std::endl;
-        savFile << (history->size() + future->size()) <<std::endl;
+        savFile << history->size() <<std::endl;
         for(std::vector<move>::iterator it = history->begin(), si =history->end(); it != si; it++){
             savFile << (*it).player <<";"<< (*it).x<<";"<< (*it).y<<";"<<std::endl;
         }
-		for(int i = future->size()-1; i >= 0; i--){
-			move m = future->at(i);
-            savFile << m.player <<";"<< m.x<<";"<< m.y<<";"<<std::endl;
-        }
+
         savFile << "hse" <<std::endl;
     }
     
@@ -312,6 +309,9 @@ bool game::saveGame() {
     {
         savFile << "ft"<<std::endl;
         savFile << future->size()<<std::endl;
+        for(std::vector<move>::iterator it = future->begin(), si =future->end(); it != si; it++){
+            savFile << (*it).player <<";"<< (*it).x<<";"<< (*it).y<<";"<<std::endl;
+        }
         savFile << "fte"<<std::endl;
     }
 
@@ -394,7 +394,7 @@ bool game::loadGame(std::string filename)
     }
     
     clearHistory();
-    
+
     
     if((pos = content.find("hs")) != std::string::npos)
     {
@@ -448,7 +448,23 @@ bool game::loadGame(std::string filename)
             return false;
         
         for(int i = 0; i < tempSize; i++){
-            prevStep();
+            move m;
+            if((pos = content.find(";")) == std::string::npos)
+                return false;
+            
+            actualPlayer1 = m.player = std::stoi("0" + content.substr(0, pos)) == 1;
+
+            content.erase(0, pos+1);
+            if((pos = content.find(";")) == std::string::npos)
+                return false;
+            m.x = std::stoi("0" + content.substr(0, pos));
+            content.erase(0, pos+1);
+            
+            if((pos = content.find(";")) == std::string::npos)
+                return false;
+            m.y = std::stoi("0" + content.substr(0, pos));
+            content.erase(0, pos+2);
+            future->push_back(m);     
         }
         
         if((pos = content.find("fte")) != std::string::npos)
