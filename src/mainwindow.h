@@ -40,8 +40,7 @@ private:
     QMovie *leftStepAnimation;
     QMovie *rightStepAnimation;
     QMovie *centerAnimation;
-    QMovie *warningAnimatrion;
-    QMovie *wheelAnimation;
+    QMovie *warningAnimatrion;    
     Ui::MainWindow *ui;
     int windowWidth;
     int windowHeight;
@@ -75,6 +74,9 @@ private:
      * @brief refresh middle point to show dialog
      */
     void centerAppMiddle();
+    /**
+     * @brief pause game and let computer think about move
+     */
     void computerMovePause();
 public:
     /**
@@ -128,5 +130,8 @@ private slots:
      * @brief go back in time
      */
     void undoHistory();
+    /**
+     * @brief continue game after computer move
+     */
     void computerMoveContinue();
 };

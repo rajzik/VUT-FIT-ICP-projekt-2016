@@ -60,8 +60,7 @@ void MainWindow::initGraphics()
     whiteAnimation = new QMovie("./graphics/whitePlayer.gif");
     wrongMoveAnimation = new QMovie("./graphics/wrongMove.gif");    
     wrongMoveAnimation->setSpeed(500);
-    warningAnimatrion = new QMovie("./graphics/warning.gif");
-    //warningAnimatrion->setSpeed(500);
+    warningAnimatrion = new QMovie("./graphics/warning.gif");    
     wheelAnimation = new QMovie("./graphics/wheel.png");
     leftStepAnimation = new QMovie("./graphics/leftStep.gif");
     leftStepAnimation->setSpeed(500);    
@@ -306,24 +305,19 @@ void MainWindow::handleButton()
 
 void MainWindow::computerMovePause()
 {
-    sleeper = true;
-    //ui->lblCenterAnimation->setMovie(wheelAnimation);
-    //wheelAnimation->start();
+    sleeper = true;    
     QTimer::singleShot(COMPUTERDELAY, this, SLOT(computerMoveContinue()));
 }
 
 void MainWindow::computerMoveContinue()
 {
-    sleeper = false;
-    //wheelAnimation->stop();
-    //ui->lblCenterAnimation->setMovie(wrongMoveAnimation);
+    sleeper = false;    
     draw();
     run();
 }
 
 void MainWindow::run()
-{
-    QMessageBox msgBox;
+{    
 
     switch (impossibleMove()) {
         case 0:
@@ -340,6 +334,7 @@ void MainWindow::run()
             run();
             break;
         case 2:
+            QMessageBox msgBox;
             msgBox.setWindowTitle("Reversi");
             if (player1->getScore() == player2->getScore()) {
                 msgBox.setText(QString::fromStdString(gStrings[Gdraw]));
