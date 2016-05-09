@@ -141,7 +141,7 @@ class game{
          * @param nameTwo player2 name
          * @param oppositePlayer type of opposite player (human, easy computer, hard computer)
          */
-        void initPlayers(std::string nameOne, std::string nameTwo, int oppositePlayer);
+        void initPlayers(int oppositePlayer);
         /**
          * @brief Virtual method for game start
          */

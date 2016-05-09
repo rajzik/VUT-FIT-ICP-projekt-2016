@@ -14,17 +14,19 @@ game::game()
     future = new std::vector<move>();
 }
 
-void game::initPlayers(std::string nameOne, std::string nameTwo, int oppositePlayer)
+void game::initPlayers(int oppositePlayer)
 {
     game::easyComputer = oppositePlayer % 2;
     actualPlayer1 = true;
-    player1 = new player(nameOne, true, false);
-    player2 = new player(nameTwo, false, oppositePlayer);
+    player1 = new player(gStrings[Gplayer1], true, false);
+    player2 = new player(gStrings[Gplayer1], false, oppositePlayer);
 }
 
 game::~game()
 {
 	delete[] gameField;
+	delete history;
+	delete future;
     delete player1;
     delete player2;
 }
@@ -203,11 +205,9 @@ void game::timeTravel(){
     changeScore();
 }
 int game::checkDirection(bool write, int x, int y, int endX, int endY){
-    // std::cout<<"x:"<<x<<" y: "<<y<<" endX: "<<endX<< " endY: "<<endY<<std::endl;
     
     int revColor = actualPlayer1?WHITE:BLACK;
-    int color = actualPlayer1?BLACK:WHITE;
-    
+    int color = actualPlayer1?BLACK:WHITE;    
     
     int stepCount = std::max(abs(x-endX),abs(y-endY));
     int xStep = (endX-x)/stepCount;
@@ -218,8 +218,6 @@ int game::checkDirection(bool write, int x, int y, int endX, int endY){
     { 
         return 0;
     }
-
-
     
     for(int i = 2; i <= stepCount; i++){
         dataField = gameField[x+i*xStep][y+i*yStep];
@@ -316,9 +314,7 @@ bool game::saveGame() {
         savFile << future->size()<<std::endl;
         savFile << "fte"<<std::endl;
     }
-    
 
-    
     
     savFile.close();
     return true;
@@ -384,18 +380,17 @@ bool game::loadGame(std::string filename)
         if(tempComputer < 0 || tempComputer > 2)
             return false;
                     
-        initPlayers("Player 1", "Player2", tempComputer);
+        initPlayers(tempComputer);
         player2->computer =true;
         content.erase(0, pos+2);
         
-        //computer = tempComputer;
         if((pos = content.find("pce")) == std::string::npos)
             return false;    
         content.erase(0, pos+4);
     }
     else
     {
-        initPlayers("Player 1", "Player2", 0);
+        initPlayers(0);
     }
     
     clearHistory();
@@ -411,7 +406,6 @@ bool game::loadGame(std::string filename)
         if(tempSize <= 0)
             return false;
         
-        // actualPlayer1 = true;
         
         for(int i = 0; i < tempSize; i++){
             move m;
