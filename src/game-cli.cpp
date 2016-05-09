@@ -205,7 +205,6 @@ void gameCli::printGameOver(){
     std::string command;
     std::getline(std::cin, command);
     std::getline(std::cin, command);
-    std::size_t a;
     if(command.find("YES") != std::string::npos){
         getGameInfo();
     }
@@ -216,7 +215,7 @@ void gameCli::printGameOver(){
 
 void gameCli::printSavedGame(){
     consol.clear();
-    boost::filesystem::path dir("saves");
+    boost::filesystem::path dir(SAVEFOLDER);
     boost::filesystem::create_directory(dir);
 
     std::stringstream filename;

@@ -1,6 +1,6 @@
 /**
  * @file   console.cpp
- * @Author Jan Silhan (xsilha10@stud.fit.vutbr.cz), Pavel Pospisil (xpospi88@stud.fit.vutbr.cz)
+ * @authors Jan Silhan (xsilha10@stud.fit.vutbr.cz), Pavel Pospisil (xpospi88@stud.fit.vutbr.cz)
  * @date   may 2016
  * @brief  work with console in both systems
  *
@@ -13,14 +13,6 @@
 #include <iostream>
 #include <cstdlib>
 #include <sstream>
-
-#define ISWINDOWS false
-
-#ifdef _WIN32
-    #include <windows.h>
-    #define ISWINDOWS true
-#endif
-
 
 enum consoleColor
 {
@@ -50,7 +42,7 @@ public:
     void resetToDefault();
 
 private: 
-    int colorsNumber[5];
+    int colorsNumber[9];
     int fgColor;
     int bgColor;
     

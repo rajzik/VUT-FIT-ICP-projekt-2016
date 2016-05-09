@@ -1,6 +1,6 @@
 /**
  * @file   game.cpp
- * @author Jan Silhan (xsilha10@stud.fit.vutbr.cz), Pavel Pospisil (xpospi88@stud.fit.vutbr.cz)
+ * @authors Jan Silhan (xsilha10@stud.fit.vutbr.cz), Pavel Pospisil (xpospi88@stud.fit.vutbr.cz)
  * @date   May 2016
  * @brief  Base class for game logic with 2 virtual functions
  */
@@ -24,6 +24,7 @@ void game::initPlayers(std::string nameOne, std::string nameTwo, int oppositePla
 
 game::~game()
 {
+	delete[] gameField;
     delete player1;
     delete player2;
 }
@@ -92,7 +93,7 @@ bool game::makeMove(bool write, int x, int y, bool clearFuture) {
         return false;
     if(gameField[x][y] != EMPTY)
         return false;
-    bool validMove = checkMove(write, x, y);
+    bool validMove = checkMove(write, x, y) != 0;
     move mv = {actualPlayer1,x,y};
     if(validMove && write == WRITE){
         changeScore();
@@ -148,66 +149,35 @@ int game::impossibleMove()
 }
 
 int game::checkMove(bool write, int x, int y){
-
-    int score = 0;
-    // std::cout<<"leva"<<std::endl;    
+	int score = 0;
     if(x > 0)
         score += checkDirection(write, x,y, 0,y);
-    
-    
-    // std::cout<<"prava"<<std::endl;
     if(x < size-1)
     {   
         score += checkDirection(write, x,y, size-1,y);
     }
-        
-    // std::cout<<"nahoru"<<std::endl;
     if(y > 0){
-        
-        
         score += checkDirection(write, x,y, x,0);
     }
-    
-    // down
     if(y < size-1){
-        
-        
-    
         score += checkDirection(write, x,y, x,size-1);
     }
-    // std::cout<<"leva nahoru"<<std::endl;
     if(x > 0 && y > 0){
-        
-        
-    
-        
         int minimum = std::min(x,y);
         score += checkDirection(write, x, y, x-minimum, y-minimum);
     }
     
-    // std::cout<<"leva dolu"<<std::endl;
     if(x > 0 && y < size-1){
-        
-        
-    
         int minimum = std::min(x,size-1-y);
         score += checkDirection(write, x, y, x-minimum, y+minimum);
     }
     
-    // std::cout<<"prava dolu"<<std::endl;
     if(x<size-1 && y < size-1){
-        
-        
-    
         int minimum = std::min(size-1-x, size-1-y);
         score += checkDirection(write, x, y, x + minimum, y+minimum);
     }
     
-    // std::cout<<"prava nahoru"<<std::endl;
     if(x<size-1 && y > 0){
-        
-        
-    
         int minimum = std::min(size-1-x, y);
         score += checkDirection(write,x,y,x+minimum, y-minimum);
     }
@@ -222,21 +192,15 @@ int game::checkMove(bool write, int x, int y){
 }
 
 void game::timeTravel(){
-
     initGameField();
-    
     std::vector<move> * tempVector = new std::vector<move>();
-    
     swap(tempVector, history);
-    
-    //std::cout<<history->size()<<std::endl;
     for (std::vector<move>::iterator it = tempVector->begin() ; it != tempVector->end(); ++it) {
         move m = *it;
         actualPlayer1 = m.player;
         makeMove(WRITE, m.x, m.y, false);
     }
     changeScore();
-    
 }
 int game::checkDirection(bool write, int x, int y, int endX, int endY){
     // std::cout<<"x:"<<x<<" y: "<<y<<" endX: "<<endX<< " endY: "<<endY<<std::endl;
@@ -294,7 +258,7 @@ void game::changeField(int x, int y)
 
 bool game::saveGame() {
     
-    boost::filesystem::path dir("saves");
+    boost::filesystem::path dir(SAVEFOLDER);
     
     boost::filesystem::create_directory(dir);
     
@@ -302,8 +266,6 @@ bool game::saveGame() {
     int biggest = 0;
     for(auto& entry : boost::make_iterator_range(boost::filesystem::directory_iterator(dir), {}))
     {
-        /*std::stringstream ss;
-        ss << boost::filesystem::basename(entry);*/
 
         std::string baseName = boost::filesystem::basename(entry);
         if (baseName.length() > 5) {
@@ -317,7 +279,8 @@ bool game::saveGame() {
     filename <<"Save " << std::setw(2) << std::setfill('0') << (++biggest) << ".sav";
     
     std::ofstream savFile;
-    savFile.open(("saves/"+ filename.str()), std::ios::out | std::ios::binary);
+	std::string saveFolder = SAVEFOLDER;
+    savFile.open((saveFolder +"/"+ filename.str()), std::ios::out | std::ios::binary);
     if(!savFile.is_open())
         return false;
     savFile << "fs" << std::endl;
@@ -333,19 +296,18 @@ bool game::saveGame() {
     
     
 
-    if(!history->empty())
+    if(!history->empty() || !future->empty())
     {
         savFile << "hs"<<std::endl;
-        savFile << history->size()<<std::endl;
-        for(int a = 0, si =history->size(); a < si; a++){
-            move m = history->at(a);
-            savFile << m.player <<";"<<m.x<<";"<<m.y<<";"<<std::endl;
+        savFile << (history->size() + future->size()) <<std::endl;
+        for(std::vector<move>::iterator it = history->begin(), si =history->end(); it != si; it++){
+            savFile << (*it).player <<";"<< (*it).x<<";"<< (*it).y<<";"<<std::endl;
         }
-        for(int a = future->size()-1; a > 0; a--){
-            move m = future->at(a);
-            savFile << m.player <<";"<<m.x<<";"<<m.y<<";"<<std::endl;
+		for(int i = future->size()-1; i >= 0; i--){
+			move m = future->at(i);
+            savFile << m.player <<";"<< m.x<<";"<< m.y<<";"<<std::endl;
         }
-        savFile << "hse"<<std::endl;
+        savFile << "hse" <<std::endl;
     }
     
     if(!future->empty())
@@ -370,15 +332,16 @@ void game::clearHistory()
 
 bool game::loadGame(std::string filename)
 {
-    boost::filesystem::path dir("saves");
+    boost::filesystem::path dir(SAVEFOLDER);
     boost::filesystem::create_directory(dir);
     
-    if(!boost::filesystem::exists( "saves/"+filename ))
+	std::string saveDir = SAVEFOLDER;
+    if(!boost::filesystem::exists( saveDir + "/"+filename ))
         return false;
     
     
     std::ifstream savFile;
-    savFile.open("saves/"+filename);
+    savFile.open(saveDir+"/"+filename);
     std::stringstream ss;
     ss << savFile.rdbuf();
     std::string content = ss.str();
@@ -405,11 +368,12 @@ bool game::loadGame(std::string filename)
     size = tempSize;
     initGameField();
 
+
+
     if((pos = content.find("fse")) == std::string::npos)
         return false;
     
     content.erase(0, pos+4);
-    //int computer = 0;
     if((pos = content.find("pc")) != std::string::npos)
     {
         

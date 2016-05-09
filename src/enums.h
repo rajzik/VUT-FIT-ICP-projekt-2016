@@ -8,6 +8,9 @@
 #pragma once
 #include <string>
 
+
+#define SAVEFOLDER "examples"
+
 /**
  * @brief Move enumerate, contains owner and position
  */
@@ -109,3 +112,5 @@ std::string const eStrings[] = {
 	"Invalid move."
 };
 #endif
+
+

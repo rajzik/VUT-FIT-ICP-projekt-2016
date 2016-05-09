@@ -22,3 +22,9 @@ HRA2016.VC.db
 HRA2016.VC.db
 *.db
 *.log
+*.tlog
+*.obj
+*.sav
+*.idb
+HRA2016CLI.VC.VC.opendb
+*.exe
