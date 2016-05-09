@@ -9,6 +9,15 @@
 #include <string>
 
 /**
+ * @brief Move enumerate, contains owner and position
+ */
+typedef struct move{
+    bool player;
+    int x;
+    int y;
+} move;
+
+/**
  * @brief Enumerate for game field colors
  */
 enum field_color

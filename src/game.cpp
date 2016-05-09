@@ -87,7 +87,7 @@ void game::initGameField() {
 }
 
 
-int game::makeMove(bool write, int x, int y, bool clearHistory) {
+bool game::makeMove(bool write, int x, int y, bool clearFuture) {
     if(x < 0 || y < 0 || x >= size || y >= size)
         return false;
     if(gameField[x][y] != EMPTY)
@@ -98,7 +98,7 @@ int game::makeMove(bool write, int x, int y, bool clearHistory) {
         changeScore();
 
         history->push_back(mv);
-        if(clearHistory && write == WRITE)
+        if(clearFuture && write == WRITE)
             future->clear();
         actualPlayer1 = !actualPlayer1;
     }

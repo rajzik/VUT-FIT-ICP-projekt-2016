@@ -11,6 +11,9 @@
 #include <cstdlib>
 #include <string>
 
+/**
+ * @brief Game player class, contains score, name, color, and methods
+ */
 class player
 {
     protected:

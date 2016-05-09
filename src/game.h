@@ -26,12 +26,9 @@
 
 #define DEFAULT_SIZE 8
 
-typedef struct move{
-    bool player;
-    int x;
-    int y;
-} move;
-
+/**
+ * @brief Core game logic class
+ */
 class game{
     protected:
         int size;
@@ -60,24 +57,50 @@ class game{
         void computerMove();
     public:
         /**
-         * Constructor of Game called by kids
-         *
+         * @brief Game constructor
          */
         game();
         /**
-         * Destructor of Game called by kids
-         *
+         * @brief Game destructor
          */
         ~game();
-
-
+        /**
+         * @brief Save actual game (size, player definition, history and future)
+         * @return true on success, false when failed
+         */
         bool saveGame();
+        /**
+         * @brief Load game from ./save folder by filename
+         * @param filename
+         * @return true on success, false when failed
+         */
         bool loadGame(std::string filename);
-
+        /**
+         * @brief Perform step from future
+         * @return true on success, false when failed
+         */
         bool nextStep();
+        /**
+         * @brief Go back in hisory
+         * @return true on success, false when failed
+         */
         bool prevStep();
-        
-        int makeMove(bool write, int x, int y,  bool clearHistory = true);
+        /**
+         * @brief Try to make specified game move
+         * @param write field change persmission
+         * @param x
+         * @param y
+         * @param clearHistory clear future
+         * @return true on success, false when failed
+         */
+        bool makeMove(bool write, int x, int y,  bool clearFuture = true);
+        /**
+         * @brief Check move possibilities
+         * @param write field change persmission
+         * @param x
+         * @param y
+         * @return score change
+         */
         int checkMove(bool write, int x, int y);
         /**
          * @brief change game field at coordinates x/y to actualPlayer color
@@ -92,14 +115,12 @@ class game{
          * @param oppositePlayer type of opposite player (human, easy computer, hard computer)
          */
         void initPlayers(std::string nameOne, std::string nameTwo, int oppositePlayer);
+        /**
+         * @brief Virtual method for game start
+         */
         virtual void run();
+        /**
+         * @brief Virtual method for game redraw
+         */
         virtual void draw();
 };
-
-
-
-
-
-
-
-

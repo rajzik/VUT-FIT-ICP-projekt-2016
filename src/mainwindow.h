@@ -50,95 +50,94 @@ private:
     QPoint appMiddle;
     bool sleeper;
     /**
-     * @brief redraw buttons, score, animations
+     * @brief Redraw buttons, score, animations
      */
     void draw();
     /**
-     * @brief playing "loop", check move possibilities, skips, game over
+     * @brief Playing "loop", check move possibilities, skips, game over
      */
     void run();
     /**
-     * @brief init buttons matrix, place them, connect to functions
+     * @brief Init buttons matrix, place them, connect to functions
      */
     void initButtons();
     /**
-     * @brief init labels posstition, load animations, set backgrounds
+     * @brief Init labels posstition, load animations, set backgrounds
      */
     void initGraphics();
     /**
-     * @brief connects menu bar buttons to functions
+     * @brief Connects menu bar buttons to functions
      */
     void connectSlots();
     /**
-     * @brief delete field buttons
+     * @brief Delete field buttons
      */
     void clearButtons();
     /**
-     * @brief refresh middle point to show dialog
+     * @brief Refresh middle point to show dialog
      */
     void centerAppMiddle();
     /**
-     * @brief pause game (inactive buttons)
+     * @brief Pause game (inactive buttons)
      */
     void pauseGame();
 public:
     /**
-     * @brief application window constructor, setup ui from mainwindow.iu file
-     *
+     * @brief Application window constructor, setup ui from mainwindow.iu file
      * @param parent
      */
     explicit MainWindow(QWidget *parent = 0);
     /**
-     * @brief init game at start
+     * @brief Init game at start
      */
     void init();
     /**
-     * @brief call graphics init methods
+     * @brief Call graphics init methods
      */
     void initUi();
     /**
-     * @brief application window destructor, delete ui
+     * @brief Application window destructor, delete ui
      */
     ~MainWindow();
 private slots:
     /**
-     * @brief open about dialog
+     * @brief Open about dialog
      */
     void openAbout();
     /**
-     * @brief open help dialog
+     * @brief Open help dialog
      */
     void openHelp();
     /**
-     * @brief open save dialog, save game
+     * @brief Open save dialog, save game
      */
     void saveGame();
     /**
-     * @brief open dialog, get info from user, init new game
+     * @brief Open dialog, get info from user, init new game
      */
     void newGame();
     /**
-     * @brief open load dialog, load game
+     * @brief Open load dialog, load game
      */
     void loadGame();
     /**
-     * @brief exit game with code 0
+     * @brief Exit game with code 0
      */
     void exitGame();
     /**
-     * @brief react on button click
+     * @brief React on button click
      */
     void handleButton();
     /**
-     * @brief go to the future!
+     * @brief Go to the future!
      */
     void redoHistory();
     /**
-     * @brief go back in time
+     * @brief Go back in time
      */
     void undoHistory();
     /**
-     * @brief continue game (activate buttons)
+     * @brief Continue game (activate buttons)
      */
     void continueGame();
 };
