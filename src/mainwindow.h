@@ -22,7 +22,8 @@
 #include <ui_mainwindow.h>
 #include "game.h"
 
-#define msgBoxSpacer QString("\n                                                           ") /* QT hack to resize QMessagebox*/
+#define MSGBOXSPACER QString("\n                                                           ") /* QT hack to resize QMessagebox*/
+#define COMPUTERDELAY 500
 
 namespace Ui {
     class MainWindow;

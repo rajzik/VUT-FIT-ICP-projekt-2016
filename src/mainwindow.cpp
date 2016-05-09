@@ -144,7 +144,7 @@ void MainWindow::openAbout()
     msgBox.setWindowTitle("About");
     msgBox.setText(QString("Reversi - ICP 2016\n"
                    "Jan Šilhan and Pavel Pospíšil\n"
-                    + msgBoxSpacer));
+                    + MSGBOXSPACER));
     centerAppMiddle();
     msgBox.move(appMiddle);
 
@@ -210,12 +210,12 @@ void MainWindow::newGame()
 
     gameSizeDialog.setComboBoxItems(gameSizes);
     gameSizeDialog.setWindowTitle("New game");
-    gameSizeDialog.setLabelText("Playing area size" + msgBoxSpacer);
+    gameSizeDialog.setLabelText("Playing area size" + MSGBOXSPACER);
     if (gameSizeDialog.exec()) {
             selectedSize = gameSizeDialog.textValue();
             oponentDialog.setComboBoxItems(gameOponents);
             oponentDialog.setWindowTitle("New game");
-            oponentDialog.setLabelText("Choose oponent" + msgBoxSpacer);
+            oponentDialog.setLabelText("Choose oponent" + MSGBOXSPACER);
             if (oponentDialog.exec()) {
                 selectedOponent = oponentDialog.textValue();
                 clearButtons();
@@ -237,9 +237,9 @@ void MainWindow::saveGame()
     msgBox.move(appMiddle);
     msgBox.setWindowTitle("Reversi");
     if (game::saveGame()) {
-        msgBox.setText(QString::fromStdString(gStrings[Gsave]) + msgBoxSpacer);
+        msgBox.setText(QString::fromStdString(gStrings[Gsave]) + MSGBOXSPACER);
     } else {
-        msgBox.setText(QString::fromStdString(eStrings[Esave]) + msgBoxSpacer);
+        msgBox.setText(QString::fromStdString(eStrings[Esave]) + MSGBOXSPACER);
     }
     msgBox.exec();
 }
@@ -263,7 +263,7 @@ void MainWindow::loadGame()
     loadDialog.resize(150, 200);
     loadDialog.setComboBoxItems(fileNames);
     loadDialog.setWindowTitle("Reversi");
-    loadDialog.setLabelText("Choose game for load" + msgBoxSpacer);
+    loadDialog.setLabelText("Choose game for load" + MSGBOXSPACER);
     if (loadDialog.exec()) {
         selectedFile = loadDialog.textValue();
         clearButtons();
@@ -277,7 +277,7 @@ void MainWindow::loadGame()
             centerAppMiddle();
             msgBox.move(appMiddle);
             msgBox.setWindowTitle("Reversi");
-            msgBox.setText(QString::fromStdString(eStrings[Eload]) + msgBoxSpacer);
+            msgBox.setText(QString::fromStdString(eStrings[Eload]) + MSGBOXSPACER);
             msgBox.exec();
         }
     }
@@ -307,16 +307,16 @@ void MainWindow::handleButton()
 void MainWindow::computerMovePause()
 {
     sleeper = true;
-    ui->lblCenterAnimation->setMovie(wheelAnimation);
-    wheelAnimation->start();
-    QTimer::singleShot(3000, this, SLOT(computerMoveContinue()));
+    //ui->lblCenterAnimation->setMovie(wheelAnimation);
+    //wheelAnimation->start();
+    QTimer::singleShot(COMPUTERDELAY, this, SLOT(computerMoveContinue()));
 }
 
 void MainWindow::computerMoveContinue()
 {
     sleeper = false;
-    wheelAnimation->stop();
-    ui->lblCenterAnimation->setMovie(wrongMoveAnimation);
+    //wheelAnimation->stop();
+    //ui->lblCenterAnimation->setMovie(wrongMoveAnimation);
     draw();
     run();
 }
@@ -344,7 +344,7 @@ void MainWindow::run()
             if (player1->getScore() == player2->getScore()) {
                 msgBox.setText(QString::fromStdString(gStrings[Gdraw]));
             } else {
-                msgBox.setText(QString((player1->getScore() > player2->getScore())?"Black player":"White player") + QString::fromStdString(gStrings[Gwin]) + msgBoxSpacer);
+                msgBox.setText(QString((player1->getScore() > player2->getScore())?"Black player":"White player") + QString::fromStdString(gStrings[Gwin]) + MSGBOXSPACER);
             }
             centerAppMiddle();
             msgBox.move(appMiddle);
