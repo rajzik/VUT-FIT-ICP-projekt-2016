@@ -15,6 +15,7 @@ bool fileSort (fileInfo i,fileInfo j) { return std::greater<std::time_t>()(i.tim
 
 gameCli::gameCli()
 :game(){
+    //initialize everything what needs to be
     consol.clear();
     printHelp();
     getGameInfo();
@@ -26,9 +27,12 @@ gameCli::~gameCli(){
 }
 
 void gameCli::getGameInfo(){
-
+    //getting info about game from user
+    
+    
     int single = -1;
     std::string a;
+    clearHistory();
     while(true){
         consol.clear();
         if(single != -1)
@@ -87,7 +91,7 @@ void gameCli::getGameInfo(){
     size = tempSize;
     initGameField();
 }
-
+//help function to draw score for 2 players
 void gameCli::drawScore(){
 
 	consol.setFgColor(CSYELLOW);
@@ -105,7 +109,8 @@ void gameCli::drawScore(){
 
     std::cout<<std::endl;
 }
-
+//just drawing to console
+//only api made some magic with escape sequnces
 void gameCli::draw(){
 
     consol.clear();
@@ -161,7 +166,7 @@ void gameCli::draw(){
     consol.setCursor(0, size*2+6);
     drawScore();
 }
-
+//print end of game, who wins is printed on screen, when its draw says draw
 void gameCli::printGameOver(){
     consol.clear();
     std::cout<<std::endl;
@@ -201,7 +206,8 @@ void gameCli::printGameOver(){
         exit(0);
     }
 }
-
+//printing saved game 
+//in order from latest 
 void gameCli::printSavedGame(){
     consol.clear();
     boost::filesystem::path dir(SAVEFOLDER);
@@ -210,7 +216,7 @@ void gameCli::printSavedGame(){
     std::stringstream filename;
 
     std::vector<fileInfo> v;
-
+//god bless boost 
     for(auto& entry : boost::make_iterator_range(boost::filesystem::directory_iterator(dir), {}))
     {
         std::time_t t = boost::filesystem::last_write_time(entry);
@@ -221,7 +227,7 @@ void gameCli::printSavedGame(){
         fi.basename = ss.str();
         v.insert(v.begin(),fi);
     }
-
+//own sort function by date nothing extra
     std::sort(v.begin(), v.end(), fileSort);
 
     int i=1;
@@ -233,7 +239,7 @@ void gameCli::printSavedGame(){
     int selected = 0;
     std::string a;
     std::getline(std::cin, a);
-
+    //getting info from user
     while(true){
 
 
@@ -277,20 +283,17 @@ void gameCli::run(){
 
         int possible;
         switch(possible = impossibleMove()){
-            case 1:
+            case 1: //pass 
                 actualPlayer1 = !actualPlayer1;
                 message = "You were skipped";
             break;
-            case 2: 
-                
+            case 2: //game over 
                 printGameOver();
-
-                
             break;
         }
 
         if(possible > 0)
-            continue;
+            continue;//check if possible was bigger then continue;
 
 
 
@@ -302,7 +305,7 @@ void gameCli::run(){
 
 
         std::cin >> command;
-
+//getting command from user
 
         std::size_t found;
 
@@ -328,6 +331,10 @@ void gameCli::run(){
             consol.clear();
             printSavedGame();
         }
+        else if((found = command.find("new")) != std::string::npos){
+            consol.clear();
+            getGameInfo();
+        }
         else if((found = command.find("save")) != std::string::npos){
             if(!saveGame())
                 Emessage = eStrings[Esave];
@@ -335,8 +342,6 @@ void gameCli::run(){
                 message = gStrings[Gsave];
         }
         else{
-                
-            
             std::size_t i = -1;
             std::string rowNum = "";
 
@@ -356,13 +361,14 @@ void gameCli::run(){
 
     }
 }
-
+//print help 
 void gameCli::printHelp(){
     std::cout << "HRA2016 Help" <<std::endl
     << "To help write help" << std::endl
     << "To quit write quit" << std::endl
     << "to save game type save" << std::endl
     << "to load game type load" << std::endl
+    << "to new game type new" << std::endl
     << "To make move just write <row><column>" <<std::endl
     << "to continue to game press enter..." << std::endl;
 

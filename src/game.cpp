@@ -82,14 +82,14 @@ void game::initGameField() {
             gameField[x][y] = EMPTY;
 
     int center = size/2;
-    
+    //set of default rocks
     gameField[center-1][center-1] = WHITE;
     gameField[center-1][center] = BLACK;
     gameField[center][center-1] = BLACK;
     gameField[center][center] = WHITE;        
 }
 
-
+//make move with fake option
 bool game::makeMove(bool write, int x, int y, bool clearFuture) {
     if(x < 0 || y < 0 || x >= size || y >= size)
         return false;
@@ -98,11 +98,14 @@ bool game::makeMove(bool write, int x, int y, bool clearFuture) {
     bool validMove = checkMove(write, x, y) != 0;
     move mv = {actualPlayer1,x,y};
     if(validMove && write == WRITE){
+        //everything is alright
+        
         changeScore();
-
         history->push_back(mv);
-        if(clearFuture && write == WRITE)
+        //clear future new future ahead
+        if(clearFuture)
             future->clear();
+            //toggle player
         actualPlayer1 = !actualPlayer1;
     }
     return validMove;
@@ -151,7 +154,8 @@ int game::impossibleMove()
 }
 
 int game::checkMove(bool write, int x, int y){
-	int score = 0;
+	//check all 9 directions
+    int score = 0;
     if(x > 0)
         score += checkDirection(write, x,y, 0,y);
     if(x < size-1)
@@ -194,9 +198,12 @@ int game::checkMove(bool write, int x, int y){
 }
 
 void game::timeTravel(){
+    //help function to get back in time
     initGameField();
     std::vector<move> * tempVector = new std::vector<move>();
+    //clear vector history 
     swap(tempVector, history);
+    //go throught all history to make consist game 
     for (std::vector<move>::iterator it = tempVector->begin() ; it != tempVector->end(); ++it) {
         move m = *it;
         actualPlayer1 = m.player;
@@ -205,7 +212,7 @@ void game::timeTravel(){
     changeScore();
 }
 int game::checkDirection(bool write, int x, int y, int endX, int endY){
-    
+    // check rules for direction 
     int revColor = actualPlayer1?WHITE:BLACK;
     int color = actualPlayer1?BLACK:WHITE;    
     
@@ -222,6 +229,7 @@ int game::checkDirection(bool write, int x, int y, int endX, int endY){
     for(int i = 2; i <= stepCount; i++){
         dataField = gameField[x+i*xStep][y+i*yStep];
         if(dataField == color){
+            //colorPath if all rules are right
             return colorPath(write, x,y, x+i*xStep, y+i*yStep);
         }
         if(dataField == EMPTY)
@@ -232,7 +240,7 @@ int game::checkDirection(bool write, int x, int y, int endX, int endY){
 }
 
 int game::colorPath(bool write, int x, int y, int endX, int endY){
-    
+    //coloring path from xy to endx,endy
     int stepCount = std::max(abs(x-endX),abs(y-endY));
     int xStep = (endX-x)/stepCount;
     int yStep = (endY-y)/stepCount;
@@ -255,16 +263,15 @@ void game::changeField(int x, int y)
 }
 
 bool game::saveGame() {
-    
     boost::filesystem::path dir(SAVEFOLDER);
-    
+    //if someone mess around
     boost::filesystem::create_directory(dir);
     
     std::stringstream filename; 
     int biggest = 0;
+    //going throught files in dir and get biggest number
     for(auto& entry : boost::make_iterator_range(boost::filesystem::directory_iterator(dir), {}))
     {
-
         std::string baseName = boost::filesystem::basename(entry);
         if (baseName.length() > 5) {
             baseName = baseName.substr(5);
@@ -281,10 +288,13 @@ bool game::saveGame() {
     savFile.open((saveFolder +"/"+ filename.str()), std::ios::out | std::ios::binary);
     if(!savFile.is_open())
         return false;
+    //section field only size is needed
     savFile << "fs" << std::endl;
     savFile << size << std::endl;
     savFile << "fse"<<std::endl;
     
+    
+    //section computer
     if(player2->computer){
         savFile << "pc"<<std::endl;
         savFile << (1+easyComputer) << ";"<<std::endl;
@@ -293,7 +303,7 @@ bool game::saveGame() {
     
     
     
-
+    //history section
     if(!history->empty())
     {
         savFile << "hs"<<std::endl;
@@ -305,6 +315,7 @@ bool game::saveGame() {
         savFile << "hse" <<std::endl;
     }
     
+    //future section
     if(!future->empty())
     {
         savFile << "ft"<<std::endl;
@@ -322,6 +333,7 @@ bool game::saveGame() {
 
 void game::clearHistory()
 {
+    //clear vector before new game
     future->clear();
     history->clear();
 }
@@ -474,7 +486,7 @@ bool game::loadGame(std::string filename)
     
     return true;
 }
-
+//going forward
 bool game::nextStep()
 {
     if(future->empty())
@@ -485,6 +497,7 @@ bool game::nextStep()
     
     if(player2->computer && !future->empty())
     {
+        //computer go forward that many steps til you are on move
         while(!future->empty() && history->back().player == true){
             history->push_back(future->back());
             future->pop_back();
@@ -503,6 +516,8 @@ bool game::prevStep() {
     
     if(player2->computer && !history->empty() && history->back().player)
     {
+        
+        //computer go back that many steps til you are on move
         do {
             future->push_back(history->back());
             history->pop_back();
@@ -512,7 +527,8 @@ bool game::prevStep() {
     timeTravel();
     return true;
 }
-
+//counting score by going throught array
+//not efective but in incosistenci of returned score needed to like this
 void game::changeScore()
 {
     int black = 0, white = 0;
