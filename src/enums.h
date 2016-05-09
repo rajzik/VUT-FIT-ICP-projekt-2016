@@ -8,11 +8,20 @@
 #pragma once
 #include <string>
 
-
+/**
+ * @brief Folder for game savess
+ */
 #define SAVEFOLDER "examples"
 
 /**
+ * @struct move
  * @brief Move enumerate, contains owner and position
+ * @var move::player
+ * True when it's black player move
+ * @var move::x
+ * Move coordinate
+ * @var move::y
+ * Move coordinate
  */
 typedef struct move{
     bool player;

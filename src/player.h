@@ -47,8 +47,9 @@ class player
         * @param score
         */
         void setScore(int score);
-
-        
+        /**
+         * @brief Computer var
+         */
         bool computer;
         /**
         * @brief getter for name

@@ -54,6 +54,9 @@
 #include "player.h"
 #include "enums.h"
 
+/**
+ * Default game size
+ */
 #define DEFAULT_SIZE 8
 
 /**
@@ -61,11 +64,37 @@
  */
 class game{
     protected:
+        /**
+         * @brief Game field size
+         */
         int size;
+        /**
+         * @brief Game field matrix
+         */
         int **gameField;
-        player * player1, * player2;
-        std::vector<move> * history, * future;
+        /**
+         * @brief First player, always human
+         */
+        player * player1;
+        /**
+         * @brief Second player, human or computer
+         */
+        player * player2;
+        /**
+         * @brief Vector of history moves
+         */
+        std::vector<move> * history;
+        /**
+         * @brief Vector of future moves
+         */
+        std::vector<move> * future;
+        /**
+         * @brief True when actual player is black
+         */
         bool actualPlayer1;
+        /**
+         * @brief True when computer player is easy guy
+         */
         bool easyComputer;        
         /**
          * @brief Clear history and future stacks
@@ -147,7 +176,7 @@ class game{
          * @param write field change persmission
          * @param x
          * @param y
-         * @param clearHistory clear future
+         * @param clearFuture clear future
          * @return true on success, false when failed
          */
         bool makeMove(bool write, int x, int y,  bool clearFuture = true);
@@ -167,8 +196,6 @@ class game{
         void changeField(int x, int y);
         /**
          * @brief player initializatino
-         * @param nameOne player1 name
-         * @param nameTwo player2 name
          * @param oppositePlayer type of opposite player (human, easy computer, hard computer)
          */
         void initPlayers(int oppositePlayer);
