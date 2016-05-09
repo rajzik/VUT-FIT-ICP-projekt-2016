@@ -262,7 +262,7 @@ void MainWindow::saveGame()
 void MainWindow::loadGame()
 {
     QStringList fileNames;
-    QDir savesDir("./saves");
+    QDir savesDir(SAVEFOLDER);
     QFileInfoList list;
     QString selectedFile;
     QInputDialog loadDialog;

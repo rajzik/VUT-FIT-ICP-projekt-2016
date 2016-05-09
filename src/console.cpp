@@ -42,7 +42,6 @@ console::console(){
 }
 
 console::~console(){
-    delete[] colorsNumber;
     std::cout<< "\033c";
 }
 

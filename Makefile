@@ -1,5 +1,5 @@
 
-NAME=HRA2016
+NAME=hra2016
 NAMECLI=$(NAME)-cli 
 
 ZIPNAME=xpospi88-xsilha10.zip
@@ -42,4 +42,4 @@ pack:
 	@zip $(ZIPNAME) $(ZIPFILES) 
 
 clean:
-	rm -rf $(NAME) $(NAMECLI) doc/ 
+	rm -rf $(NAME) $(NAMECLI) doc/* 
