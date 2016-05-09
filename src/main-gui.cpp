@@ -17,5 +17,5 @@ int main(int argc, char * argv[])
 {
     gameGui * game = new gameGui(argc, argv);
 
-    return game->run();
+    game->run();
 }

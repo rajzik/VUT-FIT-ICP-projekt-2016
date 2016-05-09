@@ -32,7 +32,7 @@ public:
     /**
      * @brief create window, init game and run application
      */
-    int run();
+    void run();
     /**
      * @brief delete QT application and window
      */

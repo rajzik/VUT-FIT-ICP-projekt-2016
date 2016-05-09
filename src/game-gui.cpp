@@ -10,14 +10,15 @@
 gameGui::gameGui(int argc, char *argv[])
 {
     a = new QApplication(argc, argv);
-}
-
-int gameGui::run()
-{
-    window = new MainWindow();    
+    window = new MainWindow();
     window->init();
     window->show();
-    return a->exec();
+    a->exec();
+}
+
+void gameGui::run()
+{
+
 }
 
 gameGui::~gameGui()
