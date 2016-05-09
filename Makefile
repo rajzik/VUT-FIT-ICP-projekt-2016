@@ -3,7 +3,7 @@ NAME=HRA2016
 NAMECLI=$(NAME)-cli 
 
 ZIPNAME=xpospi88-xsilha10.zip
-ZIPFILES = src/* examples/* Makefile README.txt doxy.config graphics/*
+ZIPFILES = src/* doc/ examples/ examples/* Makefile README.txt doxy.config graphics/*
 
 CC=g++
 CFLAGS=-Wall -Wextra --std=c++11 -pedantic -O3
@@ -35,11 +35,11 @@ doxygen:
 	@doxygen doxy.config
 
 run: all
-	@./HRA2016 && ./HRA2016-cli 
+	@./HRA2016 &
+	@./HRA2016-cli 
 
 pack:
 	@zip $(ZIPNAME) $(ZIPFILES) 
-
 
 clean:
 	rm -rf $(NAME) $(NAMECLI) doc/ 
