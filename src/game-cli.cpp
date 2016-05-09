@@ -101,18 +101,19 @@ void gameCli::getGameInfo(){
 
 void gameCli::drawScore(){
 
-    std::cout << player1->getName() << ": " << player1->getScore() << " ";
-    consol.setFgColor(CSYELLOW);
-    consol.setBgColor(CSBLACK);
-    std::cout<<"O";
+	consol.setFgColor(CSYELLOW);
+	consol.setBgColor(CSBLACK);
+	std::cout << "O";
+	consol.resetToDefault();
 
-    consol.resetToDefault();
-    std::cout << "\t" << player2->getName() << ": " << player2->getScore() << " ";
-    consol.setFgColor(CSBLACK);
-    consol.setBgColor(CSWHITE);
-    std::cout<<"O";
+	std::cout << ": " << player1->getScore() << " \t";
+    
+	consol.setFgColor(CSBLACK);
+	consol.setBgColor(CSWHITE);
+	std::cout << "O";
+	consol.resetToDefault();
+    std::cout << ": " << player2->getScore() << " ";
 
-    consol.resetToDefault();
     std::cout<<std::endl;
 }
 

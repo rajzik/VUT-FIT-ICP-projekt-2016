@@ -11,6 +11,45 @@
 #include "console.h"
 
 
+#ifndef _WIN32
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	WORD saved_attributes = NULL;
+
+
+	void console::setConsoleColor() {
+		if (saved_attributes == NULL)
+		{
+			CONSOLE_SCREEN_BUFFER_INFO consoleInfo;
+			GetConsoleScreenBufferInfo(hConsole, &consoleInfo);
+			saved_attributes = consoleInfo.wAttributes;
+		}
+		SetConsoleTextAttribute(hConsole, colorsNumber[bgColor] && colorsNumber[fgColor]);
+	}
+
+	void console::setCursor(int x, int y) {
+		y = y / 2;
+		COORD c = { x,y };
+		SetConsoleCursorPosition(hConsole, c);
+	}
+	void console::resetToDefault() {
+		SetConsoleTextAttribute(hConsole, saved_attributes);
+	}
+#else 
+
+	void console::setConsoleColor() {
+			std::cout << "\033[3" << colorsNumber[fgColor] << ";4" << colorsNumber[bgColor] << "m";
+	}
+	void console::setCursor(int x, int y) {
+		y = y / 2;
+		std::cout << "\033[" << y << ";" << x << "H";
+	}
+	void console::resetToDefault() {
+		std::cout << "\033[0m";
+	}
+
+#endif // !_WIN32
+
+
 
 console::console(){
     fgColor = CSWHITE;
@@ -21,7 +60,7 @@ console::console(){
        colorsNumber[0] = 0;
        colorsNumber[1] = 0;
        colorsNumber[2] = 7;
-       colorsNumber[3] = 4;
+       colorsNumber[3] = 1;
        colorsNumber[4] = 6;
        colorsNumber[5] = 2;
        colorsNumber[6] = 4;
@@ -44,7 +83,7 @@ console::console(){
 console::~console(){
     if (ISWINDOWS)
     {
-        
+		resetToDefault();
     }
     else
     {
@@ -61,32 +100,9 @@ void console::setFgColor(int color){
     fgColor = color;
     setConsoleColor();
 }
-void console::setConsoleColor(){
-    if (ISWINDOWS)
-    {
-		std::stringstream ss;
-		ss << "color " << colorsNumber[bgColor] << colorsNumber[fgColor];	
-        system(ss.str().c_str());
-    }
-    else
-    {
-        std::cout << "\033[3" << colorsNumber[fgColor] << ";4" << colorsNumber[bgColor] << "m";
-    }
-    
-    
-}
 
-void console::setCursor(int x, int y){
-    y = y/2;
-    if (ISWINDOWS)
-    {
-        
-    }
-    else
-    {
-        std::cout << "\033[" << y << ";" <<x <<"H";
-    }
-}
+
+
 void console::clear(){
 	if (ISWINDOWS)
 	{
@@ -99,13 +115,3 @@ void console::clear(){
 }
 
 
-void console::resetToDefault(){
-    if (ISWINDOWS)
-    {
-        
-    }
-    else
-    {
-        std::cout << "\033[0m";
-    }
-}
