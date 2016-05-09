@@ -14,6 +14,9 @@
 #include <cstdlib>
 #include <QApplication>
 
+/**
+ * @brief GUI class contains GUI application components
+ */
 class gameGui
 {
 private:
@@ -22,7 +25,6 @@ private:
 public:
     /**
      * @brief gameGui contructor, create QT application
-     *
      * @param argc main application arguments count
      * @param argv main application arguments array
      */

@@ -8,6 +8,9 @@
 #pragma once
 #include <string>
 
+/**
+ * @brief Enumerate for game field colors
+ */
 enum field_color
 {
     EMPTY,
@@ -15,12 +18,18 @@ enum field_color
     WHITE
 };
 
+/**
+ * @brief Enumerate for game field permissions
+ */
 enum write_perms
 {
     READ,
     WRITE
 };
 
+/**
+ * @brief Enumarate for indetfy second player
+ */
 enum opposite_player
 {
     HUMAN,
@@ -28,6 +37,9 @@ enum opposite_player
     COMPUTERHARD
 };
 
+/**
+ * @brief Application messages enumerate
+ */
 enum messagesGame
 {
     Gwin, 
@@ -46,6 +58,9 @@ enum messagesGame
 #ifndef GSTR
 #define GSTR
 
+/**
+ * @brief Array of application messages
+ */
 std::string const gStrings[] = {
     " WIN!",
     "It's a draw!",
@@ -60,6 +75,10 @@ std::string const gStrings[] = {
 };
 
 #endif
+
+/**
+ * @brief Application error messages enumerate
+ */
 enum EmessagesGame{
     Esave,
     Eload,
@@ -68,9 +87,11 @@ enum EmessagesGame{
     Einvalid
 };
 
-
 #ifndef ESTR
 #define ESTR
+/**
+ * @brief Array of aplication error messages
+ */
 std::string const eStrings[] = {
     "Save failed!",
     "Load failed!",

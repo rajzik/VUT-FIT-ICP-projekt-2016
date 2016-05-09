@@ -29,6 +29,9 @@ namespace Ui {
     class MainWindow;
 }
 
+/**
+ * @brief GUI class contains graphics and GUI methods for graphic game
+ */
 class MainWindow : public QMainWindow, public game
 {
     Q_OBJECT
@@ -44,7 +47,7 @@ private:
     Ui::MainWindow *ui;
     int windowWidth;
     int windowHeight;
-    QPoint appMiddle;    
+    QPoint appMiddle;
     bool sleeper;
     /**
      * @brief redraw buttons, score, animations
