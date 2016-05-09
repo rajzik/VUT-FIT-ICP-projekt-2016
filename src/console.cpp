@@ -11,16 +11,16 @@
 #include "console.h"
 
 
-	void console::setConsoleColor() {
-			std::cout << "\033[3" << colorsNumber[fgColor] << ";4" << colorsNumber[bgColor] << "m";
-	}
-	void console::setCursor(int x, int y) {
-		y = y / 2;
-		std::cout << "\033[" << y << ";" << x << "H";
-	}
-	void console::resetToDefault() {
-		std::cout << "\033[0m";
-	}
+void console::setConsoleColor() {
+        std::cout << "\033[3" << colorsNumber[fgColor] << ";4" << colorsNumber[bgColor] << "m";
+}
+void console::setCursor(int x, int y) {
+    y = y / 2;
+    std::cout << "\033[" << y << ";" << x << "H";
+}
+void console::resetToDefault() {
+    std::cout << "\033[0m";
+}
 
 
 
@@ -42,7 +42,8 @@ console::console(){
 }
 
 console::~console(){
-        std::cout<< "\033c";
+    delete[] colorsNumber;
+    std::cout<< "\033c";
 }
 
 void console::setBgColor(int color){

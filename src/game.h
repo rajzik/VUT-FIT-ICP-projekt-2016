@@ -5,6 +5,36 @@
  * @brief  application core logic
  */
 
+
+
+
+/*! \mainpage Othello/reversi
+ *
+ * \section intro_sec Introduction
+ *
+ * Basic project for collage project
+ * 
+ * Made by Pavel Pospíšil and Jan Šilhan
+ * 
+ * \section install_sec Installation
+ *
+ * just type make, or make run
+ * 
+ * \subsection step1 Generate documentation
+ *  
+ * make doxygen
+ * 
+ * \subsection step2 clear solution
+ *  
+ * make clean
+ * 
+ * \subsection step3 pack solution
+ * 
+ * make pack
+ * 
+ * 
+ */
+
 #pragma once
 
 #include <iostream>

@@ -12,23 +12,61 @@
 #include "game.h"
 #include "console.h"
 
+
+/**
+ * @brief Child of game with extension for command line input
+ */
 class gameCli : public game
 {
 private: 
+    /**
+    * @brief own basic API for linux CLI
+    */
     console consol;    
+    /**
+    * @brief informational message showed on top of gamefield
+    */
     std::string message;
+/**
+* @brief error message showed on top of gamefield
+*/
     std::string Emessage;
-    bool actualPlayer;
+/**
+* @brief Print saved game on screen
+*/
     void printSavedGame();
+/**
+* @brief print game over and select new game or end
+*/
     void printGameOver();
     
 public:
+        /**
+         * @brief constructor
+         */
     gameCli();
+            /**
+         * @brief destructor
+         */
     ~gameCli();
+    /**
+    * @brief gets game info and set it from user
+    */
     void getGameInfo();
+    /**
+    * @brief prints help
+    */
     void printHelp();
+    /**
+    * @brief draw made for command line
+    */
     void draw();
+    /**
+    * @brief draw score for both players
+    */
     void drawScore();
+    /**
+    * @brief infinite loop for runing game
+    */
     void run();
-        
 };

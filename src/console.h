@@ -31,19 +31,55 @@ enum consoleColor
 class console
 {
 public:
+    /**
+    * @brief Constructor sets color array
+    */
     console();
+    /**
+    * @brief Clears everything
+    */
     ~console();
-
+    /**
+    * @brief Setter for foreground color
+    * @param color
+    */
     void setFgColor(int color);
+    /**
+    * @brief Setter for background color 
+    * @param color
+    */
     void setBgColor(int color);
+    /**
+    * @brief Help function for console color
+    */
     void setConsoleColor();
+    /**
+    * @brief Set cursor on linux console visually
+    * @param x 
+    * @param y
+    */
     void setCursor(int x, int y);
+    /**
+    * @brief Clear everything on console screen
+    */
     void clear();
+    /**
+    * @brief Check fields in specified direction
+    */
     void resetToDefault();
 
 private: 
+    /**
+    * @brief Static colors numbers for console
+    */
     int colorsNumber[9];
+    /**
+    * @brief global variable for foreground color
+    */
     int fgColor;
+    /**
+    * @brief global variable for background color
+    */
     int bgColor;
     
 };
