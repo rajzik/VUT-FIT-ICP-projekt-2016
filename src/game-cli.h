@@ -13,6 +13,24 @@
 #include "console.h"
 
 
+
+/**
+ * @brief definition of files with just time and basename
+ */
+typedef struct fileLoad{
+
+/**
+* @brief time var
+*/
+    std::time_t time;
+    
+/**
+* @brief time var
+*/
+    std::string basename;
+} fileInfo;
+
+
 /**
  * @brief Child of game with extension for command line input
  */

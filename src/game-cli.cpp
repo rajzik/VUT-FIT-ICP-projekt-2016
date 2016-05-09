@@ -10,12 +10,6 @@
 #include "game-cli.h"
 
 
-typedef struct fileLoad{
-    std::time_t time;
-    std::string basename;
-
-
-} fileInfo;
 
 bool fileSort (fileInfo i,fileInfo j) { return std::greater<std::time_t>()(i.time, j.time); }
 
