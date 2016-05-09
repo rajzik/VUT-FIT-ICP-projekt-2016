@@ -26,10 +26,7 @@
  * @brief Make all dialogs same width
  */
 #define MSGBOXSPACER QString("\n                                                           ") /* QT hack to resize QMessagebox*/
-/**
- * @brief Delay after warning and computer mve speed
- */
-#define PAUSEDELAY 500
+
 
 namespace Ui {
     class MainWindow;

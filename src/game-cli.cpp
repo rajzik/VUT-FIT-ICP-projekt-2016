@@ -278,6 +278,7 @@ void gameCli::run(){
         if(!actualPlayer1 && player2->computer)
         {
             computerMove();
+            draw();
             continue;
         }
 

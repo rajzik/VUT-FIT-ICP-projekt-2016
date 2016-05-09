@@ -5,6 +5,7 @@
  * @brief  work with console in both systems
  *
  * sometimes i believe compiler ignores all my comments, but doxygen don't
+ * All about escape Sequnces
  */
 
 #pragma once
@@ -16,7 +17,7 @@
 
 
 /**
-* @brief Colors enum for console
+* @brief Colors enum for console, all about escape sequneces
 */
 enum consoleColor
 {

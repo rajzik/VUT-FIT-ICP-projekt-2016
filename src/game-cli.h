@@ -13,7 +13,6 @@
 #include "console.h"
 
 
-
 /**
  * @brief definition of files with just time and basename
  */

@@ -8,6 +8,12 @@
 #pragma once
 #include <string>
 
+
+/**
+ * @brief Delay after warning and computer mve speed
+ */
+#define PAUSEDELAY 500
+
 /**
  * @brief Folder for game savess
  */
