@@ -2,7 +2,7 @@
 NAME=HRA2016
 NAMECLI=$(NAME)-cli 
 
-ZIPNAME=xpospi88.zip
+ZIPNAME=xpospi88-xsilha10.zip
 ZIPFILES = src/* examples/* Makefile README.txt doxy.config graphics/*
 
 CC=g++

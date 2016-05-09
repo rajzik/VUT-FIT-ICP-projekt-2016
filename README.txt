@@ -3,8 +3,8 @@
 Projekt do ICP
 
 Authoři:
-Pavel Pospíšil
-Jan Šilhan
+Pavel Pospíšil (xpospi88)
+Jan Šilhan (xsilha10)
 
 Zadání projektu:
 
