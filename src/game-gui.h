@@ -20,7 +20,13 @@
 class gameGui
 {
 private:
+    /**
+     * @brief Application class
+     */
     QApplication * a;
+    /**
+     * @brief Application window class
+     */
     MainWindow * window;
 public:
     /**

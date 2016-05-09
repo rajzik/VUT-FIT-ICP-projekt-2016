@@ -1,15 +1,14 @@
-#-------------------------------------------------
-#
-# Project created by QtCreator 2016-05-05T10:39:07
-#
-#-------------------------------------------------
+# @file   src.pro
+# @author Jan Silhan (xsilha10@stud.fit.vutbr.cz), Pavel Pospisil (xpospi88@stud.fit.vutbr.cz)
+# @date   May 2016
+# @brief  QT settings
 
 QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 QMAKE_CXXFLAGS += -std=c++11
-
+CONFIG += debug
 TARGET = ../HRA2016
 TEMPLATE = app
 
