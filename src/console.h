@@ -1,5 +1,5 @@
 /**
- * @file   console.cpp
+ * @file   console.h
  * @author Jan Silhan (xsilha10@stud.fit.vutbr.cz), Pavel Pospisil (xpospi88@stud.fit.vutbr.cz)
  * @date   may 2016
  * @brief  work with console in both systems
